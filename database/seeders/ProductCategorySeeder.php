@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+use App\models\ProductCategory;
 
 class ProductCategorySeeder extends Seeder
 {
@@ -35,12 +37,13 @@ class ProductCategorySeeder extends Seeder
             ],
         ];
 
-        foreach ($categories as $category) {
+        foreach ($categories as $key => $category) {
             ProductCategory::create([
                 'product_category_name' => $category['name'],
                 'category_slug'         => Str::slug($category['name']), // অটোমেটিক স্লাগ জেনারেট হবে
                 'category_description'  => $category['description'],
                 'category_image'        => 'default.jpg', // একটি ডিফল্ট ইমেজ নাম
+                'order'        => $key + 1, // একটি ডিফল্ট ইমেজ নাম
                 'is_active'             => true,
             ]);
         }

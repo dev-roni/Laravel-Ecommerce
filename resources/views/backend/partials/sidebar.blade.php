@@ -5,6 +5,8 @@
         <ul class="sidebar-menu">
             <li><a href="{{route('admin.dashboard')}}" class="active"><i class="fas fa-tachometer-alt"></i> ড্যাশবোর্ড</a></li>
             <li><a href="{{route('admin.products.index')}}"><i class="fas fa-box"></i> পণ্যসমূহ</a></li>
+            <li><a href="{{route('admin.product-categories.index')}}"><i class="fas fa-box"></i> ক্যাটাগরি সমূহ</a></li>
+            <li><a href="{{route('admin.product-categories.create')}}"><i class="fas fa-box"></i> ক্যাটাগরি তৈরি</a></li>
             <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> অর্ডার সমূহ</a></li>
             <li><a href="customers.html"><i class="fas fa-users"></i> গ্রাহকবৃন্দ</a></li>
             <li><a href="settings.html"><i class="fas fa-cog"></i> সেটিংস</a></li>

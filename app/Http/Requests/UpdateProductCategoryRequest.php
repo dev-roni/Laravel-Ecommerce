@@ -26,6 +26,7 @@ class UpdateProductCategoryRequest extends FormRequest
             'slug'        => 'required|string|unique:product_categories,slug|max:100', 
             'description' => 'nullable|string|max:500', 
             'image'       => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
+            'order'       => 'nullable|integer|max:200|unique:product_categories,order', 
             'is_active'   => 'boolean' 
         ];
     }
@@ -51,6 +52,10 @@ class UpdateProductCategoryRequest extends FormRequest
             // ছবি
             'image.string'          => 'ছবির পাথ বা নাম অবশ্যই সঠিক টেক্সট হতে হবে।',
             'image.max'             => 'ছবির নাম বা পাথ ৫০ অক্ষরের বেশি হতে পারবে না।',
+
+            //ক্রম
+            'order.unique'          => 'ক্রম নাম্বার অবশই ব্যাতিক্রম হতে',
+            'order.max'             => 'ক্রম নাম্বার সর্বোচ্চ 200 এর উপর হতে পারবে না',
 
             // স্ট্যাটাস
             'is_active.boolean'              => 'স্ট্যাটাসটি অবশ্যই সচল (Active) অথবা অচল (Inactive) হতে হবে।',

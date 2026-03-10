@@ -7,4 +7,4 @@ use App\Http\Controllers\backend\ProductCategoryController;
 
 Route::get('dashboard',[DashboardController::class,'dashboard'])->name('dashboard');
 Route::resource('products',ProductController::class);
-Route::resource('products-category',ProductCategoryController::class);
+Route::resource('product-categories',ProductCategoryController::class);

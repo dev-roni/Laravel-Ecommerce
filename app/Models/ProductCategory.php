@@ -15,6 +15,7 @@ class ProductCategory extends Model
         'category_slug',
         'category_description',
         'category_image',
+        'order',
         'is_active'
     ];
 }
