@@ -29,8 +29,13 @@
                         @forelse($productCategory as $category)
                         <tr>
                             <td>
-                                <div class="category-icon-box">
-                                    <i class="fas fa-tshirt"></i>
+                                <div class="category-icon-box text-center p-2">
+                                    @if($category->category_image && file_exists(public_path('storage/' . $category->category_image)))
+                                        <img src="{{ asset('storage/' . $category->category_image) }}" class="img-fluid" alt="{{ $category->category_name }}" 
+                                        style="width: 50px; height: 50px; object-fit: cover;">
+                                    @else
+                                        <img src="{{ asset('storage/' . 'No_Image.jpg') }}" class="img-fluid" style="width: 50px; height: 50px; object-fit: cover;">
+                                    @endif
                                 </div>
                             </td>
                             <td><span class="fw-bold">{{$category->product_category_name}}</span></td>
@@ -38,8 +43,12 @@
                             <td><span class="badge bg-info text-dark">১২০</span></td>
                             <td>{{$category->is_active ? "Active" : "Deactive"}}</td>
                             <td>
-                                <a href="{{route('admin.product-categories.edit',$category->id)}}" class="btn btn-sm btn-outline-primary me-1" title="এডিট করুন"><i class="fas fa-edit"></i></a>
-                                <a class="btn btn-sm btn-outline-danger" title="মুছে ফেলুন" onclick="deleteCategory(this)"><i class="fas fa-trash"></i></a>
+                                <a href="{{route('admin.product-categories.edit',$category->id)}}" class="btn btn-sm btn-outline-primary " title="এডিট করুন"><i class="fas fa-edit"></i></a>
+                                <form action="{{route('admin.product-categories.destroy',$category->id)}}" class="d-inline-block"  title="মুছে ফেলুন" method="POST">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                </form>
                             </td>
                         </tr>
                         @empty

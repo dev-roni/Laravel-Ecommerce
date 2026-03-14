@@ -11,7 +11,7 @@ class UpdateProductCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,13 +21,15 @@ class UpdateProductCategoryRequest extends FormRequest
      */
     public function rules(): array
     {
+        // বর্তমান ক্যাটাগরির আইডি পাওয়া (Route Model Binding থাকলে)
+        $categoryId = $this->route('product_category')->id;
         return [
-            'name'        => 'required|string|max:100|min:2',
-            'slug'        => 'required|string|unique:product_categories,slug|max:100', 
-            'description' => 'nullable|string|max:500', 
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
-            'order'       => 'nullable|integer|max:200|unique:product_categories,order', 
-            'is_active'   => 'boolean' 
+            'product_category_name'       => 'required|string|max:100|min:2',
+            'category_slug'               => 'required|string|max:100|unique:product_categories,category_slug,' . $categoryId, 
+            'category_description'        => 'nullable|string|max:500', 
+            'category_image'              => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
+            'order'                       => 'nullable|integer|max:200', 
+            'is_active'                   => 'boolean' 
         ];
     }
 
@@ -35,23 +37,23 @@ class UpdateProductCategoryRequest extends FormRequest
     {
         return [
             // ক্যাটাগরির নাম
-            'name.required' => 'ক্যাটাগরির নাম প্রদান করা আবশ্যক।',
-            'name.string'   => 'ক্যাটাগরির নাম অবশ্যই সঠিক বর্ণমালায় হতে হবে।',
-            'name.min'      => 'ক্যাটাগরির নাম অন্তত ২ অক্ষরের হতে হবে।',
-            'name.max'      => 'ক্যাটাগরির নাম ২০ অক্ষরের বেশি হওয়া যাবে না।',
+            'naproduct_category_nameme.required' => 'ক্যাটাগরির নাম প্রদান করা আবশ্যক।',
+            'product_category_name.string'   => 'ক্যাটাগরির নাম অবশ্যই সঠিক বর্ণমালায় হতে হবে।',
+            'product_category_name.min'      => 'ক্যাটাগরির নাম অন্তত ২ অক্ষরের হতে হবে।',
+            'product_category_name.max'      => 'ক্যাটাগরির নাম ২০ অক্ষরের বেশি হওয়া যাবে না।',
 
             // স্লাগ
-            'slug.required'         => 'ক্যাটাগরি স্লাগ (Slug) অবশ্যই দিতে হবে।',
-            'slug.string'           => 'স্লাগটি সঠিক ফরমেটে হতে হবে।',
-            'slug.max'              => 'স্লাগ ২০ অক্ষরের বেশি হতে পারবে না।',
+            'category_slug.required'         => 'ক্যাটাগরি স্লাগ (Slug) অবশ্যই দিতে হবে।',
+            'category_slug.string'           => 'স্লাগটি সঠিক ফরমেটে হতে হবে।',
+            'category_slug.max'              => 'স্লাগ ২০ অক্ষরের বেশি হতে পারবে না।',
 
             // বিবরণ
-            'description.required'  => 'ক্যাটাগরির একটি সংক্ষিপ্ত বিবরণ দিন।',
-            'description.max'       => 'বিবরণ ২০০ অক্ষরের মধ্যে সীমাবদ্ধ রাখুন।',
+            'category_description.required'  => 'ক্যাটাগরির একটি সংক্ষিপ্ত বিবরণ দিন।',
+            'category_description.max'       => 'বিবরণ ২০০ অক্ষরের মধ্যে সীমাবদ্ধ রাখুন।',
 
             // ছবি
-            'image.string'          => 'ছবির পাথ বা নাম অবশ্যই সঠিক টেক্সট হতে হবে।',
-            'image.max'             => 'ছবির নাম বা পাথ ৫০ অক্ষরের বেশি হতে পারবে না।',
+            'category_image.string'          => 'ছবির পাথ বা নাম অবশ্যই সঠিক টেক্সট হতে হবে।',
+            'category_image.max'             => 'ছবির নাম বা পাথ ৫০ অক্ষরের বেশি হতে পারবে না।',
 
             //ক্রম
             'order.unique'          => 'ক্রম নাম্বার অবশই ব্যাতিক্রম হতে',

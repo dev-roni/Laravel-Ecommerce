@@ -23,11 +23,11 @@ class StoreProductCategoryRequest extends FormRequest
     {
         return [
             'product_category_name'        => 'required|string|max:100|min:2',
-            'category_slug'        => 'required|string|unique:product_categories,category_slug|max:100', 
-            'category_description' => 'nullable|string|max:500', 
-            'category_image'       => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
-            'order'       => 'nullable|integer|max:200', 
-            'is_active'   => 'boolean' 
+            'category_slug'                => 'required|string|unique:product_categories,category_slug|max:100', 
+            'category_description'         => 'nullable|string|max:500', 
+            'category_image'               => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
+            'order'                        => 'nullable|integer|max:200', 
+            'is_active'                    => 'boolean' 
         ];
     }
 

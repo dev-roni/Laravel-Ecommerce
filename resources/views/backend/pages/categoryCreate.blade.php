@@ -19,7 +19,15 @@
                 <span class="fw-bold d-none d-md-block">অ্যাডমিন</span>
             </div>
         </div>
-
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
         <!-- ফর্ম সেকশন -->
         <div class="row">
@@ -93,8 +101,9 @@
                                 <div class="form-text">প্রস্তাবিত সাইজ: ৮০০ x ৮০০ পিক্সেল।</div>
                                 
                                 <!-- ছবি প্রিভিউ -->
-                                <div id="imagePreview" class="mt-3 d-none">
-                                    <img src="" alt="Preview" class="img-thumbnail" style="max-height: 150px;">
+                                 <div id="imagePreview" class="mt-3 {{ isset($category) && $category->category_image ? '' : 'd-none' }}">
+                                    <img src="{{ isset($category) && $category->category_image ? asset('storage/'.$category->category_image) : '' }}" 
+                                    alt="Preview" class="img-thumbnail" style="max-height: 150px;">
                                 </div>
                             </div>
                         </div>
