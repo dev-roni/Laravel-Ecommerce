@@ -44,13 +44,38 @@
                             <td>{{$category->is_active ? "Active" : "Deactive"}}</td>
                             <td>
                                 <a href="{{route('admin.product-categories.edit',$category->id)}}" class="btn btn-sm btn-outline-primary " title="এডিট করুন"><i class="fas fa-edit"></i></a>
-                                <form action="{{route('admin.product-categories.destroy',$category->id)}}" class="d-inline-block"  title="মুছে ফেলুন" method="POST">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
-                                </form>
+                                <button type="button" class="btn btn-sm btn-outline-danger" title="মুছে ফেলুন" 
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteCategoryModal{{ $category->id }}"
+                                    data-id="{{ $category->id }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
+                            <!-- Member Delete Modal -->
+                            <div class="modal fade" id="deleteCategoryModal{{ $category->id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h6 class="modal-title">সদস্য মুছে ফেলুন</h6>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{route('admin.product-categories.destroy',$category->id)}}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <div class="modal-body text-center">
+                                                <p>আপনি কি নিশ্চিত যে আপনি এই ক্যাটাগরি মুছে ফেলতে চান?</p>
+                                                <p class="text-danger">এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।</p>
+                                            </div>
+                                            <div class="modal-footer justify-content-center">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বাতিল</button>
+                                                <button type="submit" name="submit" class="btn btn-danger">মুছে ফেলুন</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         @empty
                         <tr>
                             কোন ক্যাটাগরি নেই
@@ -60,4 +85,6 @@
                 </table>
             </div>
         </div>
+
+
 @endsection

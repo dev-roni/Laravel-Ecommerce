@@ -126,10 +126,10 @@ class ProductCategoryController extends Controller
 
 
                 $productCategory->update($validData);
-
-                return redirect()->route('admin.product-categories.index')
-                    ->with('success', 'ক্যাটাগরি আপডেট সফল হয়েছে');
             });
+
+            return redirect()->route('admin.product-categories.index')
+            ->with('success', 'ক্যাটাগরি আপডেট সফল হয়েছে');
         } 
         catch (\Exception $e) {
             // যদি কোনো এরর হয়, তবে নতুন আপলোড করা ফাইলটি মুছে ফেলা (Cleanup)
@@ -147,7 +147,16 @@ class ProductCategoryController extends Controller
      */
     public function destroy(ProductCategory $productCategory)
     {
+        // ১. ডাটাবেজ থেকে ডিলিট করার আগে ইমেজ ফাইলটি মুছে ফেলা
+        if ($productCategory->category_image) {
+            Storage::disk('public')->delete($productCategory->category_image);
+        }
+
+        // ২. অর্ডারগুলো রিব্যালেন্স করা 
+        ProductCategory::where('order', '>', $productCategory->order)->decrement('order');
+
         $productCategory->delete();
-        return redirect()->back()->with('success','ক্যাটাগরি সফলভাবে মুছে ফেলা হয়েছে');
+
+        return redirect()->back()->with('success', 'ক্যাটাগরি সফলভাবে মুছে ফেলা হয়েছে');
     }
 }

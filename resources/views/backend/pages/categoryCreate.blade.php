@@ -19,16 +19,8 @@
                 <span class="fw-bold d-none d-md-block">অ্যাডমিন</span>
             </div>
         </div>
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 
+        
         <!-- ফর্ম সেকশন -->
         <div class="row">
             <div class="col-lg-8">
