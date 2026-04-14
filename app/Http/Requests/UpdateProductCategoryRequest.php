@@ -22,14 +22,15 @@ class UpdateProductCategoryRequest extends FormRequest
     public function rules(): array
     {
         // বর্তমান ক্যাটাগরির আইডি পাওয়া (Route Model Binding থাকলে)
-        $categoryId = $this->route('product_category')->id;
+        $categoryId = $this->route('category')->id;
         return [
-            'product_category_name'       => 'required|string|max:100|min:2',
-            'category_slug'               => 'required|string|max:100|unique:product_categories,category_slug,' . $categoryId, 
-            'category_description'        => 'nullable|string|max:500', 
-            'category_image'              => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
-            'order'                       => 'nullable|integer|max:200', 
-            'is_active'                   => 'boolean' 
+            'name'               => 'required|string|max:100|min:2',
+            'slug'               => 'required|string|max:100|unique:categories,slug,' . $categoryId, 
+            'description'        => 'nullable|string|max:500', 
+            'image'              => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
+            'parent_id'          => 'nullable|integer|max:200|exists:categories,id', 
+            'order'              => 'nullable|integer|max:200', 
+            'is_active'          => 'boolean' 
         ];
     }
 
@@ -61,6 +62,8 @@ class UpdateProductCategoryRequest extends FormRequest
 
             // স্ট্যাটাস
             'is_active.boolean'              => '* স্ট্যাটাসটি অবশ্যই সচল (Active) অথবা অচল (Inactive) হতে হবে।',
+
+            'parent_id.exists' => 'Parent category খুঁজে পাওয়া যায়নি।',
         ];
     }
 

@@ -1,90 +1,212 @@
 @extends('backend.layouts.masterLayout')
+
 @section('content')
+<div class="container py-4">
 
-        <!-- কন্টেন্ট কার্ড -->
-        <div class="content-card">
-            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-                <div class="input-group w-auto" style="min-width: 300px;">
-                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-search text-muted"></i></span>
-                    <input type="text" class="form-control bg-light border-start-0" id="searchCategory" placeholder="ক্যাটাগরি খুঁজুন..." onkeyup="filterTable()">
-                </div>
-                <a class="btn btn-primary" href="{{route('admin.product-categories.create')}}">
-                    <i class="fas fa-plus me-2"></i>নতুন ক্যাটাগরি যোগ করুন
+    {{-- Breadcrumb --}}
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ route('admin.categories.index') }}" 
+                class="text-decoration-none  text-primary">
+                    Main Category
                 </a>
-            </div>
+            </li>
+            @isset($breadcrumb)
+                @foreach($breadcrumb as $crumb)
+                    @if($loop->last)
+                        <li class="breadcrumb-item active fw-bold">{{ $crumb->name }}</li>
+                    @else
+                        <li class="breadcrumb-item ">
+                            <a href="{{ route('admin.categories.children', $crumb) }}">
+                                {{ $crumb->name }}
+                            </a>
+                        </li>
+                    @endif
+                @endforeach
+            @endisset
+        </ol>
+    </nav>
 
-            <div class="table-responsive">
-                <table class="table table-hover align-middle" id="categoryTable">
-                    <thead class="table-light">
-                        <tr>
-                            <th>ইমেজ</th>
-                            <th>ক্যাটাগরির নাম</th>
-                            <th>স্লাগ (URL)</th>
-                            <th>পণ্য সংখ্যা</th>
-                            <th>স্টেটাস</th>
-                            <th>অ্যাকশন</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($productCategory as $category)
-                        <tr>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">
+            @isset($category)
+                {{ $category->name }} — এর অন্তর্গত
+            @else
+                মূল Category সমূহ
+            @endisset
+        </h5>
+        <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-sm">
+            + নতুন Category
+        </a>
+    </div>
+
+
+    {{-- Table --}}
+    @php $list = $children ?? $categories; @endphp
+
+    @if($list->isEmpty())
+        <div class="alert alert-secondary">কোনো category নেই।</div>
+    @else
+        <div class="card">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width:50px">ক্রম</th>
+                        <th style="width:50px">ফটো</th>
+                        <th>নাম</th>
+                        <th style="width:80px">মোট প্রডাক্ট</th>
+                        <th style="width:80px">স্তর</th>
+                        <th style="width:90px">অবস্থা</th>
+                        <th style="width:80px">Child</th>
+                        <th style="width:130px">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="sortable-list"
+                       data-url="{{route('admin.categories.reorder')}}">
+                    @foreach($list as $cat)
+                        <tr data-id="{{ $cat->id }}">
+
+                            {{-- Drag handle --}}
+                            <td class="text-center" style="cursor:grab; color:#aaa">
+                                &#9776;
+                            </td>
+
                             <td>
                                 <div class="category-icon-box text-center p-2">
-                                    @if($category->category_image && file_exists(public_path('storage/' . $category->category_image)))
-                                        <img src="{{ asset('storage/' . $category->category_image) }}" class="img-fluid" alt="{{ $category->category_name }}" 
+                                    @if($cat->image && file_exists(public_path('storage/' . $cat->image)))
+                                        <img src="{{ asset('storage/' . $cat->image) }}" class="img-fluid" alt="{{ $cat->name }}" 
                                         style="width: 50px; height: 50px; object-fit: cover;">
                                     @else
                                         <img src="{{ asset('storage/' . 'No_Image.jpg') }}" class="img-fluid" style="width: 50px; height: 50px; object-fit: cover;">
                                     @endif
                                 </div>
                             </td>
-                            <td><span class="fw-bold">{{$category->product_category_name}}</span></td>
-                            <td><span class="text-muted">{{$category->category_slug}}</span></td>
-                            <td><span class="badge bg-info text-dark">১২০</span></td>
-                            <td>{{$category->is_active ? "Active" : "Deactive"}}</td>
+
+                            {{-- নাম — ক্লিক করলে child লোড হবে --}}
                             <td>
-                                <a href="{{route('admin.product-categories.edit',$category->id)}}" class="btn btn-sm btn-outline-primary " title="এডিট করুন"><i class="fas fa-edit"></i></a>
+                                <a href="{{ route('admin.categories.children', $cat) }}"
+                                   class="text-decoration-none fw-500 fw-bold text-dark">
+                                    {{ $cat->name }}
+                                </a>
+                            </td>
+
+                            {{-- Level badge --}}
+                            <td><span class="badge bg-info text-dark">ডাইনামিক হয়নি</span></td>
+
+                            {{-- Level badge --}}
+                            <td>
+                                <span class="badge bg-secondary">Level {{ $cat->level }}</span>
+                            </td>
+
+                            {{-- Active/Inactive --}}
+                            <td>
+                                @if($cat->is_active)
+                                    <span class="badge bg-success">সক্রিয়</span>
+                                @else
+                                    <span class="badge bg-danger">নিষ্ক্রিয়</span>
+                                @endif
+                            </td>
+
+                            {{-- Child আছে কিনা --}}
+                            <td>
+                                @if($cat->children->count())
+                                    <a href="{{ route('admin.categories.children', $cat) }}"
+                                       class="badge bg-info text-decoration-none">
+                                        {{ $cat->children->count() }}টি
+                                    </a>
+                                @else
+                                    <span class="text-muted small">নেই</span>
+                                @endif
+                            </td>
+
+                            {{-- Edit / Delete --}}
+                            <td>
+                                <a href="{{ route('admin.categories.edit', $cat) }}"
+                                   class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+
                                 <button type="button" class="btn btn-sm btn-outline-danger" title="মুছে ফেলুন" 
                                     data-bs-toggle="modal"
-                                    data-bs-target="#deleteCategoryModal{{ $category->id }}"
-                                    data-id="{{ $category->id }}">
+                                    data-bs-target="#deleteCategoryModal{{ $cat->id }}"
+                                    data-id="{{ $cat->id }}">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
-                        </tr>
-                            <!-- Member Delete Modal -->
-                            <div class="modal fade" id="deleteCategoryModal{{ $category->id }}" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-danger text-white">
-                                            <h6 class="modal-title">সদস্য মুছে ফেলুন</h6>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <form action="{{route('admin.product-categories.destroy',$category->id)}}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
 
-                                            <div class="modal-body text-center">
-                                                <p>আপনি কি নিশ্চিত যে আপনি এই ক্যাটাগরি মুছে ফেলতে চান?</p>
-                                                <p class="text-danger">এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।</p>
-                                            </div>
-                                            <div class="modal-footer justify-content-center">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বাতিল</button>
-                                                <button type="submit" name="submit" class="btn btn-danger">মুছে ফেলুন</button>
-                                            </div>
-                                        </form>
+                        </tr>
+                        
+
+                        <!-- Member Delete Modal -->
+                        <div class="modal fade" id="deleteCategoryModal{{ $cat->id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger text-white">
+                                        <h6 class="modal-title">সদস্য মুছে ফেলুন</h6>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
+                                    <form action="{{route('admin.categories.destroy',$cat->id)}}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <div class="modal-body text-center">
+                                            <p>আপনি কি নিশ্চিত যে আপনি এই ক্যাটাগরি মুছে ফেলতে চান?</p>
+                                            <p class="text-danger">এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।</p>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বাতিল</button>
+                                            <button type="submit" name="submit" class="btn btn-danger">মুছে ফেলুন</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                        @empty
-                        <tr>
-                            কোন ক্যাটাগরি নেই
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                        </div>
+
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+    @endif
 
+    {{-- Back button --}}
+    @isset($category)
+        @if($category->parent)
+            <a href="{{ route('admin.categories.children', $category->parent) }}"
+               class="btn btn-outline-secondary btn-sm mt-3">
+                ← আগের স্তরে ফিরুন
+            </a>
+        @else
+            <a href="{{ route('admin.categories.index') }}"
+               class="btn btn-outline-secondary btn-sm mt-3">
+                ← মূল Category-তে ফিরুন
+            </a>
+        @endif
+    @endisset
 
+</div>
+
+{{-- SortableJS --}}
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+const tbody = document.getElementById('sortable-list');
+
+Sortable.create(tbody, {
+    animation: 150,
+    onEnd: function () {
+        const rows  = [...tbody.querySelectorAll('tr')];
+        const order = rows.map((row, index) => ({
+            id:       parseInt(row.dataset.id),
+            position: index + 1,
+        }));
+
+        fetch(tbody.dataset.url, {
+            method:  'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({ order }),
+        });
+    }
+});
+</script>
 @endsection

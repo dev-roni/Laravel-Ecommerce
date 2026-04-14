@@ -31,7 +31,7 @@
                    
                     @php
                         $isEdit = $category->exists;
-                        $url = $isEdit ? route('admin.product-categories.update',$category->id) : route('admin.product-categories.store') ;
+                        $url = $isEdit ? route('admin.categories.update',$category->id) : route('admin.categories.store') ;
                     @endphp
 
                     <form action="{{$url}}" method="POST" enctype="multipart/form-data" >
@@ -42,9 +42,26 @@
                         <div class="row g-3">
                             <!-- ক্যাটাগরি নাম -->
                             <div class="col-md-8">
-                                <label for="catName" class="form-label fw-bold @error('product_category_name') text-danger @enderror">@error('product_category_name'){{$message}}@else ক্যাটাগরির নাম @enderror</label>
-                                <input type="text" name="product_category_name" class="form-control" id="catName" value="{{old('product_category_name',$category->product_category_name)}}" placeholder="যেমন: মেনস ফ্যাশন" required>
+                                <label for="catName" class="form-label fw-bold @error('name') text-danger @enderror">@error('name'){{$message}}@else ক্যাটাগরির নাম @enderror</label>
+                                <input type="text" name="name" class="form-control" id="catName" value="{{old('name',$category->name)}}" placeholder="যেমন: মেনস ফ্যাশন" required>
                                 <div class="form-text">ক্যাটাগরির প্রদর্শিত নাম এখানে দিন।</div>
+                            </div>
+
+                            {{-- Parent Category --}}
+                            <div class="mb-3">
+                                <label class="form-label">Parent Category</label>
+                                <select name="parent_id"
+                                        class="form-select @error('parent_id') is-invalid @enderror">
+                                    <option value="">— কোনো parent নেই (root) —</option>
+                                    @foreach($parents as $parent)
+                                        <option value="{{ $parent->id }}" {{ old('parent_id',$category->parent_id) == $parent->id ? 'selected' : '' }}>
+                                            {{ str_repeat('— ', $parent->level - 1) }} {{ $parent->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('parent_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <!-- ডিসপ্লে অর্ডার -->
@@ -56,10 +73,9 @@
 
                             <!-- স্লাগ -->
                             <div class="col-12">
-                                <label for="catSlug" class="form-label fw-bold @error('category_slug') text-danger @enderror">@error('category_slug'){{$message}}@else স্লাগ (Slug) @enderror</label>
+                                <label for="catSlug" class="form-label fw-bold @error('slug') text-danger @enderror">@error('slug'){{$message}}@else স্লাগ (Slug) @enderror</label>
                                 <div class="input-group">
-                                    <span class="input-group-text">/category/</span>
-                                    <input type="text" name="category_slug" value="{{old('category_slug',$category->category_slug)}}" class="form-control" id="catSlug" placeholder="mens-fashion" >
+                                    <input type="text" name="slug" value="{{old('slug',$category->slug)}}" class="form-control" id="catSlug" placeholder="mens-fashion" >
                                 </div>
                                 <div class="form-text">ইউআরএল (URL) এর জন্য ইংরেজিতে লিখুন, স্পেস ব্যবহার করবেন না।</div>
                             </div>
@@ -82,19 +98,19 @@
 
                             <!-- বিবরণ -->
                             <div class="col-12">
-                                <label for="catDesc" class="form-label fw-bold @error('category_description') text-danger @enderror">@error('category_description'){{$message}}@else বিবরণ @enderror</label>
-                                <textarea class="form-control" name="category_description" id="catDesc" rows="4" placeholder="এই ক্যাটাগরি সম্পর্কে বিস্তারিত লিখুন...">{{old('category_slug',$category->category_slug)}}</textarea>
+                                <label for="catDesc" class="form-label fw-bold @error('description') text-danger @enderror">@error('description'){{$message}}@else বিবরণ @enderror</label>
+                                <textarea class="form-control" name="description" id="catDesc" rows="4" placeholder="এই ক্যাটাগরি সম্পর্কে বিস্তারিত লিখুন...">{{old('description',$category->description)}}</textarea>
                             </div>
 
                             <!-- ছবি আপলোড -->
                             <div class="col-12">
-                                <label for="catImage" class="form-label fw-bold @error('category_image') text-danger @enderror">@error('category_image'){{$message}}@else ক্যাটাগরি ছবি @enderror</label>
-                                <input class="form-control" name="category_image" value="old('category_image',$category->category_image)" type="file" id="catImage" accept="image/*">
+                                <label for="catImage" class="form-label fw-bold @error('image') text-danger @enderror">@error('image'){{$message}}@else ক্যাটাগরি ছবি @enderror</label>
+                                <input class="form-control" name="image" value="old('category_image',$category->image)" type="file" id="catImage" accept="image/*">
                                 <div class="form-text">প্রস্তাবিত সাইজ: ৮০০ x ৮০০ পিক্সেল।</div>
                                 
                                 <!-- ছবি প্রিভিউ -->
-                                 <div id="imagePreview" class="mt-3 {{ isset($category) && $category->category_image ? '' : 'd-none' }}">
-                                    <img src="{{ isset($category) && $category->category_image ? asset('storage/'.$category->category_image) : '' }}" 
+                                 <div id="imagePreview" class="mt-3 {{ isset($category) && $category->image ? '' : 'd-none' }}">
+                                    <img src="{{ isset($category) && $category->image ? asset('storage/'.$category->image) : '' }}" 
                                     alt="Preview" class="img-thumbnail" style="max-height: 150px;">
                                 </div>
                             </div>
@@ -104,7 +120,7 @@
 
                         <div class="d-flex gap-3">
                             <button type="submit" class="btn btn-primary px-4"><i class="fas fa-save me-2"></i>সংরক্ষণ করুন</button>
-                            <a href="{{route('admin.product-categories.index')}}" class="btn btn-outline-secondary px-4">বাতিল করুন</a>
+                            <a href="{{route('admin.categories.index')}}" class="btn btn-outline-secondary px-4">বাতিল করুন</a>
                         </div>
                     </form>
                 </div>

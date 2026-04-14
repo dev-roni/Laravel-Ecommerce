@@ -4,8 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use App\models\ProductCategory;
+use App\models\Category;
 
 class ProductCategorySeeder extends Seeder
 {
@@ -15,36 +16,60 @@ class ProductCategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
+            // Level 1 — Root categories
             [
-                'name' => 'Electronics',
-                'description' => 'সব ধরনের ইলেকট্রনিক্স পণ্য এখানে পাওয়া যাবে।'
+                'name'        => 'Electronics',
+                'description' => 'মোবাইল, ল্যাপটপ, গ্যাজেট সহ সব ইলেকট্রনিক পণ্য',
+                'parent_id'   => null,
+                'level'       => 1,
+                'order'       => 1,
             ],
             [
-                'name' => 'Fashion',
-                'description' => 'ছেলে ও মেয়েদের আধুনিক সব পোশাকের সমাহার।'
+                'name'        => 'Clothing',
+                'description' => 'পুরুষ, মহিলা ও শিশুদের পোশাক',
+                'parent_id'   => null,
+                'level'       => 1,
+                'order'       => 2,
+            ],
+
+            // Level 2 — Electronics-এর children (parent_id = 1)
+            [
+                'name'        => 'Mobile',
+                'description' => 'স্মার্টফোন ও ফিচার ফোন',
+                'parent_id'   => 1,
+                'level'       => 2,
+                'order'       => 1,
             ],
             [
-                'name' => 'Home Appliances',
-                'description' => 'গৃহস্থালির প্রয়োজনীয় সব ইলেকট্রনিক সরঞ্জাম।'
+                'name'        => 'Laptop',
+                'description' => 'ব্র্যান্ডেড ও লোকাল সব ধরনের ল্যাপটপ',
+                'parent_id'   => 1,
+                'level'       => 2,
+                'order'       => 2,
             ],
+
+            // Level 3 — Mobile-এর children (parent_id = 3)
             [
-                'name' => 'Groceries',
-                'description' => 'নিত্যপ্রয়োজনীয় ফ্রেশ এবং মানসম্মত গ্রোসারি আইটেম।'
-            ],
-            [
-                'name' => 'Beauty Products',
-                'description' => 'প্রসাধনী এবং স্কিন কেয়ারের সব প্রিমিয়াম প্রোডাক্ট।'
+                'name'        => 'Samsung',
+                'description' => 'Samsung-এর সকল স্মার্টফোন',
+                'parent_id'   => 3,
+                'level'       => 3,
+                'order'       => 1,
             ],
         ];
 
-        foreach ($categories as $key => $category) {
-            ProductCategory::create([
-                'product_category_name' => $category['name'],
-                'category_slug'         => Str::slug($category['name']), // অটোমেটিক স্লাগ জেনারেট হবে
-                'category_description'  => $category['description'],
-                'category_image'        => 'default.jpg', // একটি ডিফল্ট ইমেজ নাম
-                'order'        => $key + 1, // একটি ডিফল্ট ইমেজ নাম
-                'is_active'             => true,
+        foreach ($categories as $category) {
+            DB::table('categories')->insert([
+                'name'        => $category['name'],
+                'slug'        => Str::slug($category['name']),
+                'description' => $category['description'],
+                'image'       => null,
+                'parent_id'   => $category['parent_id'],
+                'level'       => $category['level'],
+                'order'       => $category['order'],
+                'is_active'   => true,
+                'created_at'  => now(),
+                'updated_at'  => now(),
             ]);
         }
     
