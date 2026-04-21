@@ -92,7 +92,7 @@
                             </td>
 
                             {{-- Level badge --}}
-                            <td><span class="badge bg-info text-dark">ডাইনামিক হয়নি</span></td>
+                            <td><span class="badge bg-info text-dark">{{$cat->products->count()}}</span></td>
 
                             {{-- Level badge --}}
                             <td>
@@ -136,12 +136,12 @@
                         </tr>
                         
 
-                        <!-- Member Delete Modal -->
+                        <!-- category Delete Modal -->
                         <div class="modal fade" id="deleteCategoryModal{{ $cat->id }}" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header bg-danger text-white">
-                                        <h6 class="modal-title">সদস্য মুছে ফেলুন</h6>
+                                        <h6 class="modal-title">ক্যাটাগরি মুছে ফেলুন</h6>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <form action="{{route('admin.categories.destroy',$cat->id)}}" method="POST">

@@ -327,5 +327,6 @@ function previewImages(input) {
         preview.appendChild(img);
     });
 }
+
 </script>
 @endsection
