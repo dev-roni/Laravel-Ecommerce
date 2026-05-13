@@ -20,7 +20,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
+        'role',
+        'address'
     ];
 
     /**
@@ -44,5 +47,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Admin কিনা চেক
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    // Orders relationship
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }
