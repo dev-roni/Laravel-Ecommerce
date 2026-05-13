@@ -10,6 +10,9 @@ use App\Models\Product;
 class HomeController extends Controller
 {
     public function index(){
+        // Cache থেকে আনবে, DB hit হবে না
+        $featured = Product::getFeatured(8);
+        $latest   = Product::getLatest(12);
         return view('frontend.pages.home');
     }
 
@@ -78,5 +81,39 @@ class HomeController extends Controller
         return view('frontend.pages.productShow', compact(
             'product', 'attributeGroups', 'variantMap'
         ));
+    }
+
+    // Category page — paginate তাই cache নয়
+    public function category(Request $request, int $categoryId)
+    {
+        $products = Product::with(['primaryImage', 'activeVariants'])
+            ->active()
+            ->inCategory($categoryId)
+            ->when($request->filled('min_price'), fn($q) =>
+                $q->where('base_price', '>=', $request->min_price))
+            ->when($request->filled('max_price'), fn($q) =>
+                $q->where('base_price', '<=', $request->max_price))
+            ->when($request->filled('sort'), fn($q) => match($request->sort) {
+                'price_asc'  => $q->orderBy('base_price'),
+                'price_desc' => $q->orderByDesc('base_price'),
+                'oldest'     => $q->oldest(),
+                default      => $q->latest(),
+            }, fn($q) => $q->latest())
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('category', compact('products'));
+    }
+
+    // Search
+    public function search(Request $request)
+    {
+        $products = Product::with(['primaryImage'])
+            ->active()
+            ->search($request->q)
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('shop.search', compact('products'));
     }
 }
