@@ -1,64 +1,74 @@
  @extends('backend/layouts/masterLayout')
- @section('content')
- <!-- স্ট্যাটস কার্ড -->
-        <div class="row g-4 mb-4">
-            <div class="col-md-6 col-lg-3">
-                <div class="stat-card position-relative blue">
-                    <i class="fas fa-wallet stat-icon text-primary"></i>
-                    <div class="card-title-text text-muted">আজকের বিক্রি</div>
-                    <div class="h4 fw-bold text-dark">৳ ২৫,৪০০</div>
-                    <small class="text-success"><i class="fas fa-arrow-up"></i> ১২%</small>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="stat-card position-relative orange">
-                    <i class="fas fa-shopping-bag stat-icon text-warning"></i>
-                    <div class="card-title-text text-muted">মোট অর্ডার</div>
-                    <div class="h4 fw-bold text-dark">১২০</div>
-                    <small class="text-muted">৫টি পেন্ডিং</small>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="stat-card position-relative green">
-                    <i class="fas fa-users stat-icon text-success"></i>
-                    <div class="card-title-text text-muted">নতুন গ্রাহক</div>
-                    <div class="h4 fw-bold text-dark">৩৫</div>
-                    <small class="text-success"><i class="fas fa-arrow-up"></i> ৫%</small>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="stat-card position-relative red">
-                    <i class="fas fa-exclamation-triangle stat-icon text-danger"></i>
-                    <div class="card-title-text text-muted">লো-স্টক</div>
-                    <div class="h4 fw-bold text-dark">৮</div>
-                    <small class="text-danger">দ্রুত রিস্টক করুন</small>
-                </div>
-            </div>
-        </div>
 
-        <!-- চার্ট এবং টেবিল -->
-        <div class="row g-4">
-            <div class="col-lg-8">
-                <div class="content-card h-100">
-                    <h5 class="fw-bold mb-3">সাপ্তাহিক বিক্রয় রিপোর্ট</h5>
-                    <div style="height: 300px;"><canvas id="salesChart"></canvas></div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="content-card h-100">
-                    <h5 class="fw-bold mb-3">সাম্প্রতিক অর্ডার</h5>
-                    <div class="d-flex flex-column gap-3">
-                        <div class="d-flex justify-content-between border-bottom pb-2">
-                            <span>#০০১২৩</span> <span class="fw-bold">৳ ১,৫০০</span>
-                        </div>
-                        <div class="d-flex justify-content-between border-bottom pb-2">
-                            <span>#০০১২৪</span> <span class="fw-bold">৳ ৩,২০০</span>
-                        </div>
-                        <div class="d-flex justify-content-between border-bottom pb-2">
-                            <span>#০০১২৫</span> <span class="fw-bold">৳ ৮৫০</span>
-                        </div>
+
+@section('content')
+<div class="container-fluid py-4 px-4">
+
+    <h4 class="mb-4">Dashboard</h4>
+
+    {{-- Stats --}}
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted small mb-1">মোট Product</div>
+                    <div class="fs-3 fw-bold">{{ $stats['total_products'] }}</div>
+                    <div class="text-success small">
+                        {{ $stats['active_products'] }}টি সক্রিয়
                     </div>
                 </div>
             </div>
         </div>
-        @endsection
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted small mb-1">মোট Customer</div>
+                    <div class="fs-3 fw-bold">{{ $stats['total_users'] }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted small mb-1">কম Stock</div>
+                    <div class="fs-3 fw-bold text-danger">{{ $stats['low_stock'] }}</div>
+                    <div class="text-danger small">মনোযোগ প্রয়োজন</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted small mb-1">মোট Order</div>
+                    <div class="fs-3 fw-bold">—</div>
+                    <div class="text-muted small">শীঘ্রই আসছে</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Quick Links --}}
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent fw-500">দ্রুত কাজ</div>
+                <div class="list-group list-group-flush">
+                    <a href="{{ route('admin.products.create') }}"
+                       class="list-group-item list-group-item-action">
+                        + নতুন Product যোগ করুন
+                    </a>
+                    <a href="{{ route('admin.categories.create') }}"
+                       class="list-group-item list-group-item-action">
+                        + নতুন Category যোগ করুন
+                    </a>
+                    <a href="{{ route('admin.attributes.index') }}"
+                       class="list-group-item list-group-item-action">
+                        Attributes পরিচালনা
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@endsection

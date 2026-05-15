@@ -12,6 +12,14 @@
             <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> অর্ডার সমূহ</a></li>
             <li><a href="customers.html"><i class="fas fa-users"></i> গ্রাহকবৃন্দ</a></li>
             <li><a href="settings.html"><i class="fas fa-cog"></i> সেটিংস</a></li>
-            <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> লগআউট</a></li>
+            <li>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+
+                    <button type="submit" class="border-0 bg-transparent text-white w-100 text-start p-0">
+                        <i class="fas fa-sign-out-alt"></i> লগআউট
+                    </button>
+                </form>
+            </li>
         </ul>
     </nav>

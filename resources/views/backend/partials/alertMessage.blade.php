@@ -1,5 +1,6 @@
 <div class="toast-container" id="toastContainer"></div>
-@push('component')@if(session('success'))
+@push('component')
+@if(session('success'))
     <div id="alert-message" class="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-3"
         role="alert" style="z-index: 1050; min-width: 250px;">
         {{ session('success') }}

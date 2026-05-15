@@ -1,4 +1,12 @@
 <body>
+
+    @if(request('verified'))
+        <div id="alert-message" class="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-3"
+            role="alert" style="z-index: 1050; min-width: 250px;">
+            Verified Successfully
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
@@ -13,7 +21,18 @@
                     <li class="nav-item"><a class="nav-link" href="#home">হোম</a></li>
                     <li class="nav-item"><a class="nav-link" href="#categories">ক্যাটাগরি</a></li>
                     <li class="nav-item"><a class="nav-link" href="#products">প্রোডাক্ট</a></li>
-                    <li class="nav-item"><a class="nav-link" href="login.html">লগইন</a></li>
+                    @if(!auth()->check())
+                    <li class="nav-item"><a class="nav-link" href="{{route('login')}}">লগইন</a></li>
+                    @else
+                    <li class="nav-item">
+                        <form method="POST" action="{{ route('logout') }}" class="nav-link">
+                            @csrf
+                            <button type="submit" class="border-0 bg-transparent text-white w-100 text-start p-0">
+                                <i class="fas fa-sign-out-alt"></i> লগআউট
+                            </button>
+                        </form>
+                    </li>
+                    @endif
                 </ul>
                 <div class="navbar-nav ms-3">
                     <a class="nav-link" href="#"><i class="fas fa-search"></i></a>
