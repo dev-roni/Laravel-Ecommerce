@@ -7,6 +7,7 @@ use App\Http\Controllers\backend\ProductController;
 use App\Http\Controllers\backend\ProductVariantController;
 use App\Http\Controllers\backend\CategoryController;
 use App\Http\Controllers\backend\AttributeController;
+use App\Http\Controllers\backend\OrderController;
 
 // ── Auth Routes (Breeze দেয়) ──
 require __DIR__ . '/auth.php';
@@ -38,4 +39,11 @@ Route::middleware(['auth','admin'])->group(function(){
     Route::resource('categories',CategoryController::class);
     Route::get('categories/root-data', [CategoryController::class, 'rootData']);
     Route::get('categories/{category}/children', [CategoryController::class, 'children'])->name('categories.children');
+
+    // Admin group-এর ভেতরে
+    Route::resource('orders',OrderController::class);
+    Route::post('orders/{order}/status', [Admin\OrderController::class, 'updateStatus'])
+        ->name('orders.status');
+    Route::post('orders/{order}/payment', [Admin\OrderController::class, 'updatePayment'])
+        ->name('orders.payment');
 });

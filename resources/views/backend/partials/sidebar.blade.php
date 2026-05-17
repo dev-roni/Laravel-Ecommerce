@@ -9,7 +9,15 @@
             <li><a href="{{route('admin.attributes.index')}}"><i class="fa-solid fa-sitemap"></i> পণ্যের ভেরিয়েন্ট</a></li>
             <li><a href="{{route('admin.categories.index')}}"><i class="fas fa-layer-group"></i> ক্যাটাগরি সমূহ</a></li>
             <li><a href="{{route('admin.categories.create')}}"><i class="fas fa-plus-circle"></i> ক্যাটাগরি তৈরি</a></li>
-            <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> অর্ডার সমূহ</a></li>
+
+            <li> <a href="{{ route('admin.orders.index') }}"
+                class="nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
+                    <i class="fas fa-shopping-cart"></i> অর্ডার সমূহ
+                    @if(($pendingCount = \App\Models\Order::where('status','pending')->count()) > 0)
+                        <span class="badge bg-danger ms-1">{{ $pendingCount }}</span>
+                    @endif
+                </a>
+            </li>
             <li><a href="customers.html"><i class="fas fa-users"></i> গ্রাহকবৃন্দ</a></li>
             <li><a href="settings.html"><i class="fas fa-cog"></i> সেটিংস</a></li>
             <li>
