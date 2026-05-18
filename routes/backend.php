@@ -42,8 +42,6 @@ Route::middleware(['auth','admin'])->group(function(){
 
     // Admin group-এর ভেতরে
     Route::resource('orders',OrderController::class);
-    Route::post('orders/{order}/status', [Admin\OrderController::class, 'updateStatus'])
-        ->name('orders.status');
-    Route::post('orders/{order}/payment', [Admin\OrderController::class, 'updatePayment'])
-        ->name('orders.payment');
+    Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+    Route::post('orders/{order}/payment', [OrderController::class, 'updatePayment'])->name('orders.payment');
 });

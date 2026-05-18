@@ -20,6 +20,11 @@ class DashboardController extends Controller
                 'low_stock'      => Product::where('has_variants', false)
                                            ->where('stock', '<=', 5)
                                            ->count(),
+                'pending_orders'  => Order::where('status', 'pending')->count(),
+                'today_orders'    => Order::today()->count(),
+                'today_revenue'   => Order::today()
+                                        ->where('payment_status', 'paid')
+                                        ->sum('total'),
             ];
         });
         return view('backend.pages.dashboard', compact('stats'));
