@@ -36,9 +36,15 @@
                 </ul>
                 <div class="navbar-nav ms-3">
                     <a class="nav-link" href="#"><i class="fas fa-search"></i></a>
-                    <a class="nav-link position-relative" href="#">
+                    <a href="{{ route('cart.index') }}" class="nav-link position-relative">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-accent">3</span>
+                        @php $count = app(\App\Services\CartService::class)->count(); @endphp
+                        @if($count > 0)
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-accent"
+                                id="cart-count">
+                                {{ $count }}
+                            </span>
+                        @endif
                     </a>
                 </div>
             </div>

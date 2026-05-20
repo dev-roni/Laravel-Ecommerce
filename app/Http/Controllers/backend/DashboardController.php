@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Order;
 
 class DashboardController extends Controller
 {
