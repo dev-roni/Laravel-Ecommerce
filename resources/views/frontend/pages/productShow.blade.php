@@ -318,7 +318,7 @@ function addToCart() {
     }
     @endif
 
-    fetch('{{-- route("cart.add") --}}', {
+    fetch('{{ route("cart.add") }}', {
         method:  'POST',
         headers: {
             'Content-Type': 'application/json',

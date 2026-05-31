@@ -35,6 +35,13 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id')->orderBy('order');
     }
 
+    public function activeChildren()
+    {
+        return $this->children()
+                    ->where('is_active', true)
+                    ->get();
+    }
+
     // নতুন category যোগ করলে order স্বয়ংক্রিয় ঠিক হবে
     public static function nextOrder($parent_id): int
     {

@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\frontend\HomeController;
+use App\Http\Controllers\frontend\ShopController;
+use App\Http\Controllers\frontend\CartController;
+use App\Http\Controllers\frontend\CheckoutController;
+use App\Http\Controllers\frontend\orderController;
 
 // ── Auth Routes (Breeze দেয়) ──
 require __DIR__ . '/auth.php';
@@ -26,15 +30,21 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 
     // Order success
-    Route::get('/orders/{order}/success', [OrderController::class, 'success'])
-         ->name('orders.success');
+    Route::get('/orders/{order}/success', [OrderController::class, 'success'])->name('orders.success');
 
     // Customer order history
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
 
 });
 
 Route::get('/',[HomeController::class,'index'])->name('index');
 Route::get('products/{product:slug}', [HomeController::class, 'show'])
      ->name('products.show');
+
+// routes/web.php — Public routes
+Route::get('home', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/search', [ShopController::class, 'search'])->name('shop.search');
+Route::get('/category/{slug}', [ShopController::class, 'category'])->name('shop.category');
+Route::get('/product/{slug}', [ShopController::class, 'product'])->name('shop.product');

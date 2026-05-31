@@ -33,7 +33,7 @@ class CheckoutController extends Controller
         $total    = $this->cart->total();
         $user     = auth()->user();
 
-        return view('shop.checkout',
+        return view('shop.check-out',
             compact('items', 'subtotal', 'shipping', 'total', 'user'));
     }
 

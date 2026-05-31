@@ -382,7 +382,7 @@
             <h6 class="text-muted mb-3">নতুন Variant যোগ করুন</h6>
 
             <form method="POST"
-                    action="{{ route('admin.products.variants.store', [$product, $variant]) }}"
+                    action="{{ route('admin.products.variants.store', $product) }}"
                     id="add-variant-form">
                 @csrf
 

@@ -36,7 +36,7 @@ class CartController extends Controller
             $request->quantity ?? 1
         );
 
-        if ($request->ajax()) {
+        if ($request->ajax() or $request->expectsJson()) {
             return response()->json($result);
         }
 

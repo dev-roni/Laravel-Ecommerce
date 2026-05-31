@@ -1,4 +1,10 @@
 @include('frontend/partials/header')
 @include('frontend/partials/navbar')
-@yield('content')
+@include('frontend/partials/marquee')
+@include('frontend/partials/breadcrumb')
+<main>
+  @yield('content')
+</main>
+@include('frontend/partials/feature')
+@include('frontend/partials/flashMessage')
 @include('frontend/partials/footer')

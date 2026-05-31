@@ -8,37 +8,55 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    // Order history
+
     public function index()
     {
         $orders = Order::where('user_id', auth()->id())
-                       ->with('items')
+                       ->with(['items'])
                        ->latest()
                        ->paginate(10);
 
-        return view('shop.orders.index', compact('orders'));
+        return view('shop.orders', compact('orders'));
     }
 
-    // Order details
+
     public function show(Order $order)
     {
-        // শুধু নিজের order দেখতে পারবে
-        if ($order->user_id !== auth()->id()) {
-            abort(403);
-        }
+        if ($order->user_id !== auth()->id()) abort(403);
 
         $order->load(['items.product', 'items.variant']);
 
-        return view('shop.orders.show', compact('order'));
+        return view('shop.orderShow', compact('order'));
     }
 
-    // Order success page
+
     public function success(Order $order)
     {
-        if ($order->user_id !== auth()->id()) {
-            abort(403);
+        if ($order->user_id !== auth()->id()) abort(403);
+
+        return view('shop.order-success', compact('order'));
+    }
+
+    // Order বাতিল (শুধু pending অবস্থায়)
+    public function cancel(Order $order)
+    {
+        if ($order->user_id !== auth()->id()) abort(403);
+
+        if ($order->status !== 'pending') {
+            return back()->with('error', 'শুধু pending order বাতিল করা যাবে।');
         }
 
-        return view('shop.orders.success', compact('order'));
+        // Stock ফেরত
+        foreach ($order->items as $item) {
+            if ($item->product_variant_id) {
+                $item->variant?->increment('stock', $item->quantity);
+            } else {
+                $item->product?->increment('stock', $item->quantity);
+            }
+        }
+
+        $order->update(['status' => 'cancelled']);
+
+        return back()->with('success', 'Order বাতিল হয়েছে।');
     }
 }

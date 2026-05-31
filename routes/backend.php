@@ -25,7 +25,7 @@ Route::middleware(['auth','admin'])->group(function(){
     //product varient manage
     Route::put('products/{product}/variants/{variant}',[ProductVariantController::class, 'update'])->name('products.variants.update');
     Route::delete('products/{product}/variants/{variant}',[ProductVariantController::class, 'destroy'])->name('products.variants.destroy');
-    Route::post('products/{product}/variants/{variant}',[ProductVariantController::class, 'store'])->name('products.variants.store');
+    Route::post('products/{product}/variants',[ProductVariantController::class, 'store'])->name('products.variants.store');
     Route::post('products/{product}/variants/{variant}/image',[ProductVariantController::class, 'updateImage'])->name('products.variants.image');
     Route::delete('products/{product}/variants/{variant}/image',[ProductVariantController::class, 'destroyImage'])->name('products.variants.image.destroy');
 

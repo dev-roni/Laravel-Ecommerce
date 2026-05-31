@@ -6,14 +6,20 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Product;
+use App\Models\Category;
 
 class HomeController extends Controller
 {
     public function index(){
         // Cache থেকে আনবে, DB hit হবে না
+       $categories = Category::whereNull('parent_id')
+                               ->where('is_active', true)
+                               ->orderBy('order')
+                               ->get();
+
         $featured = Product::getFeatured(8);
         $latest   = Product::getLatest(12);
-        return view('frontend.pages.home');
+        return view('frontend.layouts.masterLayout',compact('categories', 'featured', 'latest'));
     }
 
     // app/Http/Controllers/ProductController.php (frontend)
