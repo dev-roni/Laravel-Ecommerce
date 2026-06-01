@@ -1,5 +1,6 @@
 
 <body>
+@php use Illuminate\Support\Facades\Storage; @endphp
 
 @php
   $cartCount = auth()->check()
@@ -51,7 +52,7 @@
             ->where('is_active', true)
             ->orderBy('order')
             ->get() as $cat)
-            @include('frontend.partials._cat_item', ['category' => $cat, 'depth' => 0])
+            @include('frontend.component._cat_item', ['category' => $cat, 'depth' => 0])
           @endforeach
         </div>
       </div>
@@ -155,7 +156,7 @@
         ->where('is_active', true)
         ->orderBy('order')
         ->get() as $cat)
-        @include('frontend.partials._mob_cat_item', ['category' => $cat, 'depth' => 0])
+        @include('frontend.component._mob_cat_item', ['category' => $cat, 'depth' => 0])
       @endforeach
     </div>
 

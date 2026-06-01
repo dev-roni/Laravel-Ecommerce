@@ -19,7 +19,7 @@ class HomeController extends Controller
 
         $featured = Product::getFeatured(8);
         $latest   = Product::getLatest(12);
-        return view('frontend.layouts.masterLayout',compact('categories', 'featured', 'latest'));
+        return view('frontend.pages.home',compact('categories', 'featured', 'latest'));
     }
 
     // app/Http/Controllers/ProductController.php (frontend)

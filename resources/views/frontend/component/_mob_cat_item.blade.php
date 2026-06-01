@@ -43,7 +43,7 @@
 
     {{-- Recurse into each child — they live INSIDE this .mob-sub-links --}}
     @foreach($children as $child)
-      @include('frontend.partials._mob_cat_item', ['category' => $child, 'depth' => $depth + 1])
+      @include('frontend.component._mob_cat_item', ['category' => $child, 'depth' => $depth + 1])
     @endforeach
 
   </div>

@@ -1,6 +1,5 @@
 @include('frontend/partials/header')
 @include('frontend/partials/navbar')
-@include('frontend/partials/marquee')
 @include('frontend/partials/breadcrumb')
 <main>
   @yield('content')

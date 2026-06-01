@@ -51,7 +51,7 @@
 
       {{-- Recurse into each child --}}
       @foreach($children as $child)
-        @include('frontend.partials._cat_item', ['category' => $child, 'depth' => $depth + 1])
+        @include('frontend.component._cat_item', ['category' => $child, 'depth' => $depth + 1])
       @endforeach
 
     </div>
