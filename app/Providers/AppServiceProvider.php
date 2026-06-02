@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\View;
 use App\Models\Category;
 use App\Observers\CategoryObserver;
 use App\Services\CartService;
@@ -24,5 +26,24 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Category::observe(CategoryObserver::class);
+
+        View::composer('*', function ($view) {
+
+            $categories = Cache::rememberForever(
+                'global_categories',
+                fn () => Category::query()
+                    ->whereNull('parent_id')
+                    ->where('is_active', true)
+                    ->with([
+                        'children' => fn ($q) => $q
+                            ->where('is_active', true)
+                            ->orderBy('order')
+                    ])
+                    ->orderBy('order')
+                    ->get()
+            );
+
+            $view->with('globalCategories', $categories);
+        });
     }
 }

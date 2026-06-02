@@ -7,14 +7,9 @@
 
 @section('content')
 
-{{-- ████████████████████████████████
-     HERO
-████████████████████████████████ --}}
+{{-- HERO --}}
 
-@include('frontend.component.hero', [
-    'featured' => $featured,
-    'latest'   => $latest,
-])
+@include('frontend.component.hero', ['featured' => $featured,'latest'   => $latest,])
 
 {{-- ████████████████████████████████
      CATEGORIES
@@ -184,18 +179,4 @@
 
 @endsection
 
-@push('scripts')
-<script>
-// Hero dot interaction
-document.querySelectorAll('[data-dot]').forEach((dot, i, all) => {
-  dot.addEventListener('click', () => {
-    all.forEach(d => {
-      d.style.background = 'rgba(255,255,255,.35)';
-      d.style.width = '6px'; d.style.height = '6px';
-    });
-    dot.style.background = '#fff';
-    dot.style.width = '8px'; dot.style.height = '8px';
-  });
-});
-</script>
-@endpush
+

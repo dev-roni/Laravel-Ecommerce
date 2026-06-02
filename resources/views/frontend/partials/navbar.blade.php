@@ -1,6 +1,5 @@
 
 <body>
-@php use Illuminate\Support\Facades\Storage; @endphp
 
 @php
   $cartCount = auth()->check()
@@ -48,10 +47,7 @@
           <i class="fa-solid fa-chevron-down cat-chevron"></i>
         </button>
         <div class="cat-dropdown">
-          @foreach(\App\Models\Category::whereNull('parent_id')
-            ->where('is_active', true)
-            ->orderBy('order')
-            ->get() as $cat)
+          @foreach($globalCategories as $cat)
             @include('frontend.component._cat_item', ['category' => $cat, 'depth' => 0])
           @endforeach
         </div>
@@ -152,10 +148,7 @@
     {{-- Categories --}}
     <div class="pt-2">
       <div class="mob-section-label">Categories</div>
-      @foreach(\App\Models\Category::whereNull('parent_id')
-        ->where('is_active', true)
-        ->orderBy('order')
-        ->get() as $cat)
+      @foreach($globalCategories  as $cat)
         @include('frontend.component._mob_cat_item', ['category' => $cat, 'depth' => 0])
       @endforeach
     </div>

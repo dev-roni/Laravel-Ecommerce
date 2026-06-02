@@ -90,4 +90,17 @@ class Category extends Model
         }
         return implode(' > ', $path);
     }
+
+    // ══════════════════════════════
+    // service provider — automatic cache clear
+    // ══════════════════════════════
+    protected static function booted(): void
+    {
+        foreach (['created', 'updated', 'deleted'] as $event) {
+
+            static::$event(function () {
+                Cache::forget('global_categories');
+            });
+        }
+    }
 }
