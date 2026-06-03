@@ -1,5 +1,8 @@
-<div class="toast-container" id="toastContainer"></div>
-@push('component')
+<div class="toast-container position-fixed top-0 end-0 p-3"
+     id="toastContainer"
+     style="z-index: 1080;">
+</div>
+
 @if(session('success'))
     <div id="alert-message" class="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-3"
         role="alert" style="z-index: 1050; min-width: 250px;">
@@ -15,6 +18,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

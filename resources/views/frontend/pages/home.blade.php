@@ -23,7 +23,7 @@
         <h2 class="sec-title mb-0">Shop Categories</h2>
       </div>
       <a href="{{ route('shop.search') }}" class="link-viewall">
-        All Categories <i class="bi bi-arrow-right"></i>
+        All Categories <i class="fa-solid fa-arrow-right"></i>
       </a>
     </div>
 
@@ -99,7 +99,7 @@
           <h2 class="sec-title mb-0">Trending Now</h2>
         </div>
         <a href="{{ route('shop.search') }}" class="link-viewall">
-          See All Products <i class="bi bi-arrow-right"></i>
+          See All Products <i class="fa-solid fa-arrow-right"></i>
         </a>
       </div>
 

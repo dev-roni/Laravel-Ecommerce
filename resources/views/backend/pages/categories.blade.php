@@ -187,26 +187,38 @@
 {{-- SortableJS --}}
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
-const tbody = document.getElementById('sortable-list');
+    const tbody = document.getElementById('sortable-list');
 
-Sortable.create(tbody, {
-    animation: 150,
-    onEnd: function () {
-        const rows  = [...tbody.querySelectorAll('tr')];
-        const order = rows.map((row, index) => ({
-            id:       parseInt(row.dataset.id),
-            position: index + 1,
-        }));
+    Sortable.create(tbody, {
+        animation: 150,
+        onEnd: function () {
+            const rows  = [...tbody.querySelectorAll('tr')];
+            const order = rows.map((row, index) => ({
+                id:       parseInt(row.dataset.id),
+                position: index + 1,
+            }));
 
-        fetch(tbody.dataset.url, {
-            method:  'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            },
-            body: JSON.stringify({ order }),
-        });
-    }
-});
+            fetch(tbody.dataset.url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                },
+                body: JSON.stringify({ order }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                } else {
+                    showToast('Something went wrong', 'danger');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                showToast('Server error occurred', 'danger');
+            });
+        }
+    });
 </script>
 @endsection

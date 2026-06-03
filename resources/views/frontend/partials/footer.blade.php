@@ -24,8 +24,7 @@
       {{-- Shop --}}
       <div class="col-6 col-lg-2 col-md-3">
         <div class="footer-h mb-3">Shop</div>
-        @foreach(\App\Models\Category::whereNull('parent_id')
-          ->where('is_active', true)->limit(5)->orderBy('order')->get() as $cat)
+        @foreach($globalCategories as $cat)
           <a href="{{ route('shop.category', $cat->slug) }}" class="footer-link">
             {{ $cat->name }}
           </a>

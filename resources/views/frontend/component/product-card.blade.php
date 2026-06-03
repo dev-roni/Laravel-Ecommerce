@@ -88,14 +88,14 @@
            class="btn-add-cart"
            title="Choose options"
            style="text-decoration:none">
-          <i class="bi bi-arrow-right"></i>
+          <i class="fa-solid fa-arrow-right"></i>
         </a>
       @else
         <button class="btn-add-cart"
                 onclick="addToCart({{ $product->id }})"
                 title="Add to Cart"
                 {{ $product->total_stock <= 0 ? 'disabled style=opacity:.4' : '' }}>
-          <i class="bi bi-plus-lg"></i>
+          <i class="fa-solid fa-plus fa-lg"></i>
         </button>
       @endif
     </div>

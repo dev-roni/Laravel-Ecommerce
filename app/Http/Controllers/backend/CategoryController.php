@@ -33,7 +33,7 @@ class CategoryController extends Controller
                     ->update(['order' => $item['position']]);
         }
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true,'message' => 'Category reorder successfully']);
     }
     /**
      * কোন ক্যাটাগরিতে ক্লিক করলে তার চাইল্ড দেখাতে.
