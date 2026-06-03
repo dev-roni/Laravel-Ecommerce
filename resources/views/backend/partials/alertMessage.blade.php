@@ -1,6 +1,6 @@
 <div class="toast-container position-fixed top-0 end-0 p-3"
      id="toastContainer"
-     style="z-index: 1080;">
+     style="z-index:1090;">
 </div>
 
 @if(session('success'))
@@ -21,15 +21,18 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const alert = document.getElementById('alert-message');
-        if (alert) {
-            // ৫ সেকেন্ড (৫০০০ মিলিসেকেন্ড) পর এটি ফেড আউট হয়ে যাবে
-            setTimeout(function() {
-                // বুটস্ট্র্যাপের বিল্ট-ইন ক্লাস ব্যবহার করে ক্লোজ করা
-                let bsAlert = new bootstrap.Alert(alert);
+document.addEventListener('DOMContentLoaded', function() {
+    const alert = document.getElementById('alert-message');
+
+    if (alert) {
+        setTimeout(function() {
+
+            if (window.bootstrap) {
+                let bsAlert = new window.bootstrap.Alert(alert);
                 bsAlert.close();
-            }, 5000); 
-        }
-    });
+            }
+
+        }, 5000);
+    }
+});
 </script>

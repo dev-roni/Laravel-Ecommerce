@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<link rel="stylesheet" href="{{asset('frontend_assets/css/bootstrap.min.css')}}">
-<link rel="stylesheet" href="{{asset('frontend_assets/css/style.css')}}">
+@vite(['resources/css/app.css'])
 @stack('styles')
 </head>

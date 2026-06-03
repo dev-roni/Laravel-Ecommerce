@@ -6,7 +6,7 @@
     <title>ড্যাশবোর্ড</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{asset('backend_assets/backend_css/admin.css')}}">
-    <link rel="stylesheet" href="{{asset('backend_assets/backend_css/bootstrap.min.css')}}">
+    @vite(['resources/css/admin.css','resources/js/admin.js'])
+    
 </head>
 <body>

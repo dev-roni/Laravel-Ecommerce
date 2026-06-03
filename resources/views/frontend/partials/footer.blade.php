@@ -80,9 +80,7 @@
   </div>
 </footer>
 
-<!-- Bootstrap JS -->
-<script src="{{asset('frontend_assets/js/bootstrap.bundle.min.js')}}"></script>
-<script src="{{asset('frontend_assets/js/script.js')}}"></script>
+@vite(['resources/js/app.js'])
 
 @stack('scripts')
 </body>
