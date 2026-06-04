@@ -468,7 +468,7 @@
 </style>
 
 <div class="container-fluid px-0">
-  <div id="heroCarousel" class="carousel slide " data-bs-ride="carousel" data-bs-interval="5000" data-bs-touch="true">
+  <div id="heroCarousel" class="carousel slide pt-2" data-bs-ride="carousel" data-bs-interval="5000" data-bs-touch="true">
     
     {{-- Indicators --}}
     <div class="carousel-indicators">

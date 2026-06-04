@@ -11,7 +11,3 @@
                 🛒 পবন<span>বাহিকা</span>
                 </a>
             </h3>
-
-            <p class="auth-subtitle mb-0">
-                Welcome Back
-            </p>

@@ -14,7 +14,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="auth-page">
-        <div class="auth-card mb-4">
+        <div class="auth-card mb-2">
             <div class="text-center mb-4">
                 <x-application-logo  />
             </div>
