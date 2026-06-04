@@ -54,6 +54,15 @@
     box-shadow: 0 0 0 4px rgba(29, 161, 168, .15);
 }
 
+.form-control.is-invalid {
+    border-color: var(--error);
+}
+
+.form-control.is-invalid:focus {
+    border-color: var(--error);
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, .15);
+}
+
 .btn-primary-custom {
     background: var(--primary);
     border: none;
