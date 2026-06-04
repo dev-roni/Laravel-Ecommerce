@@ -1,4 +1,6 @@
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import './bootstrap';
+import * as bootstrap from 'bootstrap';
+window.bootstrap = bootstrap;
 
 import '../js/shop/script.js';
 

@@ -1,0 +1,129 @@
+.auth-page {
+    background: var(--background);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 10px 25px rgba(10, 37, 64, 0.06);
+}
+
+.brand-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-card .auth-title {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.auth-subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.auth-card .form-label {
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.auth-card .form-control {
+    height: 46px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+}
+
+.auth-card .form-control:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 4px rgba(29, 161, 168, .15);
+}
+
+.btn-primary-custom {
+    background: var(--primary);
+    border: none;
+    border-radius: 12px;
+    height: 46px;
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-primary-custom:hover {
+    background: #081d32;
+    color: #fff;
+    border-style: solid;
+    border-width: 2px;
+    border-color: var(--secondary);
+}
+
+.auth-link {
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+.auth-link:hover {
+    color: var(--primary);
+}
+
+.btn-social {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--text-primary);
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.btn-social:hover {
+    background: #f1f5f9;
+    color: var(--text-primary);
+}
+
+.auth-card .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.auth-card .divider::before,
+.auth-card .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.alert-success {
+    background: rgba(34, 197, 94, .08);
+    border: 1px solid rgba(34, 197, 94, .15);
+    color: var(--success);
+}
+
+.alert-danger {
+    background: rgba(239, 68, 68, .08);
+    border: 1px solid rgba(239, 68, 68, .15);
+    color: var(--error);
+}
