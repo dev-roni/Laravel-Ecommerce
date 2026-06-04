@@ -1,4 +1,4 @@
-<div class="brand-icon mb-3">
+            <div class="brand-icon mb-3">
                 <svg width="24" height="24" viewBox="0 0 24 24"
                     fill="none" stroke="white" stroke-width="2">
                     <rect x="3" y="11" width="18" height="11" rx="2"/>
