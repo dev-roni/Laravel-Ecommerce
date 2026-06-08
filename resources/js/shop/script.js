@@ -92,13 +92,10 @@ function addToCart(productId, variantId = null, quantity = 1) {
         })
         .then(data => {
             if (!data) return;
-            const toastEl = document.getElementById('cart-toast');
-            const toastMsg = document.getElementById('toast-message');
 
             if (data.success) {
-                toastEl.classList.remove('text-bg-danger', 'text-bg-success');
-                toastEl.classList.add(data.success ? 'text-bg-success' : 'text-bg-danger');
-                toastMsg.textContent = data.message || 'পণ্য কার্টে যোগ হয়েছে!';
+                const msg = data.message || 'পণ্য কার্টে যোগ হয়েছে!';
+                showToast(msg, 'success');
                 // update badge
                 let badge = document.getElementById('cart-count');
                 if (data.count > 0) {
@@ -113,10 +110,9 @@ function addToCart(productId, variantId = null, quantity = 1) {
                     setTimeout(() => badge.style.transform = 'scale(1)', 300);
                 }
             } else {
-                toastEl.classList.replace('text-bg-success', 'text-bg-danger');
-                toastMsg.textContent = data.message || 'কিছু একটা সমস্যা হয়েছে।';
+                const msg = data.message || 'কিছু একটা সমস্যা হয়েছে!';
+                showToast(msg, 'error');
             }
-            new bootstrap.Toast(toastEl, { delay: 3000 }).show();
         })
         .catch(() => window.location.href = window.App.loginUrl);
 }

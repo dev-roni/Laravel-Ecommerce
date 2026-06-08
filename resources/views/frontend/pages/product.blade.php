@@ -4,26 +4,17 @@
 
 @push('styles')
 <style>
-    .anim-up {
-    animation: fadeUp .7s ease both;
-    }
-    .d1 {
-        animation-delay: .05s
+
+
+  .gallery-wrap { 
+        position: sticky; top: 90px; 
     }
 
-    .d2 {
-        animation-delay: .12s
-    }
-
-    .d3 {
-        animation-delay: .19s
-    }
-
-    .d4 {
-        animation-delay: .26s
-    }
-
-  .gallery-wrap { position: sticky; top: 90px; }
+.gallery-wrap img{
+    transition: transform .5s ease;
+    display: block;
+}
+.gallery-wrap:hover img { transform: scale(1.04); }
 
   .variant-info{
   background: var(--background);
@@ -85,57 +76,26 @@
   color: var(--text-secondary);
   line-height: 1.75;
 }
-/* =========================
-   PRIMARY BUTTON
-========================= */
 
-.btn-primary {
-    background: var(--primary) !important;
-    border-color: var(--primary) !important;
-    color: #fff !important;
-    transition: all .25s ease !important;
+.discount-chip {
+  display:inline-block;
+  background:rgba(239,68,68,.09); color:var(--error);
+  border:1px solid rgba(239,68,68,.2);
+  border-radius:4px; font-size:.66rem; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase;
+  padding:.22rem .6rem; margin-left:.45rem;
 }
 
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active {
-    background: #081d33 !important;
-    border-color: #081d33 !important;
-    color: #fff !important;
-
-    transform: translateY(-2px) !important;
-    box-shadow: 0 10px 25px rgba(10, 37, 64, .25) !important;
+.cat-pill {
+  display:inline-flex; align-items:center; gap:.4rem;
+  font-size:.65rem; letter-spacing:.12em; text-transform:uppercase;
+  font-weight:600; color:var(--secondary);
+  background:rgba(29,161,168,.09);
+  border:1px solid rgba(29,161,168,.22);
+  border-radius:50px; padding:.28rem .85rem;
+  margin-bottom:.85rem; text-decoration:none;
 }
-
-.btn-primary:disabled {
-    background: var(--primary) !important;
-    border-color: var(--primary) !important;
-    opacity: .65 !important;
-}
-
-
-/* =========================
-   OUTLINE SECONDARY BUTTON
-========================= */
-
-.btn-outline-secondary {
-    background: transparent !important;
-    border: 1px solid var(--secondary) !important;
-    color: var(--secondary) !important;
-    transition: all .25s ease !important;
-}
-
-.btn-outline-secondary:hover,
-.btn-outline-secondary:active {
-    background: var(--secondary) !important;
-    border-color: var(--secondary) !important;
-    color: #fff !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 10px 25px rgba(29, 161, 168, .25) !important;
-}
-
-.btn-outline-secondary:disabled {
-    opacity: .65 !important;
+.cat-pill:hover { color:var(--secondary); background:rgba(29,161,168,.15); }
   </style>
   @endpush
 @section('content')
@@ -199,7 +159,8 @@
         {{-- Product Info --}}
         <div class="col-md-7">
 
-            <span class="badge bg-light text-primary border border-primary mb-2 d1">
+            <span class="cat-pill d1">
+                <i class="fa-solid fa-folder" style="font-size:.58rem"></i>
                 {{ $product->category->name }}
             </span>
 
@@ -218,7 +179,7 @@
                     <span id="original-price" class="text-muted text-decoration-line-through ms-2">
                         ৳{{ number_format($product->base_price) }}
                     </span>
-                    <span id="commission" class="badge bg-g6 ms-2">
+                    <span id="commission" class="discount-chip ms-2">
                         {{ $product->discount_percent }}% ছাড়
                     </span>
                 @endif
@@ -307,8 +268,8 @@
                               <span class="v-info-value" id="variant-price">—</span>
                             </div>
                             <div class="v-info-item">
-                              <span class="v-info-label">Original Price</span>
-                              <span class="v-info-value text-decoration-line-through" id="variant-original-price">—</span>
+                              <span class="v-info-label">Save</span>
+                              <span class="v-info-value " id="save-tk">—</span>
                             </div>
                             <div class="v-info-item">
                               <span class="v-info-label">stock</span>
@@ -645,7 +606,7 @@ function checkAvailability(targetAttr, targetValueId) {
         const infoBox     = document.getElementById('variant-info');
         const addBtn      = document.getElementById('add-cart-btn');
         const priceEl     = document.getElementById('variant-price');
-        const origPriceEl = document.getElementById('variant-original-price');
+        const savePrice = document.getElementById('save-tk');
         const stockBadge  = document.getElementById('variant-stock-badge');
 
         // reset
@@ -711,10 +672,11 @@ function checkAvailability(targetAttr, targetValueId) {
         // update info
         // ─────────────────────────
         const price = matched.sale_price ?? matched.price;
+        //বাংলার জন্য
         const priceStr = '৳' + price.toLocaleString('en-BD');
 
         if (priceEl) {
-            priceEl.textContent = priceStr;
+            priceEl.textContent ='৳ ' + price;
         }
 
         // combination
@@ -724,27 +686,27 @@ function checkAvailability(targetAttr, targetValueId) {
             return btn?.dataset.value ?? id;
         }).join(' / ');
 
-        if (origPriceEl) {
+        if (savePrice) {
 
             if (matched.sale_price) {
 
-                origPriceEl.textContent = '৳' + Number(matched.price).toLocaleString('bn-BD');
+                savePrice.textContent = '৳ ' + Number(matched.price - matched.sale_price);
 
             } else {
 
-                origPriceEl.textContent = '';
+                savePrice.textContent = '';
 
             }
         }
         
         if (priceMain) {
-            priceMain.textContent = priceStr;
+            priceMain.textContent = '৳ ' + price;
         }
         if (originalPrice) {
 
             if (matched.sale_price) {
 
-                originalPrice.textContent ='৳' + Number(matched.price).toLocaleString('bn-BD');
+                originalPrice.textContent ='৳ ' + Number(matched.price);
 
             } else {
 
@@ -753,9 +715,11 @@ function checkAvailability(targetAttr, targetValueId) {
             }
         }
 
-        const pct = Math.round((1 - matched.sale_price / matched.price) * 100);
-        chipEl.textContent   = pct + '% OFF';
-        chipEl.style.display = '';
+        if(matched.sale_price){
+            const pct = Math.round((1 - matched.sale_price / matched.price) * 100);
+            chipEl.textContent   = pct + '% OFF';
+            chipEl.style.display = '';
+        }
 
         // stock badge
         if (stockBadge) {
@@ -882,31 +846,7 @@ function handleAddToCart() {
 
 }
 
-// ─────────────────────────────
-// Toast
-// ─────────────────────────────
-function showToast(message, success = true) {
 
-    const toastEl  = document.getElementById('cart-toast');
-    const toastMsg = document.getElementById('toast-message');
-
-    if (!toastEl || !toastMsg) return;
-
-    toastEl.className =
-        `toast align-items-center border-0 ${
-            success
-                ? 'text-bg-success'
-                : 'text-bg-danger'
-        }`;
-
-    toastMsg.textContent = message;
-
-    new bootstrap.Toast(
-        toastEl,
-        { delay: 3000 }
-    ).show();
-
-}
 
 // ── Accordion for description,delivery info zip/unzip ─────────────────────────────────────────────
 function toggleMeta(trigger) {
