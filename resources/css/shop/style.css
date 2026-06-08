@@ -962,6 +962,15 @@ main {
     background: linear-gradient(155deg, #1DA1A8, #FF7A18 130%);
 }
 
+.bg-g6 {
+    background: linear-gradient(155deg, #0A2540, #FF7A18 10%);
+}
+
+.bg-success {
+    background-color: var(--success) !important;
+}
+
+
 /* ══════════════════════════════════════
    PROMO BAND
 ══════════════════════════════════════ */
@@ -1308,8 +1317,72 @@ main {
 /* ══════════════════════════════════════
    UTILITIES
 ══════════════════════════════════════ */
+hr {
+    border: none;
+    height: 2px;
+    background-color: var(--secondary);
+}
+
+/* =========================
+   PRIMARY BUTTON
+========================= */
+
+.btn-primary {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #fff !important;
+    transition: all .25s ease !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background: #081d33 !important;
+    border-color: #081d33 !important;
+    color: #fff !important;
+
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 25px rgba(10, 37, 64, .25) !important;
+}
+
+.btn-primary:disabled {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    opacity: .65 !important;
+}
+
+
+/* =========================
+   OUTLINE SECONDARY BUTTON
+========================= */
+
+.btn-outline-secondary {
+    background: transparent !important;
+    border: 1px solid var(--secondary) !important;
+    color: var(--secondary) !important;
+    transition: all .25s ease !important;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:active {
+    background: var(--secondary) !important;
+    border-color: var(--secondary) !important;
+    color: #fff !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 25px rgba(29, 161, 168, .25) !important;
+}
+
+.btn-outline-secondary:disabled {
+    opacity: .65 !important;
+}
+
+
 .text-primary-c {
-    color: var(--primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.text-success-c {
+    color: var(--success) !important;
 }
 
 .text-secondary-c {
@@ -1320,6 +1393,6 @@ main {
     color: var(--accent) !important;
 }
 
-.text-muted-c {
+.text-muted {
     color: var(--text-secondary) !important;
 }

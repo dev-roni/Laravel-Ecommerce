@@ -72,20 +72,21 @@ function showToast(message, type = 'success') {
         setTimeout(() => toast.remove(), 300);
     }, 3500);
 }
+window.showToast = showToast;
 
 // ── Global addToCart ─────────────────────────────────────
 function addToCart(productId, variantId = null, quantity = 1) {
-    fetch('{{ route("cart.add") }}', {
+    fetch(window.App.cartAddUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'X-CSRF-TOKEN': window.App.csrfToken,
             'X-Requested-With': 'XMLHttpRequest',
         },
         body: JSON.stringify({ product_id: productId, variant_id: variantId, quantity }),
     })
         .then(async r => {
-            if (r.status === 401) { window.location.href = '{{ route("login") }}'; return; }
+            if (r.status === 401) { window.location.href = window.App.loginUrl; return; }
             if (!r.ok) throw new Error('Request failed');
             return r.json();
         })
@@ -117,5 +118,6 @@ function addToCart(productId, variantId = null, quantity = 1) {
             }
             new bootstrap.Toast(toastEl, { delay: 3000 }).show();
         })
-        .catch(() => window.location.href = '{{ route("login") }}');
+        .catch(() => window.location.href = window.App.loginUrl);
 }
+window.addToCart = addToCart;

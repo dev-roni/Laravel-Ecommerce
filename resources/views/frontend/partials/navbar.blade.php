@@ -1,5 +1,5 @@
 
-<body>
+<body loading="lazy">
 
 @php
   $cartCount = auth()->check()

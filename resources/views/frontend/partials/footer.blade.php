@@ -80,7 +80,13 @@
   </div>
 </footer>
 
-@vite(['resources/js/app.js'])
+<script>
+  window.App = {
+      csrfToken: '{{ csrf_token() }}',
+      cartAddUrl: '{{ route("cart.add") }}',
+      loginUrl: '{{ route("login") }}'
+  };
+</script>
 
 @stack('scripts')
 </body>

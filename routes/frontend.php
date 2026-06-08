@@ -39,12 +39,11 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::get('/',[HomeController::class,'index'])->name('index');
-Route::get('products/{product:slug}', [HomeController::class, 'show'])
-     ->name('products.show');
+//Route::get('/',[HomeController::class,'index'])->name('index');
+//Route::get('products/{product:slug}', [HomeController::class, 'show'])->name('products.show');
 
 // routes/web.php — Public routes
-Route::get('home', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/search', [ShopController::class, 'search'])->name('shop.search');
 Route::get('/category/{slug}', [ShopController::class, 'category'])->name('shop.category');
 Route::get('/product/{slug}', [ShopController::class, 'product'])->name('shop.product');
