@@ -110,6 +110,6 @@ class ShopController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        return view('shop.search', compact('products'));
+        return view('frontend.pages.search', compact('products'));
     }
 }
