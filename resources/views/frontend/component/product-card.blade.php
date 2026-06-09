@@ -2,53 +2,32 @@
 <div class="prod-card h-100">
 
   {{-- Image Zone --}}
-  <div class="prod-img-zone">
+  <a href="{{ route('shop.product', $product->slug) }}">
+    <div class="prod-img-zone">
 
-    @if($product->primaryImage)
-      <img src="{{ Storage::disk('public')->url($product->primaryImage->image) }}"
-           alt="{{ $product->name }}"
-           loading="lazy">
-    @else
-      <span>📦</span>
-    @endif
-
-    {{-- Badge --}}
-    @if($product->total_stock <= 0)
-      <span class="prod-badge badge" style="background:var(--error)">Stock নেই</span>
-    @elseif($product->discount_percent)
-      <span class="prod-badge badge" style="background:var(--accent)">
-        −{{ $product->discount_percent }}%
-      </span>
-    @elseif($product->created_at->isAfter(now()->subDays(7)))
-      <span class="prod-badge badge" style="background:var(--success)">New</span>
-    @elseif($product->is_featured)
-      <span class="prod-badge badge" style="background:var(--secondary)">Best</span>
-    @endif
-
-    {{-- Overlay Actions --}}
-    <div class="prod-overlay-actions">
-      @if($product->has_variants)
-        <a href="{{ route('shop.product', $product->slug) }}"
-           class="prod-act-btn"
-           title="View Options">
-          <i class="bi bi-eye"></i>
-        </a>
+      @if($product->primaryImage)
+        <img src="{{ Storage::url($product->primaryImage?->image ?? $product->images->first()->image) }}"
+            alt="{{ $product->name }}"
+            loading="lazy">
       @else
-        <button class="prod-act-btn"
-                title="Add to Cart"
-                onclick="addToCart({{ $product->id }})"
-                {{ $product->total_stock <= 0 ? 'disabled' : '' }}>
-          <i class="bi bi-bag-plus"></i>
-        </button>
+        <span>📦</span>
       @endif
-      <a href="{{ route('shop.product', $product->slug) }}"
-         class="prod-act-btn"
-         title="Quick View">
-        <i class="bi bi-arrows-angle-expand"></i>
-      </a>
-    </div>
 
-  </div>
+      {{-- Badge --}}
+      @if($product->total_stock <= 0)
+        <span class="prod-badge badge" style="background:var(--error)">Stock নেই</span>
+      @elseif($product->discount_percent)
+        <span class="prod-badge badge" style="background:var(--accent)">
+          −{{ $product->discount_percent }}%
+        </span>
+      @elseif($product->created_at->isAfter(now()->subDays(7)))
+        <span class="prod-badge badge" style="background:var(--success)">New</span>
+      @elseif($product->is_featured)
+        <span class="prod-badge badge" style="background:var(--secondary)">Best</span>
+      @endif
+
+    </div>
+  </a>
 
   {{-- Card Body --}}
   <div class="p-3">
@@ -65,7 +44,7 @@
     {{-- Low stock warning --}}
     @if($product->total_stock > 0 && $product->total_stock <= 5)
       <div style="font-size:.65rem;color:var(--accent);font-weight:600;margin-bottom:.35rem">
-        <i class="bi bi-exclamation-triangle me-1"></i>
+        <i class="fa-solid fa-triangle-exclamation me-1"></i>
         মাত্র {{ $product->total_stock }}টি বাকি
       </div>
     @endif

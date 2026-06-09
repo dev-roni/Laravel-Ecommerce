@@ -400,8 +400,10 @@
         <div class="mt-5">
             <h4 class="mb-4">সম্পর্কিত পণ্য</h4>
             <div class="row g-3">
-                @foreach($related as $relProduct)
-                    @include('frontend.component.product-card', ['product' => $relProduct])
+                @foreach($related as $i => $relProduct)
+                    <div class="col-xl-3 col-md-6 anim-up d{{ $i+1 }}">
+                        @include('frontend.component.product-card', ['product' => $relProduct])
+                    </div>
                 @endforeach
             </div>
         </div>

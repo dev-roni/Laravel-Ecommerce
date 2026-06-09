@@ -773,22 +773,6 @@ main {
     border-radius: 4px;
 }
 
-.prod-overlay-actions {
-    position: absolute;
-    bottom: -44px;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: center;
-    gap: .4rem;
-    padding: .7rem;
-    transition: bottom .25s;
-    background: linear-gradient(transparent, rgba(10, 37, 64, .15));
-}
-
-.prod-card:hover .prod-overlay-actions {
-    bottom: 0;
-}
 
 .prod-act-btn {
     width: 34px;
