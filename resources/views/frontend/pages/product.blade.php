@@ -715,7 +715,7 @@ function checkAvailability(targetAttr, targetValueId) {
             }
         }
 
-        if(matched.sale_price){
+        if(chipEl){
             const pct = Math.round((1 - matched.sale_price / matched.price) * 100);
             chipEl.textContent   = pct + '% OFF';
             chipEl.style.display = '';

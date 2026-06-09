@@ -44,4 +44,47 @@ class ShopController extends Controller
     }
 
  
+        // Category page
+    public function category(string $slug)
+    {
+        $category = Category::where('slug', $slug)
+                            ->where('is_active', true)
+                            ->firstOrFail();
+
+        // Breadcrumb তৈরি
+        $breadcrumb = [];
+        $current    = $category;
+        while ($current) {
+            array_unshift($breadcrumb, $current);
+            $current = $current->parent;
+        }
+
+        // Sub categories
+        $subCategories = Category::where('parent_id', $category->id)
+                                  ->where('is_active', true)
+                                  ->withCount('products')
+                                  ->orderBy('order')
+                                  ->get();
+
+        // Products — এই category + সব child category
+        $categoryIds   = $this->getAllCategoryIds($category);
+        $categoryIds[] = $category->id;
+
+        $products = Product::with(['primaryImage', 'category', 'activeVariants'])
+            ->whereIn('category_id', $categoryIds)
+            ->where('is_active', true)
+            ->when(request('min_price'), fn($q) =>
+                $q->where('base_price', '>=', request('min_price')))
+            ->when(request('max_price'), fn($q) =>
+                $q->where('base_price', '<=', request('max_price')))
+            ->when(request('sort'), fn($q) => match(request('sort')) {
+                'price_asc'  => $q->orderBy('base_price'),
+                'price_desc' => $q->orderByDesc('base_price'),
+                default      => $q->latest(),
+            }, fn($q) => $q->latest())
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('shop.category',compact('category', 'products', 'breadcrumb', 'subCategories'));
+    }
 }
