@@ -34,7 +34,7 @@ class OrderController extends Controller
     {
         if ($order->user_id !== auth()->id()) abort(403);
 
-        return view('shop.order-success', compact('order'));
+        return view('frontend.pages.orderSuccess', compact('order'));
     }
 
     // Order বাতিল (শুধু pending অবস্থায়)
