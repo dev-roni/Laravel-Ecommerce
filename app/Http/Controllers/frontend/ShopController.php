@@ -85,6 +85,15 @@ class ShopController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        return view('shop.category',compact('category', 'products', 'breadcrumb', 'subCategories'));
+        return view('frontend.pages.category',compact('category', 'products', 'breadcrumb', 'subCategories'));
+    }
+    private function getAllCategoryIds(Category $category): array
+    {
+        $ids = [];
+        foreach ($category->children as $child) {
+            $ids[] = $child->id;
+            $ids   = array_merge($ids, $this->getAllCategoryIds($child));
+        }
+        return $ids;
     }
 }
