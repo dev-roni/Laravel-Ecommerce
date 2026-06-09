@@ -96,4 +96,20 @@ class ShopController extends Controller
         }
         return $ids;
     }
+
+        // Search
+    public function search(Request $request)
+    {
+        $products = Product::with(['primaryImage', 'category', 'activeVariants'])
+            ->where('is_active', true)
+            ->when($request->filled('q'), fn($q) =>
+                $q->where('name', 'like', '%' . $request->q . '%')
+                  ->orWhere('sku', 'like', '%' . $request->q . '%')
+                  ->orWhere('brand', 'like', '%' . $request->q . '%'))
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('shop.search', compact('products'));
+    }
 }
