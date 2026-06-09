@@ -26,7 +26,7 @@ class OrderController extends Controller
 
         $order->load(['items.product', 'items.variant']);
 
-        return view('shop.orderShow', compact('order'));
+        return view('frontend.pages.orderShow', compact('order'));
     }
 
 

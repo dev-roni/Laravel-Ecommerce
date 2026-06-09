@@ -161,7 +161,7 @@
           <h2 class="sec-title mb-0">New Arrivals</h2>
         </div>
         <a href="{{ route('shop.search') }}" class="link-viewall">
-          See All <i class="bi bi-arrow-right"></i>
+          See All <i class="fa-solid fa-arrow-right"></i>
         </a>
       </div>
 
