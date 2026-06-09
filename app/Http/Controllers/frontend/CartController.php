@@ -18,7 +18,7 @@ class CartController extends Controller
         $shipping = $this->cart->shippingCharge();
         $total    = $this->cart->total();
 
-        return view('shop.cart', compact('items', 'subtotal', 'shipping', 'total'));
+        return view('frontend.pages.cart', compact('items', 'subtotal', 'shipping', 'total'));
     }
 
     // Cart-এ যোগ (AJAX)
