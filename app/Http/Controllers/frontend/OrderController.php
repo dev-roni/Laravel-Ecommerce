@@ -12,11 +12,11 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::where('user_id', auth()->id())
-                       ->with(['items'])
+                       ->with(['items.variant'])
                        ->latest()
                        ->paginate(10);
 
-        return view('shop.orders', compact('orders'));
+        return view('frontend.pages.orders', compact('orders'));
     }
 
 

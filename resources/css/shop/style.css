@@ -1336,6 +1336,38 @@ hr {
 }
 
 
+.btn-outline-primary {
+    color: var(--primary) !important;
+    background-color: transparent !important;
+    transition: all 0.25s ease !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary.active {
+    color: #fff !important;
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+
+    box-shadow: 0 8px 20px rgba(10, 37, 64, 0.20) !important;
+    transform: translateY(-2px);
+}
+
+.btn-outline-primary:focus {
+    box-shadow:
+        0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25),
+        0 8px 20px rgba(10, 37, 64, 0.20) !important;
+}
+
+.btn-outline-primary.disabled {
+    color: var(--text-secondary) !important;
+    border-color: var(--border) !important;
+    background-color: transparent !important;
+    opacity: 0.65;
+}
+
+
+
 /* =========================
    OUTLINE SECONDARY BUTTON
 ========================= */
