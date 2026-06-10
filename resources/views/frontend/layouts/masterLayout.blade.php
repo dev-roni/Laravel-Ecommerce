@@ -2,7 +2,7 @@
 @include('frontend/partials/navbar')
 @include('frontend/partials/flashMessage')
 @include('frontend/partials/breadcrumb')
-<main>
+<main class="anim-up">
   @yield('content')
 </main>
 @include('frontend/partials/feature')
