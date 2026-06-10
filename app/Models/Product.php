@@ -258,5 +258,33 @@ class Product extends Model
             });
         });
     }
+
+    // ══════════════════════════════
+    // for product review 
+    // ══════════════════════════════
+
+    public function reviews()
+    {
+        return $this->hasMany(ProductReview::class);
+    }
+
+    public function approvedReviews()
+    {
+        return $this->hasMany(ProductReview::class)
+                    ->where('is_approved', true)
+                    ->latest();
+    }
+
+    // গড় rating
+    public function getAvgRatingAttribute(): float
+    {
+        return round($this->approvedReviews()->avg('rating') ?? 0, 1);
+    }
+
+    // মোট review সংখ্যা
+    public function getReviewCountAttribute(): int
+    {
+        return $this->approvedReviews()->count();
+    }
 }
 
