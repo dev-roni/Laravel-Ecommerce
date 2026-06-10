@@ -61,7 +61,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->isAdmin()
             ? route('admin.dashboard', [], false)
-            : route('index', [], false);
+            : route('shop.index', [], false);
     }
 
     // Orders relationship

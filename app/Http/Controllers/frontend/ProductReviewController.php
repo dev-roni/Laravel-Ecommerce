@@ -53,7 +53,6 @@ class ProductReviewController extends Controller
             'product_id'  => $product->id,
             'user_id'     => auth()->id(),
             'rating'      => $request->rating,
-            'title'       => $request->title,
             'body'        => $request->body,
             'is_approved' => true, // auto approve, admin থেকে false করতে পারবেন
         ]);
@@ -88,8 +87,15 @@ class ProductReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductReview $productReview)
+    public function destroy(ProductReview $review)
     {
-        //
+        // শুধু নিজের review মুছতে পারবে
+        if ($review->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $review->delete();
+
+        return back()->with('review_success', 'Review মুছে ফেলা হয়েছে।');
     }
 }

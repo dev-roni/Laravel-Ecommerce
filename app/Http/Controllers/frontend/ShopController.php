@@ -34,6 +34,7 @@ class ShopController extends Controller
             'category',
             'images',
             'activeVariants.attributeValues.attribute',
+            'approvedReviews.user',
         ]);
 
         // Rating breakdown (1★ থেকে 5★ কতটা)

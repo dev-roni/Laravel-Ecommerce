@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->tinyInteger('rating')->unsigned(); // 1–5
-            $table->string('title')->nullable();
             $table->text('body');
             $table->boolean('is_approved')->default(true);
             $table->timestamps();
