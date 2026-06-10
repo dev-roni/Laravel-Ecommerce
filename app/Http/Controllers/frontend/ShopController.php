@@ -36,11 +36,25 @@ class ShopController extends Controller
             'activeVariants.attributeValues.attribute',
         ]);
 
+        // Rating breakdown (1★ থেকে 5★ কতটা)
+        $ratingBreakdown = $product->approvedReviews()
+            ->selectRaw('rating, count(*) as count')
+            ->groupBy('rating')
+            ->pluck('count', 'rating')
+            ->toArray();
+
+        // Login user review দিয়েছে কিনা
+        $userReview = auth()->check()
+            ? $product->reviews()
+                    ->where('user_id', auth()->id())
+                    ->first()
+            : null;
+
         $related = Product::getByCategory($product->category_id, 6)
                           ->reject(fn($p) => $p->id === $product->id)
                           ->take(4);
 
-        return view('frontend.pages.product', compact('product', 'related'));
+        return view('frontend.pages.product', compact('product', 'related','ratingBreakdown','userReview'));
     }
 
  
