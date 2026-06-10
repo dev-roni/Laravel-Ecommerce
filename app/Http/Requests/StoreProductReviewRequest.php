@@ -12,7 +12,7 @@ class StoreProductReviewRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,16 @@ class StoreProductReviewRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'rating' => 'nullable|integer|min:1|max:5',
+            'title'  => 'nullable|string|max:100',
+            'body'   => 'required|string|min:5|max:1000',
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'body.required'   => 'Review লিখতে হবে।',
+            'body.min'        => 'Review কমপক্ষে 5 অক্ষর হতে হবে।',
         ];
     }
 }
