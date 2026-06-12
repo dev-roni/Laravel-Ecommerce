@@ -15,19 +15,26 @@ class DashboardController extends Controller
     public function dashboard(){
         $stats = Cache::remember('admin:dashboard:stats', now()->addMinutes(10), function () {
             return [
-                'total_products' => Product::count(),
+                'total_products'  => Product::count(),
                 'active_products' => Product::where('is_active', true)->count(),
-                'total_users'    => User::where('role', 'customer')->count(),
-                'low_stock'      => Product::where('has_variants', false)
-                                           ->where('stock', '<=', 5)
-                                           ->count(),
+                'total_customers' => User::where('role', 'customer')->count(),
+                'low_stock'       => Product::where('has_variants', false)
+                                            ->where('stock', '<=', 5)->count(),
+                'total_orders'    => Order::count(),
                 'pending_orders'  => Order::where('status', 'pending')->count(),
                 'today_orders'    => Order::today()->count(),
                 'today_revenue'   => Order::today()
                                         ->where('payment_status', 'paid')
                                         ->sum('total'),
+                'total_revenue'   => Order::where('payment_status', 'paid')->sum('total'),
             ];
         });
-        return view('backend.pages.dashboard', compact('stats'));
+
+        // সাম্প্রতিক orders
+        $recentOrders = Order::with(['user', 'items'])
+                         ->latest()
+                         ->limit(8)
+                         ->get();
+        return view('backend.pages.dashboard', compact('stats','recentOrders'));
     }
 }
