@@ -16,6 +16,6 @@ class ProfileController extends Controller
                              ->where('payment_status', 'paid')
                              ->sum('total');
 
-        return view('shop.profile', compact('user', 'recentOrders', 'totalOrders', 'totalSpent'));
+        return view('frontend.pages.profile', compact('user', 'recentOrders', 'totalOrders', 'totalSpent'));
     }
 }
