@@ -17,5 +17,16 @@ class ProductReviewController extends Controller
         return view('backend.pages.productReview', compact('reviews'));
     }
 
+    public function approve(ProductReview $review)
+    {
+        $review->update(['is_approved' => !$review->is_approved]);
+        return back()->with('success', 'Review status পরিবর্তন হয়েছে।');
+    }
+
+    public function destroy(ProductReview $review)
+    {
+        $review->delete();
+        return back()->with('success', 'Review মুছে ফেলা হয়েছে।');
+    }
     
 }
