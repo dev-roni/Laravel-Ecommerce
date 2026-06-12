@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\frontend\ProfileController;
 use App\Http\Controllers\frontend\ShopController;
 use App\Http\Controllers\frontend\ProductReviewController;
 use App\Http\Controllers\frontend\CartController;
@@ -13,11 +13,10 @@ require __DIR__ . '/auth.php';
 
 // ── Authenticated Routes ──
 Route::middleware('auth')->group(function () {
-
-    //profile
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
         // Cart
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -41,10 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/products/{product}/reviews',[ProductReviewController::class, 'store'])->name('reviews.store');
     Route::delete('/reviews/{review}', [ProductReviewController::class, 'destroy'])->name('reviews.destroy');
 
-});
-
-//Route::get('/',[HomeController::class,'index'])->name('index');
-//Route::get('products/{product:slug}', [HomeController::class, 'show'])->name('products.show');
+}); 
 
 // routes/web.php — Public routes
 Route::get('/', [ShopController::class, 'index'])->name('shop.index');
