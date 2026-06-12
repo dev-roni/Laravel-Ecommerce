@@ -19,10 +19,12 @@
                 </a>
             </li>
 
-            <a href="{{ route('admin.reviews.index') }}"
-            class="nav-link {{ request()->routeIs('admin.reviews.*') ? 'active' : '' }}">
-                ⭐ Reviews
-            </a>
+            <li>
+                <a href="{{ route('admin.reviews.index') }}"
+                class="nav-link {{ request()->routeIs('admin.reviews.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-user-pen"></i> Reviews
+                </a>
+            </li>
             <li><a href="customers.html"><i class="fas fa-users"></i> গ্রাহকবৃন্দ</a></li>
             <li><a href="settings.html"><i class="fas fa-cog"></i> সেটিংস</a></li>
             <li>

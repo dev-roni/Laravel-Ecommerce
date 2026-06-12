@@ -1,4 +1,4 @@
-{{-- resources/views/admin/reviews/index.blade.php --}}
+
 @extends('backend.layouts.masterLayout')
 @section('title', 'Reviews')
 
