@@ -62,29 +62,34 @@
                 <div class="card mb-4">
                     <div class="card-header fw-500">Payment পদ্ধতি</div>
                     <div class="card-body">
-                        @foreach([
-                            ['value' => 'cod',   'label' => '💵 ক্যাশ অন ডেলিভারি',  'desc' => 'পণ্য পেলে পরিশোধ করুন'],
-                            ['value' => 'bkash', 'label' => '📱 bKash',               'desc' => 'bKash-এ পেমেন্ট করুন'],
-                            ['value' => 'nagad', 'label' => '📱 Nagad',               'desc' => 'Nagad-এ পেমেন্ট করুন'],
-                        ] as $method)
-                            <div class="form-check mb-3 p-3 border rounded
-                                        {{ old('payment_method', 'cod') === $method['value'] ? 'border-primary bg-light' : '' }}"
-                                 style="cursor:pointer"
-                                 onclick="selectPayment('{{ $method['value'] }}', this)">
-                                <input class="form-check-input" type="radio"
-                                       name="payment_method"
-                                       id="pay_{{ $method['value'] }}"
-                                       value="{{ $method['value'] }}"
-                                       {{ old('payment_method', 'cod') === $method['value'] ? 'checked' : '' }}>
-                                <label class="form-check-label w-100"
-                                       for="pay_{{ $method['value'] }}"
-                                       style="cursor:pointer">
-                                    <span class="fw-500">{{ $method['label'] }}</span>
-                                    <br>
-                                    <small class="text-muted">{{ $method['desc'] }}</small>
-                                </label>
-                            </div>
-                        @endforeach
+                    @foreach([
+                        ['value' => 'cod',    'label' => '💵 Cash on Delivery', 'desc' => 'পণ্য পেলে পরিশোধ করুন', 'badge' => ''],
+                        ['value' => 'online', 'label' => '💳 Online Payment',   'desc' => 'bKash, Nagad, Card, Net Banking', 'badge' => 'Recommended'],
+                    ] as $method)
+                    <div class="form-check mb-3 p-3 border rounded"
+                        style="cursor:pointer;{{ old('payment_method','cod') === $method['value'] ? 'border-color:var(--secondary)!important;background:rgba(29,161,168,.04)' : '' }}"
+                        onclick="selectPayment('{{ $method['value'] }}', this)">
+                        <input class="form-check-input"
+                            type="radio"
+                            name="payment_method"
+                            id="pay_{{ $method['value'] }}"
+                            value="{{ $method['value'] }}"
+                            {{ old('payment_method','cod') === $method['value'] ? 'checked' : '' }}>
+                        <label class="form-check-label w-100"
+                            for="pay_{{ $method['value'] }}"
+                            style="cursor:pointer">
+                        <span class="fw-500">{{ $method['label'] }}</span>
+                        @if($method['badge'])
+                            <span class="badge ms-2"
+                                style="background:var(--secondary);font-size:.65rem">
+                            {{ $method['badge'] }}
+                            </span>
+                        @endif
+                        <br>
+                        <small class="text-muted">{{ $method['desc'] }}</small>
+                        </label>
+                    </div>
+                    @endforeach
 
                         @error('payment_method')
                             <div class="text-danger small">{{ $message }}</div>

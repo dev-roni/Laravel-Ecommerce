@@ -44,7 +44,7 @@ class CheckoutController extends Controller
             'shipping_phone'   => 'required|string|max:20',
             'shipping_address' => 'required|string|max:500',
             'shipping_city'    => 'required|string|max:100',
-            'payment_method'   => 'required|in:cod,bkash,nagad,card',
+            'payment_method'   => 'required|in:cod,online',
             'notes'            => 'nullable|string|max:300',
         ], [
             'shipping_name.required'    => 'নাম দিতে হবে।',

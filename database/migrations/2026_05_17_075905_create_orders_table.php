@@ -40,9 +40,7 @@ return new class extends Migration
             // Payment
             $table->enum('payment_method', [
                 'cod',
-                'bkash',
-                'nagad',
-                'card',
+                'online',
             ])->default('cod');
 
             $table->enum('payment_status', [
