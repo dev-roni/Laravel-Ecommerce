@@ -28,6 +28,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 
+    //payment
+    Route::post('payment/initiate/{order}',[PaymentController::class, 'initiate'])->name('payment.initiate');
+
     // Order success
     Route::get('/orders/{order}/success', [OrderController::class, 'success'])->name('orders.success');
 
@@ -42,8 +45,14 @@ Route::middleware('auth')->group(function () {
 
 }); 
 
-// routes/web.php — Public routes
+// routes — Public routes
 Route::get('/', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/search', [ShopController::class, 'search'])->name('shop.search');
 Route::get('/category/{slug}', [ShopController::class, 'category'])->name('shop.category');
 Route::get('/product/{slug}', [ShopController::class, 'product'])->name('shop.product');
+
+// SSLCommerz callback — auth middleware ছাড়া
+Route::post('payment/success',  [PaymentController::class, 'success'])->name('payment.success');
+Route::post('payment/fail',     [PaymentController::class, 'fail'])->name('payment.fail');
+Route::post('payment/cancel',   [PaymentController::class, 'cancel'])->name('payment.cancel');
+Route::post('payment/ipn',      [PaymentController::class, 'ipn'])->name('payment.ipn');
