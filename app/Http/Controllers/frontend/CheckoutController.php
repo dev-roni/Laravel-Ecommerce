@@ -117,8 +117,17 @@ class CheckoutController extends Controller
 
             DB::commit();
 
-            return redirect()->route('orders.success', $order)
-                             ->with('success', 'Order সফলভাবে হয়েছে!');
+            // COD হলে সরাসরি success page
+            if ($request->payment_method === 'cod') {
+                return redirect()
+                    ->route('orders.success', $order)
+                    ->with('success', 'Order সফলভাবে হয়েছে!');
+            }
+
+            // Online payment হলে payment page-এ পাঠাও
+            return redirect()
+                ->route('payment.initiate', $order)
+                ->with('info', 'Payment করতে redirect হচ্ছে...');
 
         } catch (\Exception $e) {
             DB::rollBack();
