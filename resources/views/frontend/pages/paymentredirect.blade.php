@@ -27,18 +27,13 @@
         <button type="submit"
                 class="btn btn-primary px-5 py-2 w-100 mb-2">
           <i class="bi bi-credit-card me-2"></i>
-          SSLCommerz দিয়ে Payment করুন
+          Payment 
         </button>
       </form>
 
-      <a href="{{ route('orders.show', $order) }}"
-         class="btn btn-outline-secondary w-100 btn-sm">
-        পরে করব
-      </a>
-
       <p class="text-muted mt-3" style="font-size:.72rem">
         <i class="bi bi-shield-check text-success me-1"></i>
-        bKash, Nagad, Card, Net Banking সব সাপোর্ট করে
+        bKash, Nagad, Card, Net Banking সব সাপোর্ট 
       </p>
 
     </div>
@@ -48,7 +43,7 @@
 {{-- Auto redirect --}}
 <script>
   // ৩ সেকেন্ড পর auto submit
-  let countdown = 3;
+  let countdown = 0;
   const msg = document.createElement('p');
   msg.className = 'text-muted small mt-2';
   msg.id = 'autoMsg';
