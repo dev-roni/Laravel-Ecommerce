@@ -125,9 +125,8 @@ class CheckoutController extends Controller
             }
 
             // Online payment হলে payment page-এ পাঠাও
-            return redirect()
-                ->route('payment.initiate', $order)
-                ->with('info', 'Payment করতে redirect হচ্ছে...');
+            // COD নয় → payment page-এ পাঠাও
+return redirect()->route('payment.pending', $order);
 
         } catch (\Exception $e) {
             DB::rollBack();

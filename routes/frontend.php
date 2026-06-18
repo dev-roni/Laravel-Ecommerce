@@ -30,6 +30,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 
     //payment
+     Route::get('payment/pending/{order}',
+        [PaymentController::class, 'pending'])
+        ->name('payment.pending');
     Route::post('payment/initiate/{order}',[PaymentController::class, 'initiate'])->name('payment.initiate');
 
     // Order success
@@ -53,7 +56,7 @@ Route::get('/category/{slug}', [ShopController::class, 'category'])->name('shop.
 Route::get('/product/{slug}', [ShopController::class, 'product'])->name('shop.product');
 
 // SSLCommerz callback — auth middleware ছাড়া
-Route::post('payment/success',  [PaymentController::class, 'success'])->name('payment.success');
-Route::post('payment/fail',     [PaymentController::class, 'fail'])->name('payment.fail');
-Route::post('payment/cancel',   [PaymentController::class, 'cancel'])->name('payment.cancel');
-Route::post('payment/ipn',      [PaymentController::class, 'ipn'])->name('payment.ipn');
+Route::post('payment/success',  [PaymentController::class, 'success'])->name('sslc.success');
+Route::post('payment/fail',     [PaymentController::class, 'fail'])->name('sslc.failure');
+Route::post('payment/cancel',   [PaymentController::class, 'cancel'])->name('sslc.cancel');
+Route::post('payment/ipn',      [PaymentController::class, 'ipn'])->name('sslc.ipn');

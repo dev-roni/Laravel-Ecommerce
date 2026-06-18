@@ -5,12 +5,23 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Raziul\Sslcommerz\Facades\Sslcommerz;
 
 class PaymentController extends Controller
 {
+    public function pending(Order $order)
+    {
+        if ($order->user_id !== auth()->id()) abort(403);
+
+        if ($order->payment_status === 'paid') {
+            return redirect()->route('orders.show', $order);
+        }
+
+        return view('frontend.pages.paymentredirect', compact('order'));
+    }
     // ── Payment শুরু করো ──────────────────────────────────
     public function initiate(Order $order)
     {
@@ -37,24 +48,15 @@ class PaymentController extends Controller
                     phone: $order->shipping_phone
                 )
                 ->setShippingInfo(
-                    itemsQuantity: $order->items->count(),
-                    address:       $order->shipping_address,
-                    city:          $order->shipping_city,
-                    country:       'Bangladesh'
-                )
-                ->setCurrency('BDT')
-                ->setUrls(
-                    success: route('payment.success'),
-                    fail:    route('payment.fail'),
-                    cancel:  route('payment.cancel'),
-                    ipn:     route('payment.ipn')
+                    $order->items->count(),
+                     $order->shipping_address
                 )
                 ->makePayment();
-
+               
             if ($response->success()) {
                 // Order-এ transaction id save করো
                 $order->update([
-                    'ssl_transaction_id' => $response->transactionId(),
+                    'ssl_transaction_id' => $order->order_number,
                 ]);
 
                 // SSLCommerz payment page-এ redirect
@@ -72,6 +74,7 @@ class PaymentController extends Controller
     // ── Payment সফল ──────────────────────────────────────
     public function success(Request $request)
     {
+
         $order = Order::where('order_number', $request->tran_id)->first();
 
         if (!$order) {
@@ -98,6 +101,11 @@ class PaymentController extends Controller
                 ]);
 
                 DB::commit();
+
+                // User session restore
+                Auth::loginUsingId($order->user_id);
+                // Session regenerate (security)
+                request()->session()->regenerate();
 
                 return redirect()
                     ->route('orders.success', $order)
@@ -129,6 +137,9 @@ class PaymentController extends Controller
             ]);
         }
 
+        Auth::loginUsingId($order->user_id);
+        request()->session()->regenerate();
+
         return redirect()
             ->route($order ? 'orders.show' : 'shop.index', $order ?? [])
             ->with('error', 'Payment ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
@@ -139,6 +150,9 @@ class PaymentController extends Controller
     {
         $order = Order::where('order_number', $request->tran_id)->first();
 
+        Auth::loginUsingId($order->user_id);
+        request()->session()->regenerate();
+        
         return redirect()
             ->route($order ? 'orders.show' : 'shop.index', $order ?? [])
             ->with('error', 'Payment বাতিল করা হয়েছে।');
@@ -165,6 +179,11 @@ class PaymentController extends Controller
                 'ssl_val_id'         => $request->val_id,
                 'ssl_response'       => json_encode($request->all()),
             ]);
+
+            // User session restore
+            Auth::loginUsingId($order->user_id);
+            // Session regenerate (security)
+            request()->session()->regenerate();
 
             Log::info("IPN: Order #{$order->order_number} payment confirmed.");
         }

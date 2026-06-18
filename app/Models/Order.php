@@ -24,6 +24,9 @@ class Order extends Model
         'transaction_id', 
         'notes',
         'delivered_at',
+        'ssl_transaction_id',
+        'ssl_val_id',
+        'ssl_response',
     ];
 
     protected $casts = [
