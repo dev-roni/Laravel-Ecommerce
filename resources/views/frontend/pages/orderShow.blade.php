@@ -134,6 +134,29 @@
                 </div>
             </div>
 
+            {{-- Payment করা হয়নি এবং COD নয় --}}
+            @if($order->payment_status === 'unpaid' && $order->payment_method !== 'cod' && $order->status !== 'cancelled')
+            <div class="card mb-3"
+                style="border:2px solid var(--accent) !important">
+                <div class="card-body text-center py-4">
+                <div style="font-size:2rem">💳</div>
+                <h6 class="mt-2 mb-1" style="color:var(--primary)">
+                    Payment বাকি আছে
+                </h6>
+                <p class="text-muted small mb-3">
+                    আপনার order confirm করতে payment করুন।
+                </p>
+                <form method="POST"
+                        action="{{ route('payment.initiate', $order) }}">
+                    @csrf
+                    <button class="btn btn-warning fw-600 px-4">
+                    💳 এখনই Payment করুন
+                    </button>
+                </form>
+                </div>
+            </div>
+            @endif
+            
             {{-- Cancel button --}}
             @if($order->status === 'pending')
                 <form method="POST"
