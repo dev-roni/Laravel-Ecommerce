@@ -4,8 +4,10 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Mail\OrderStatusUpdatedMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -123,6 +125,12 @@ class OrderController extends Controller
         }
 
         $order->update($data);
+
+        //notify customer if status change
+        //mail sending for all status without 'pending'
+        if($newStautus !== 'pending'){
+            Mail::to($order->user->email)->send(new OrderStatusUpdatedMail($order));
+        }
 
         // Cache clear
         Cache::forget('admin:orders:summary');
