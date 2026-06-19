@@ -11,7 +11,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Order;
 
-class OrderConfirmedMail extends Mailable
+class OrderConfirmedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -29,7 +29,7 @@ class OrderConfirmedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Order Confirmed - {$this->$order->order_number} । পবনবাহিকা ',
+            subject: "Order Confirmed {$this->order->order_number} । পবনবাহিকা "
         );
     }
 
@@ -39,7 +39,7 @@ class OrderConfirmedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.order-confirmed',
+            view: 'mails.order-confirmed',
         );
     }
 

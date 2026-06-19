@@ -21,10 +21,10 @@
     text-align:center; padding:28px 32px 0;
   }
   .success-icon {
-    width:64px; height:64px; border-radius:50%;
+    width:56px; height:56px; border-radius:50%;
     background:rgba(34,197,94,.1); border:2px solid #22C55E;
     display:inline-flex; align-items:center; justify-content:center;
-    font-size:28px; margin-bottom:12px;
+    font-size:28px; margin-bottom:12px; padding:9px;
   }
   .success-title { font-size:20px; font-weight:700; color:#0A2540; margin-bottom:6px; }
   .success-sub { font-size:13px; color:#6B7280; line-height:1.6; }

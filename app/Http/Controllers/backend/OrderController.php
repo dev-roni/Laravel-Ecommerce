@@ -128,7 +128,7 @@ class OrderController extends Controller
 
         //notify customer if status change
         //mail sending for all status without 'pending'
-        if($newStautus !== 'pending'){
+        if($newStatus !== 'pending'){
             Mail::to($order->user->email)->send(new OrderStatusUpdatedMail($order));
         }
 

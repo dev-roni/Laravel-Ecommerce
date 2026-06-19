@@ -8,7 +8,7 @@ use App\Services\CartService;
 use App\Mail\OrderConfirmedMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facedes\Mail;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
