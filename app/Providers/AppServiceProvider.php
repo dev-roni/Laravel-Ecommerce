@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\View;
 use App\Models\Category;
 use App\Observers\CategoryObserver;
 use App\Services\CartService;
+use App\Services\CouponService;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -18,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(CartService::class, fn() => new CartService());
+        $this->app->singleton(CouponService::class,fn() => new CouponService());
     }
 
     /**
