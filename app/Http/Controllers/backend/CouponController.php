@@ -20,7 +20,8 @@ class CouponController extends Controller
 
     public function create()
     {
-        return view('backend.coupons.create');
+        $coupon = new Coupon();
+        return view('backend.pages.couponCreate',compact('coupon'));
     }
 
     public function store(Request $request)
@@ -53,7 +54,7 @@ class CouponController extends Controller
 
     public function edit(Coupon $coupon)
     {
-        return view('backend.coupons.edit', compact('coupon'));
+        return view('backend.pages.couponCreate', compact('coupon'));
     }
 
     public function update(Request $request, Coupon $coupon)
