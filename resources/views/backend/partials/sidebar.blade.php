@@ -31,6 +31,12 @@
                     <i class="fa-solid fa-tags"></i> Coupons
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.coupons.create') }}"
+                    class="nav-link {{ request()->routeIs('admin.coupons.create') ? 'active' : '' }}">
+                    <i class="fa-solid fa-ticket-simple"></i> Coupon create
+                </a>
+            </li>
             <li><a href="customers.html"><i class="fas fa-users"></i> গ্রাহকবৃন্দ</a></li>
             <li><a href="settings.html"><i class="fas fa-cog"></i> সেটিংস</a></li>
             <li>
