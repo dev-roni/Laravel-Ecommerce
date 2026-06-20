@@ -50,4 +50,8 @@ Route::middleware(['auth','admin'])->group(function(){
     Route::get('reviews', [ProductReviewController::class, 'index'])->name('reviews.index');
     Route::post('reviews/{review}/approve',[ProductReviewController::class, 'approve'])->name('reviews.approve');
     Route::delete('reviews/{review}',[ProductReviewController::class, 'destroy'])->name('reviews.destroy');
+
+    //coupon
+    Route::resource('coupons', CouponController::class)->except(['show']);
+    Route::post('coupons/{coupon}/toggle', [CouponController::class, 'toggleActive'])->name('coupons.toggle');
 });
