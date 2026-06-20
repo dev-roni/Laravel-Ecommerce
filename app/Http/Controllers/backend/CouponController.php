@@ -15,7 +15,7 @@ class CouponController extends Controller
                          ->latest()
                          ->paginate(20);
 
-        return view('backend.coupons.index', compact('coupons'));
+        return view('backend.pages.coupons', compact('coupons'));
     }
 
     public function create()
