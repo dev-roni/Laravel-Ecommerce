@@ -110,13 +110,56 @@
                                     @endif
                                 </td>
                             </tr>
+
+                            {{-- Coupon row — session-এ থাকলে দেখাবে --}}
+                            <tr id="coupon-row" style="display:{{ session('coupon') ? 'table-row' : 'none' }}">
+                                <td>
+                                    Coupon
+                                    <span class="badge bg-success" id="coupon-code-badge">
+                                        {{ session('coupon.code') }}
+                                    </span>
+                                </td>
+                                <td class="text-end text-danger" id="summary-discount">
+                                    -৳{{ number_format(session('coupon.discount', 0)) }}
+                                </td>
+                            </tr>
+
                             <tr class="fw-bold">
                                 <td>সর্বমোট</td>
                                 <td class="text-end" id="summary-total">
-                                    ৳{{ number_format($total) }}
+                                    ৳{{ number_format($subtotal + $shipping - session('coupon.discount', 0)) }}
                                 </td>
                             </tr>
                         </table>
+
+                        <div class="mb-3" id="coupon-box">
+        @if(session('coupon'))
+            <div class="d-flex align-items-center justify-content-between
+                        p-2 rounded"
+                 style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2)">
+                <span class="small">
+                    ✅ <strong>{{ session('coupon.code') }}</strong> apply হয়েছে
+                </span>
+                <button class="btn btn-sm btn-outline-danger"
+                        onclick="removeCoupon()">
+                    সরান
+                </button>
+            </div>
+        @else
+            <div class="input-group input-group-sm">
+                <input type="text"
+                       id="couponInput"
+                       class="form-control"
+                       placeholder="Coupon Code"
+                       style="text-transform:uppercase">
+                <button class="btn btn-outline-primary"
+                        onclick="applyCoupon()">
+                    Apply
+                </button>
+            </div>
+            <div id="couponMsg" class="small mt-1"></div>
+        @endif
+    </div>
 
                         @if($shipping == 0)
                             <div class="alert alert-success py-2 small mb-3">
@@ -146,48 +189,91 @@
 </div>
 
 <script>
-function updateQty(itemId, qty) {
-    fetch(`/cart/${itemId}`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type':  'application/json',
-            'X-CSRF-TOKEN':  document.querySelector('meta[name="csrf-token"]').content,
-        },
-        body: JSON.stringify({ quantity: qty }),
-    })
-    .then(r => r.json())
-    .then(data => {
-        if (!data.success) {
-            alert(data.message);
+    function updateQty(itemId, qty) {
+        
+        fetch(`/cart/${itemId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type':  'application/json',
+                'X-CSRF-TOKEN':  document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({ quantity: qty }),
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) {
+                alert(data.message);
+                return;
+            }
+            if (qty <= 0) {
+                document.getElementById('cart-item-' + itemId)?.remove();
+            } else {
+                document.getElementById('qty-' + itemId).textContent = qty;
+                document.getElementById('subtotal-' + itemId).textContent = '৳' + data.subtotal;
+            }
+            document.getElementById('summary-total').textContent = '৳' + data.total;
+
+            // Cart count update
+            const badge = document.getElementById('cart-count');
+            if (badge) badge.textContent = data.count;
+        });
+    }
+
+    function removeItem(itemId) {
+
+        if (!confirm('এই item সরাবেন?')) return;
+        fetch(`/cart/${itemId}`, {
+            method: 'DELETE',
+            headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+        })
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('cart-item-' + itemId)?.remove();
+            const badge = document.getElementById('cart-count');
+            if (badge) badge.textContent = data.count;
+            if (data.count === 0) location.reload();
+        });
+    }
+
+    function applyCoupon() {
+
+        const code = document.getElementById('couponInput').value.trim();
+        const msgEl = document.getElementById('couponMsg');
+
+        if (!code) {
+            msgEl.innerHTML = '<span class="text-danger">Coupon code দিন।</span>';
             return;
         }
-        if (qty <= 0) {
-            document.getElementById('cart-item-' + itemId)?.remove();
-        } else {
-            document.getElementById('qty-' + itemId).textContent = qty;
-            document.getElementById('subtotal-' + itemId).textContent = '৳' + data.subtotal;
-        }
-        document.getElementById('summary-total').textContent = '৳' + data.total;
 
-        // Cart count update
-        const badge = document.getElementById('cart-count');
-        if (badge) badge.textContent = data.count;
-    });
-}
+        fetch('{{ route("cart.coupon.apply") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({ code }),
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // সহজে পুরো cart page reload
+            } else {
+                msgEl.innerHTML = `<span class="text-danger">${data.message}</span>`;
+            }
+        });
+    }
 
-function removeItem(itemId) {
-    if (!confirm('এই item সরাবেন?')) return;
-    fetch(`/cart/${itemId}`, {
-        method: 'DELETE',
-        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
-    })
-    .then(r => r.json())
-    .then(data => {
-        document.getElementById('cart-item-' + itemId)?.remove();
-        const badge = document.getElementById('cart-count');
-        if (badge) badge.textContent = data.count;
-        if (data.count === 0) location.reload();
-    });
-}
+    function removeCoupon() {
+
+        fetch('{{ route("cart.coupon.remove") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+        })
+        .then(r => r.json())
+        .then(() => location.reload());
+    }
 </script>
 @endsection
