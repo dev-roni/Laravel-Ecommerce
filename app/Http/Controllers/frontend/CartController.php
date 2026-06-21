@@ -5,10 +5,13 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\CartService;
+use App\Services\CouponService;
 
 class CartController extends Controller
 {
-    public function __construct(private CartService $cart) {}
+    public function __construct(
+        private CartService $cart,
+        private CouponService $couponService) {}
 
     // Cart page
     public function index()
@@ -66,5 +69,56 @@ class CartController extends Controller
         }
 
         return back()->with('success', $result['message']);
+    }
+
+    // Coupon apply (AJAX)
+    public function applyCoupon(Request $request)
+    {
+        $request->validate(['code' => 'required|string']);
+
+        $subtotal = $this->cart->subtotal();
+        $result   = $this->couponService->apply($request->code, $subtotal);
+
+        if ($result['success']) {
+            // Session-এ coupon রাখো
+            session([
+                'coupon' => [
+                    'id'       => $result['coupon_id'],
+                    'code'     => $result['code'],
+                    'discount' => $result['discount'],
+                    'type'     => $result['type'],
+                    'value'    => $result['value'],
+                ],
+            ]);
+        }
+
+        $shipping = $this->cart->shippingCharge();
+        $discount = $result['success'] ? $result['discount'] : 0;
+        $total    = $subtotal + $shipping - $discount;
+
+        return response()->json([
+            ...$result,
+            'subtotal' => number_format($subtotal),
+            'shipping' => number_format($shipping),
+            'discount_fmt' => number_format($discount),
+            'total'    => number_format($total),
+        ]);
+    }
+
+    // Coupon সরানো (AJAX)
+    public function removeCoupon()
+    {
+        session()->forget('coupon');
+
+        $subtotal = $this->cart->subtotal();
+        $shipping = $this->cart->shippingCharge();
+        $total    = $subtotal + $shipping;
+
+        return response()->json([
+            'success'  => true,
+            'subtotal' => number_format($subtotal),
+            'shipping' => number_format($shipping),
+            'total'    => number_format($total),
+        ]);
     }
 }
