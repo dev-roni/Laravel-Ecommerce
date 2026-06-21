@@ -29,6 +29,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 
+    //coupon apply/remove
+    Route::post('cart/coupon/apply',  [CartController::class, 'applyCoupon'])->name('cart.coupon.apply');
+    Route::post('cart/coupon/remove', [CartController::class, 'removeCoupon'])->name('cart.coupon.remove');
+
     //payment
      Route::get('payment/pending/{order}',
         [PaymentController::class, 'pending'])
