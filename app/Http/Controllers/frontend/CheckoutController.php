@@ -32,11 +32,12 @@ class CheckoutController extends Controller
 
         $subtotal = $this->cart->subtotal();
         $shipping = $this->cart->shippingCharge();
-        $total    = $this->cart->total();
+        $discount = session('coupon.discount', 0);
+        $total    = $subtotal + $shipping - $discount;
         $user     = auth()->user();
 
         return view('frontend.pages.checkOut',
-            compact('items', 'subtotal', 'shipping', 'total', 'user'));
+            compact('items', 'subtotal', 'shipping', 'total', 'discount','user'));
     }
 
     public function store(Request $request)
@@ -74,6 +75,9 @@ class CheckoutController extends Controller
         try {
             $subtotal = $this->cart->subtotal();
             $shipping = $this->cart->shippingCharge();
+            $discount = session('coupon.discount', 0);
+            $couponId = session('coupon.id');
+
 
             // Order তৈরি
             $order = Order::create([
@@ -85,8 +89,8 @@ class CheckoutController extends Controller
                 'shipping_city'    => $request->shipping_city,
                 'subtotal'         => $subtotal,
                 'shipping_charge'  => $shipping,
-                'discount'         => 0,
-                'total'            => $subtotal + $shipping,
+                'discount'         => $discount,
+                'total'            => $subtotal + $shipping - $discount,
                 'payment_method'   => $request->payment_method,
                 'payment_status'   => 'unpaid',
                 'status'           => 'pending',
@@ -114,8 +118,16 @@ class CheckoutController extends Controller
                 }
             }
 
+            // Coupon usage record করা
+            if ($couponId) {
+                app(\App\Services\CouponService::class)
+                ->recordUsage($couponId, auth()->id(), $order->id, $discount);
+            }
+
             // Cart খালি করো
             $this->cart->clear();
+            // checkout শেষে coupon clear
+            session()->forget('coupon'); 
 
             DB::commit();
 
@@ -130,8 +142,7 @@ class CheckoutController extends Controller
                     ->with('success', 'Order সফলভাবে হয়েছে!');
             }
 
-            // Online payment হলে payment page-এ পাঠাও
-            // COD নয় → payment page-এ পাঠাও
+            // COD নয় → Online payment হলে payment page-এ পাঠাও
             return redirect()->route('payment.pending', $order);
 
         } catch (\Exception $e) {

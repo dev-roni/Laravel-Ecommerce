@@ -131,35 +131,36 @@
                                 </td>
                             </tr>
                         </table>
-
+                        
+                        {{-- Coupon Apply Box --}}
                         <div class="mb-3" id="coupon-box">
-        @if(session('coupon'))
-            <div class="d-flex align-items-center justify-content-between
-                        p-2 rounded"
-                 style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2)">
-                <span class="small">
-                    ✅ <strong>{{ session('coupon.code') }}</strong> apply হয়েছে
-                </span>
-                <button class="btn btn-sm btn-outline-danger"
-                        onclick="removeCoupon()">
-                    সরান
-                </button>
-            </div>
-        @else
-            <div class="input-group input-group-sm">
-                <input type="text"
-                       id="couponInput"
-                       class="form-control"
-                       placeholder="Coupon Code"
-                       style="text-transform:uppercase">
-                <button class="btn btn-outline-primary"
-                        onclick="applyCoupon()">
-                    Apply
-                </button>
-            </div>
-            <div id="couponMsg" class="small mt-1"></div>
-        @endif
-    </div>
+                            @if(session('coupon'))
+                                <div class="d-flex align-items-center justify-content-between
+                                            p-2 rounded"
+                                    style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2)">
+                                    <span class="small">
+                                        ✅ <strong>{{ session('coupon.code') }}</strong> apply হয়েছে
+                                    </span>
+                                    <button class="btn btn-sm btn-outline-danger"
+                                            onclick="removeCoupon()">
+                                        সরান
+                                    </button>
+                                </div>
+                            @else
+                                <div class="input-group input-group-sm">
+                                    <input type="text"
+                                        id="couponInput"
+                                        class="form-control"
+                                        placeholder="Coupon Code"
+                                        style="text-transform:uppercase">
+                                    <button class="btn btn-outline-primary"
+                                            onclick="applyCoupon()">
+                                        Apply
+                                    </button>
+                                </div>
+                                <div id="couponMsg" class="small mt-1"></div>
+                            @endif
+                        </div>
 
                         @if($shipping == 0)
                             <div class="alert alert-success py-2 small mb-3">
@@ -190,7 +191,7 @@
 
 <script>
     function updateQty(itemId, qty) {
-        
+
         fetch(`/cart/${itemId}`, {
             method: 'PATCH',
             headers: {

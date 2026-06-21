@@ -151,6 +151,17 @@
                                     @endif
                                 </td>
                             </tr>
+                            <tr id="coupon-row" style="display:{{ session('coupon') ? 'table-row' : 'none' }}">
+                                <td>
+                                    Coupon
+                                    <span class="badge bg-success" id="coupon-code-badge">
+                                        {{ session('coupon.code') }}
+                                    </span>
+                                </td>
+                                <td class="text-end text-danger" id="summary-discount">
+                                    -৳{{ number_format(session('coupon.discount', 0)) }}
+                                </td>
+                            </tr>
                             <tr class="fw-bold fs-6">
                                 <td>সর্বমোট</td>
                                 <td class="text-end text-primary">
