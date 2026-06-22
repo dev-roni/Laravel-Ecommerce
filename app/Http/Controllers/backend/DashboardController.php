@@ -127,4 +127,57 @@ class DashboardController extends Controller
             ->limit($limit)
             ->get();
     }
+
+    // ── Sales Report Page ──────────────────────────
+    public function salesReport(Request $request)
+    {
+        $period = $request->get('period', '30'); // 7, 30, 90, 365
+        $from   = now()->subDays($period)->startOfDay();
+        $to     = now()->endOfDay();
+
+        if ($request->filled('from') && $request->filled('to')) {
+            $from = \Carbon\Carbon::parse($request->from)->startOfDay();
+            $to   = \Carbon\Carbon::parse($request->to)->endOfDay();
+        }
+
+        // Daily revenue in range
+        $dailyRevenue = Order::where('payment_status', 'paid')
+            ->whereBetween('created_at', [$from, $to])
+            ->selectRaw('DATE(created_at) as date, SUM(total) as revenue, COUNT(*) as orders')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        // Summary for period
+        $summary = [
+            'revenue'   => $dailyRevenue->sum('revenue'),
+            'orders'    => Order::whereBetween('created_at', [$from, $to])->count(),
+            'paid'      => Order::where('payment_status','paid')->whereBetween('created_at',[$from,$to])->count(),
+            'cancelled' => Order::where('status','cancelled')->whereBetween('created_at',[$from,$to])->count(),
+            'avg_order' => $dailyRevenue->count() > 0
+                            ? $dailyRevenue->sum('revenue') / max($dailyRevenue->sum('orders'),1)
+                            : 0,
+        ];
+
+        // Top products in period
+        $topProducts = OrderItem::join('orders','orders.id','=','order_items.order_id')
+            ->where('orders.payment_status','paid')
+            ->whereBetween('orders.created_at', [$from, $to])
+            ->selectRaw('product_name, SUM(quantity) as qty, SUM(subtotal) as revenue')
+            ->groupBy('product_name')
+            ->orderByDesc('revenue')
+            ->limit(10)
+            ->get();
+
+        // Payment method breakdown
+        $paymentBreakdown = Order::whereBetween('created_at', [$from, $to])
+            ->selectRaw('payment_method, COUNT(*) as count, SUM(total) as total')
+            ->groupBy('payment_method')
+            ->get();
+
+        return view('admin.sales-report', compact(
+            'dailyRevenue', 'summary', 'topProducts',
+            'paymentBreakdown', 'period', 'from', 'to'
+        ));
+    }
 }
