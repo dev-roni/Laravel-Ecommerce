@@ -37,7 +37,12 @@
                     <i class="fa-solid fa-ticket-simple"></i> Coupon create
                 </a>
             </li>
-            <li><a href="customers.html"><i class="fas fa-users"></i> গ্রাহকবৃন্দ</a></li>
+            <li>
+                <a href="{{ route('admin.users.index') }}"
+                class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                    <i class="fas fa-users"></i> Customers
+                </a>
+            </li>
             <li><a href="settings.html"><i class="fas fa-cog"></i> সেটিংস</a></li>
             <li>
                 <form method="POST" action="{{ route('logout') }}">

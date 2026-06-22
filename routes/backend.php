@@ -10,6 +10,7 @@ use App\Http\Controllers\backend\AttributeController;
 use App\Http\Controllers\backend\OrderController;
 use App\Http\Controllers\backend\ProductReviewController;
 use App\Http\Controllers\backend\CouponController;
+use App\Http\Controllers\backend\UserController;
 
 // ── Auth Routes (Breeze দেয়) ──
 require __DIR__ . '/auth.php';
