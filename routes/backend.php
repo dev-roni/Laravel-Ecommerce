@@ -55,4 +55,16 @@ Route::middleware(['auth','admin'])->group(function(){
     //coupon
     Route::resource('coupons', CouponController::class)->except(['show']);
     Route::post('coupons/{coupon}/toggle', [CouponController::class, 'toggleActive'])->name('coupons.toggle');
+
+    //user management
+    Route::get('users', [Admin\UserController::class, 'index'])->name('users.index');
+    Route::get('users/{user}', [Admin\UserController::class, 'show'])->name('users.show');
+    Route::post('users/{user}/ban', [Admin\UserController::class, 'toggleBan'])->name('users.ban');
+    Route::delete('users/{user}', [Admin\UserController::class, 'destroy'])->name('users.destroy');
+
+    // Admin management
+    Route::get('admins', [Admin\UserController::class, 'admins'])->name('users.admins');
+    Route::get('admins/create', [Admin\UserController::class, 'createAdmin'])->name('users.admins.create');
+    Route::post('admins', [Admin\UserController::class, 'storeAdmin'])->name('users.admins.store');
+
 });
