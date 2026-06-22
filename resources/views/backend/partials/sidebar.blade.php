@@ -4,6 +4,11 @@
         <div class="sidebar-header"><h3>ই-শপ অ্যাডমিন</h3><span>CMS প্যানেল</span></div>
         <ul class="sidebar-menu">
             <li><a href="{{route('admin.dashboard')}}" class="active"><i class="fas fa-tachometer-alt"></i> ড্যাশবোর্ড</a></li>
+            <li>  
+                <a href="{{ route('admin.sales.report') }}"class="nav-link {{ request()->routeIs('admin.sales.*') ? 'active' : '' }}">
+                    <i class="fas fa-chart-line"></i> Sales Report
+                </a>
+            </li>
             <li><a href="{{route('admin.products.index')}}"><i class="fas fa-box"></i> পণ্যসমূহ</a></li>
             <li><a href="{{route('admin.products.create')}}"><i class="fas fa-plus"></i> পণ্য যুক্ত করুন</a></li>
             <li><a href="{{route('admin.attributes.index')}}"><i class="fa-solid fa-sitemap"></i> পণ্যের ভেরিয়েন্ট</a></li>
