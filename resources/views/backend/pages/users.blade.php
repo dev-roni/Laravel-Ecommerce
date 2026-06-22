@@ -78,7 +78,7 @@
                             </td>
                             <td>{{ $user->orders_count }}টি</td>
                             <td>৳{{ number_format($user->total_spent ?? 0) }}</td>
-                            <td><small>{{ $user->created_at->format('d M Y') }}</small></td>
+                            <td><small>{{ $user->created_at }}</small></td>
                             <td>
                                 @if($user->is_banned)
                                     <span class="badge bg-danger">ব্যানড</span>

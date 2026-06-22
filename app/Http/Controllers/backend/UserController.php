@@ -46,7 +46,7 @@ class UserController extends Controller
             'cancelled'     => $user->orders()->where('status', 'cancelled')->count(),
         ];
 
-        return view('backend.pages.users', compact('user', 'orders', 'stats'));
+        return view('backend.pages.userShow', compact('user', 'orders', 'stats'));
     }
 
     public function toggleBan(User $user)
