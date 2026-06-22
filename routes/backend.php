@@ -20,7 +20,7 @@ Route::middleware(['auth','admin'])->group(function(){
     Route::get('dashboard',[DashboardController::class,'dashboard'])->name('dashboard');
 
     //saler report
-    Route::get('sales-report', [Admin\DashboardController::class, 'salesReport'])->name('sales.report');
+    Route::get('sales-report', [DashboardController::class, 'salesReport'])->name('sales.report');
 
     //Product
     Route::resource('products',ProductController::class);

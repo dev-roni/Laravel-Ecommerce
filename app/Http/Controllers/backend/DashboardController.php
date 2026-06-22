@@ -163,7 +163,7 @@ class DashboardController extends Controller
         $topProducts = OrderItem::join('orders','orders.id','=','order_items.order_id')
             ->where('orders.payment_status','paid')
             ->whereBetween('orders.created_at', [$from, $to])
-            ->selectRaw('product_name, SUM(quantity) as qty, SUM(subtotal) as revenue')
+            ->selectRaw('product_name, SUM(order_items.quantity) as qty, SUM(order_items.subtotal) as revenue')
             ->groupBy('product_name')
             ->orderByDesc('revenue')
             ->limit(10)
@@ -175,7 +175,7 @@ class DashboardController extends Controller
             ->groupBy('payment_method')
             ->get();
 
-        return view('admin.sales-report', compact(
+        return view('backend.pages.salesReport', compact(
             'dailyRevenue', 'summary', 'topProducts',
             'paymentBreakdown', 'period', 'from', 'to'
         ));
