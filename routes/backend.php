@@ -67,7 +67,7 @@ Route::middleware(['auth','admin'])->group(function(){
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     // Admin management
-    Route::get('admins', [UserController::class, 'admins'])->name('users.admins');
+    Route::get('admins', [UserController::class, 'managers'])->name('users.managers');
     Route::get('admins/create', [UserController::class, 'createAdmin'])->name('users.admins.create');
     Route::post('admins', [UserController::class, 'storeAdmin'])->name('users.admins.store');
 

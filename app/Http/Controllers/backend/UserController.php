@@ -79,10 +79,10 @@ class UserController extends Controller
     }
 
     // Admin user list (separate)
-    public function admins()
+    public function managers()
     {
-        $admins = User::where('role', 'admin')->latest()->get();
-        return view('backend.pages.users', compact('admins'));
+        $users = User::where('role', 'manager')->paginate(20)->withQueryString();
+        return view('backend.pages.users', compact('users'));
     }
 
     public function createAdmin()

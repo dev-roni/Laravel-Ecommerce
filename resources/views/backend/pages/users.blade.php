@@ -7,8 +7,8 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="mb-0">Customer ব্যবস্থাপনা</h4>
-        <a href="{{ route('admin.users.admins') }}" class="btn btn-outline-primary btn-sm">
-            👤 Admin তালিকা
+        <a href="{{ route('admin.users.managers') }}" class="btn btn-outline-primary btn-sm">
+            👤 Managers তালিকা
         </a>
     </div>
 
