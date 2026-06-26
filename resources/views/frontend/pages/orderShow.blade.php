@@ -242,6 +242,15 @@
             </div>
 
         </div>
+        {{-- Order invoice download--}}
+        <div class="d-flex justify-content-center">
+            <a href="{{ route('orders.invoice', $order) }}"
+            class="btn btn-outline-primary mt-2"
+            target="_blank">
+                📄 Invoice Download
+            </a>
+        </div>
+
     </div>
 </div>
 @endsection
