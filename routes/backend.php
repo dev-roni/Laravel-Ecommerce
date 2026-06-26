@@ -71,4 +71,7 @@ Route::middleware(['auth','admin'])->group(function(){
     Route::get('admins/create', [UserController::class, 'createAdmin'])->name('users.admins.create');
     Route::post('admins', [UserController::class, 'storeAdmin'])->name('users.admins.store');
 
+    //invoice generate
+    Route::get('orders/{order}/invoice',[OrderController::class, 'invoice'])->name('orders.invoice');
+
 });
