@@ -51,6 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/products/{product}/reviews',[ProductReviewController::class, 'store'])->name('reviews.store');
     Route::delete('/reviews/{review}', [ProductReviewController::class, 'destroy'])->name('reviews.destroy');
 
+    //invoice generate
+    Route::get('orders/{order}/invoice',[OrderController::class, 'invoice'])->name('orders.invoice');
+
 }); 
 
 // routes — Public routes
