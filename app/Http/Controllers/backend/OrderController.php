@@ -8,6 +8,7 @@ use App\Mail\OrderStatusUpdatedMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -161,5 +162,17 @@ class OrderController extends Controller
                 $item->product?->increment('stock', $item->quantity);
             }
         }
+    }
+
+
+    //invoice generate
+    public function invoice(Order $order)
+    {
+        $order->load(['items.product', 'items.variant', 'user']);
+
+        $pdf = Pdf::loadView('pdf.invoice', compact('order'))
+                ->setPaper('a4', 'portrait');
+
+        return $pdf->download("invoice-{$order->order_number}.pdf");
     }
 }
