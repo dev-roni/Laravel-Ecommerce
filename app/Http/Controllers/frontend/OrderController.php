@@ -5,6 +5,7 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -58,5 +59,18 @@ class OrderController extends Controller
         $order->update(['status' => 'cancelled']);
 
         return back()->with('success', 'Order বাতিল হয়েছে।');
+    }
+
+    public function invoice(Order $order)
+    {
+        // শুধু নিজের order
+        if ($order->user_id !== auth()->id()) abort(403);
+
+        $order->load(['items.product', 'items.variant', 'user']);
+
+        $pdf = Pdf::loadView('pdf.invoice', compact('order'))
+                ->setPaper('a4', 'portrait');
+
+        return $pdf->download("invoice-{$order->order_number}.pdf");
     }
 }
