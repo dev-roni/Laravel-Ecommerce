@@ -54,6 +54,13 @@ Route::middleware('auth')->group(function () {
     //invoice generate
     Route::get('orders/{order}/invoice',[OrderController::class, 'invoice'])->name('orders.invoice');
 
+    //wishlist
+    Route::get('wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::delete('wishlist/{wishlist}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+    Route::post('wishlist/{wishlist}/cart', [WishlistController::class, 'moveToCart'])->name('wishlist.to-cart');
+    Route::post('wishlist/cart/all', [WishlistController::class, 'moveAllToCart'])->name('wishlist.all-to-cart');
+
 }); 
 
 // routes — Public routes
