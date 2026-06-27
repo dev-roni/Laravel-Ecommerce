@@ -52,9 +52,7 @@ class Order extends Model
 
     const PAYMENT_METHOD_LABELS = [
         'cod'   => 'ক্যাশ অন ডেলিভারি',
-        'bkash' => 'bKash',
-        'nagad' => 'Nagad',
-        'card'  => 'Card',
+        'online' => 'অনলাইন',
     ];
 
     // Relationships

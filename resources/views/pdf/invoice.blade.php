@@ -175,10 +175,10 @@
   {{-- ── Header ── --}}
   <div class="header">
     <div class="header-left">
-      <div class="brand-name">🛒 পবনবাহিকা</div>
+      <div class="brand-name">Pobonbahika</div>
       <div class="brand-sub" style="margin-top:4px">
-        ঢাকা, বাংলাদেশ<br>
-        📞 01700-000000<br>
+         BD<br>
+         01700-000000<br>
         ✉ info@pobonbahika.com
       </div>
     </div>
@@ -186,11 +186,11 @@
       <div class="invoice-title">INVOICE</div>
       <div class="invoice-number"># {{ $order->order_number }}</div>
       <div style="margin-top:8px;font-size:10px;color:#6B7280">
-        তারিখ: <strong>{{ $order->created_at->format('d M Y') }}</strong>
+        Date: <strong>{{ $order->created_at->format('d M Y') }}</strong>
       </div>
       @if($order->delivered_at)
         <div style="font-size:10px;color:#6B7280;margin-top:3px">
-          ডেলিভারি: <strong>{{ $order->delivered_at->format('d M Y') }}</strong>
+          Delivery: <strong>{{ $order->delivered_at->format('d M Y') }}</strong>
         </div>
       @endif
     </div>
@@ -202,7 +202,7 @@
   <div class="info-grid">
 
     <div class="info-col">
-      <div class="info-label">বিল করা হচ্ছে</div>
+      <div class="info-label">Making Bill</div>
       <div class="info-value">
         <strong>{{ $order->shipping_name }}</strong><br>
         {{ $order->shipping_phone }}<br>
@@ -211,24 +211,24 @@
     </div>
 
     <div class="info-col">
-      <div class="info-label">Delivery ঠিকানা</div>
+      <div class="info-label">Delivery Address</div>
       <div class="info-value">
         {{ $order->shipping_address }}<br>
-        {{ $order->shipping_city }}, বাংলাদেশ
+        {{ $order->shipping_city }}, BD
       </div>
     </div>
 
     <div class="info-col">
-      <div class="info-label">Payment তথ্য</div>
+      <div class="info-label">Payment Info</div>
       <div class="info-value">
-        পদ্ধতি: <strong>{{ $order->payment_method_label }}</strong><br>
+        Method: <strong>{{ $order->payment_method }}</strong><br>
         <br>
         <span class="status-badge status-{{ $order->payment_status }}">
-          {{ $order->payment_label }}
+          {{ $order->payment_status }}
         </span>
         &nbsp;
         <span class="status-badge status-{{ $order->status }}">
-          {{ $order->status_label }}
+          {{ $order->status }}
         </span>
       </div>
     </div>
@@ -240,10 +240,10 @@
     <thead>
       <tr>
         <th style="width:5%">#</th>
-        <th style="width:45%">পণ্য</th>
-        <th style="width:15%">একক মূল্য</th>
-        <th style="width:10%">পরিমাণ</th>
-        <th style="width:15%;text-align:right">মোট</th>
+        <th style="width:45%">Product</th>
+        <th style="width:15%">Unit price</th>
+        <th style="width:10%">Quantity </th>
+        <th style="width:15%;text-align:right">Total</th>
       </tr>
     </thead>
     <tbody>
@@ -256,9 +256,9 @@
               <div class="item-variant">{{ $item->variant_label }}</div>
             @endif
           </td>
-          <td>৳{{ number_format($item->unit_price) }}</td>
+          <td>Tk. {{ number_format($item->unit_price) }}</td>
           <td>{{ $item->quantity }}</td>
-          <td>৳{{ number_format($item->subtotal) }}</td>
+          <td>Tk. {{ number_format($item->subtotal) }}</td>
         </tr>
       @endforeach
     </tbody>
@@ -270,7 +270,7 @@
     <div class="totals-left">
       @if($order->notes)
         <div class="note-box">
-          <strong style="color:#0A2540">নোট:</strong><br>
+          <strong style="color:#0A2540">Note:</strong><br>
           {{ $order->notes }}
         </div>
       @endif
@@ -280,27 +280,27 @@
       <table class="totals-table">
         <tr>
           <td style="color:#6B7280">Subtotal</td>
-          <td>৳{{ number_format($order->subtotal) }}</td>
+          <td>Tk. {{ number_format($order->subtotal) }}</td>
         </tr>
         <tr>
           <td style="color:#6B7280">Shipping</td>
           <td>
             @if($order->shipping_charge > 0)
-              ৳{{ number_format($order->shipping_charge) }}
+              Tk. {{ number_format($order->shipping_charge) }}
             @else
-              <span style="color:#22C55E">বিনামূল্যে</span>
+              <span style="color:#22C55E">Free of Charge</span>
             @endif
           </td>
         </tr>
         @if($order->discount > 0)
           <tr class="discount-row">
-            <td>ছাড়</td>
-            <td>-৳{{ number_format($order->discount) }}</td>
+            <td>Discount</td>
+            <td>-Tk. {{ number_format($order->discount) }}</td>
           </tr>
         @endif
         <tr class="total-final">
-          <td>সর্বমোট</td>
-          <td>৳{{ number_format($order->total) }}</td>
+          <td>Grand total</td>
+          <td>Tk. {{ number_format($order->total) }}</td>
         </tr>
       </table>
     </div>
@@ -309,7 +309,7 @@
 
   {{-- ── Thank You ── --}}
   <div class="thank-you">
-    ধন্যবাদ আপনার কেনাকাটার জন্য! 🙏
+    Thank you for your purchase! 🙏
   </div>
 
   <hr class="divider-light">
@@ -317,12 +317,12 @@
   {{-- ── Footer ── --}}
   <div class="footer">
     <div class="footer-left">
-      পবনবাহিকা | ঢাকা, বাংলাদেশ<br>
-      📞 01700-000000 | ✉ info@pobonbahika.com
+      Pobonbahika | BD<br>
+       01700-000000 | ✉ info@pobonbahika.com
     </div>
     <div class="footer-right">
-      Invoice তৈরি: {{ now()->format('d M Y, h:i A') }}<br>
-      এটি একটি computer generated invoice
+      Invoice Make: {{ now()->format('d M Y, h:i A') }}<br>
+      It's a computer generated invoice
     </div>
   </div>
 
