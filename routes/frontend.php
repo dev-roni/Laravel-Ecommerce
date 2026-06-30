@@ -8,6 +8,7 @@ use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\CheckoutController;
 use App\Http\Controllers\frontend\orderController;
 use App\Http\Controllers\frontend\PaymentController;
+use App\Http\Controllers\frontend\WishlistController;
 
 // ── Auth Routes (Breeze দেয়) ──
 require __DIR__ . '/auth.php';

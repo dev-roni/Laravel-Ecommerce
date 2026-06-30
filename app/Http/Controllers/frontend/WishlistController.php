@@ -20,7 +20,7 @@ class WishlistController extends Controller
                          ->latest()
                          ->get();
 
-        return view('shop.wishlist', compact('items'));
+        return view('frontend.pages.wishlist', compact('items'));
     }
 
     // Toggle — add বা remove (AJAX)
