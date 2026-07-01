@@ -1,4 +1,3 @@
-
 <div class="prod-card h-100">
 
   {{-- Image Zone --}}
@@ -25,6 +24,26 @@
       @elseif($product->is_featured)
         <span class="prod-badge badge" style="background:var(--secondary)">Best</span>
       @endif
+
+{{-- Heart button --}}
+@auth
+    <button class="wish-btn"
+            type="button"
+            data-id="{{ $product->id }}"
+            onclick="toggleWishlist( event, {{ $product->id }} , this)"
+            title="Wishlist"
+            style="position:absolute;top:.6rem;right:.6rem;
+                   width:32px;height:32px;border-radius:50%;
+                   background:rgba(255,255,255,.92);
+                   backdrop-filter:blur(6px);
+                   border:1px solid var(--border);
+                   font-size:.9rem;cursor:pointer;
+                   display:flex;align-items:center;justify-content:center;
+                   transition:all .2s;z-index:2;
+                   color:{{ in_array($product->id, auth()->user()->wishedProductIds()) ? 'var(--error)' : 'var(--text-secondary)' }}">
+        {{ in_array($product->id, auth()->user()->wishedProductIds()) ? '❤️' : '🤍' }}
+    </button>
+@endauth
 
     </div>
   </a>

@@ -117,3 +117,43 @@ function addToCart(productId, variantId = null, quantity = 1) {
         .catch(() => window.location.href = window.App.loginUrl);
 }
 window.addToCart = addToCart;
+
+
+
+// ── Wishlist Toggle ──────────────────────────────────────
+function toggleWishlist(event, productId, btn) {
+    event.preventDefault();   // <a> এর default action বন্ধ করবে
+    event.stopPropagation();  // parent এ event যেতে দেবে না
+
+    fetch(window.App.wishlistToggle, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': window.App.csrfToken,
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({ product_id: productId }),
+    })
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) return;
+
+            // Icon update
+            btn.textContent = data.wished ? '❤️' : '🤍';
+            btn.style.color = data.wished ? 'var(--error)' : 'var(--text-secondary)';
+
+            // Bounce animation
+            btn.style.transform = 'scale(1.35)';
+            setTimeout(() => btn.style.transform = 'scale(1)', 250);
+
+            // Toast
+            showToast(data.message, 'success');
+
+
+        })
+        .catch(() => {
+            window.location.href = window.App.loginUrl;
+        });
+
+}
+window.toggleWishlist = toggleWishlist;

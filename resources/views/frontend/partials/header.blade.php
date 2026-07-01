@@ -12,9 +12,10 @@
 <script>
   
   window.App = {
-      csrfToken: '{{ csrf_token() }}',
-      cartAddUrl: '{{ route("cart.add") }}',
-      loginUrl: '{{ route("login") }}'
+    csrfToken: @json(csrf_token()),
+    cartAddUrl: @json(route('cart.add')),
+    wishlistToggle: @json(route('wishlist.toggle')),
+    loginUrl: @json(route('login')),
   };
 </script>
 @vite(['resources/css/app.css','resources/js/app.js'])
