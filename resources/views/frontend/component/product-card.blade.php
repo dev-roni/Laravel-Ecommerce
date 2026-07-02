@@ -27,6 +27,7 @@
 
 {{-- Heart button --}}
 @auth
+  @if($product->total_stock <= 0)
     <button class="wish-btn"
             type="button"
             data-id="{{ $product->id }}"
@@ -41,8 +42,10 @@
                    display:flex;align-items:center;justify-content:center;
                    transition:all .2s;z-index:2;
                    color:{{ in_array($product->id, auth()->user()->wishedProductIds()) ? 'var(--error)' : 'var(--text-secondary)' }}">
-        {{ in_array($product->id, auth()->user()->wishedProductIds()) ? '❤️' : '🤍' }}
+                   
+                    {{ in_array($product->id, auth()->user()->wishedProductIds()) ? '❤️' : '🤍' }}
     </button>
+  @endif
 @endauth
 
     </div>
