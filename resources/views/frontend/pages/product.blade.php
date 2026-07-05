@@ -305,6 +305,22 @@
                         🛒 Cart-এ যোগ করুন
                     @endif
                 </button>
+                @auth
+                    <button id="wishBtn"
+                            onclick="toggleWishlist( event, {{ $product->id }} , this)"
+                            class="btn btn-primary px-5 py-2 anim-up"
+                            style=
+                                background:#fff;border:1.5px solid var(--border);
+                                font-size:1.1rem;cursor:pointer;
+                                display:flex;align-items:center;justify-content:center;
+                                transition:all .22s;flex-shrink:0"
+                            title="Wishlist-এ যোগ ">
+                        @php
+                            $isWished = auth()->user()->wishlist()->where('product_id',$product->id)->exists();
+                        @endphp
+                        {{ $isWished ? '❤️ Remove from wishlist' : '🤍 Add Wishlist' }}
+                    </button>
+                @endauth
             </div>
 
             {{-- Stock info --}}
