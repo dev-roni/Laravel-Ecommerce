@@ -26,6 +26,7 @@
       @endif
 
 {{-- Heart button --}}
+@php $isWished = in_array($product->id, $wishedIds ?? []); @endphp
 @auth
   @if($product->total_stock <= 0)
     <button class="wish-btn"
@@ -41,9 +42,9 @@
                    font-size:.9rem;cursor:pointer;
                    display:flex;align-items:center;justify-content:center;
                    transition:all .2s;z-index:2;
-                   color:{{ in_array($product->id, auth()->user()->wishedProductIds()) ? 'var(--error)' : 'var(--text-secondary)' }}">
+                   color:{{ $isWished ? 'var(--error)' : 'var(--text-secondary)' }}">
                    
-                    {{ in_array($product->id, auth()->user()->wishedProductIds()) ? '❤️' : '🤍' }}
+                    {{ $isWished ? '❤️' : '🤍' }}
     </button>
   @endif
 @endauth

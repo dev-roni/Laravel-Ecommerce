@@ -19,8 +19,11 @@ class ShopController extends Controller
 
         $featured = Product::getFeatured(8);
         $latest   = Product::getLatest(12);
+        $wishedIds = auth()->check()
+            ? auth()->user()->wishedProductIds()
+            : [];
 
-        return view('frontend.pages.home', compact('categories', 'featured', 'latest'));
+        return view('frontend.pages.home', compact('categories', 'featured', 'latest', 'wishedIds'));
     }
 
     // Product detail
@@ -100,7 +103,11 @@ class ShopController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        return view('frontend.pages.category',compact('category', 'products', 'breadcrumb', 'subCategories'));
+        $wishedIds = auth()->check()
+            ? auth()->user()->wishedProductIds()
+            : [];
+
+        return view('frontend.pages.category',compact('category', 'products', 'breadcrumb', 'subCategories','wishedIds'));
     }
     private function getAllCategoryIds(Category $category): array
     {
@@ -125,6 +132,10 @@ class ShopController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        return view('frontend.pages.search', compact('products'));
+        $wishedIds = auth()->check()
+            ? auth()->user()->wishedProductIds()
+            : [];
+
+        return view('frontend.pages.search', compact('products','wishedIds'));
     }
 }
