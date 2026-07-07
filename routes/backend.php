@@ -11,6 +11,7 @@ use App\Http\Controllers\backend\OrderController;
 use App\Http\Controllers\backend\ProductReviewController;
 use App\Http\Controllers\backend\CouponController;
 use App\Http\Controllers\backend\UserController;
+use App\Http\Controllers\backend\RefundController;
 
 // ── Auth Routes (Breeze দেয়) ──
 require __DIR__ . '/auth.php';
@@ -75,8 +76,8 @@ Route::middleware(['auth','admin'])->group(function(){
     Route::get('orders/{order}/invoice',[OrderController::class, 'invoice'])->name('orders.invoice');
 
     //refund
-    Route::get('refunds', [Admin\RefundController::class, 'index'])->name('refunds.index');
-    Route::get('refunds/{refund}', [Admin\RefundController::class, 'show'])->name('refunds.show');
-    Route::patch('refunds/{refund}', [Admin\RefundController::class, 'update'])->name('refunds.update');
+    Route::get('refunds', [RefundController::class, 'index'])->name('refunds.index');
+    Route::get('refunds/{refund}', [RefundController::class, 'show'])->name('refunds.show');
+    Route::patch('refunds/{refund}', [RefundController::class, 'update'])->name('refunds.update');
 
 });

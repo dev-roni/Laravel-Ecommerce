@@ -26,6 +26,6 @@ class RefundController extends Controller
             'total_amt' => Refund::where('status', 'completed')->sum('amount'),
         ];
 
-        return view('admin.refunds.index', compact('refunds', 'summary'));
+        return view('backend.pages.refunds', compact('refunds', 'summary'));
     }
 }

@@ -30,6 +30,18 @@
                     <i class="fa-solid fa-user-pen"></i> Reviews
                 </a>
             </li>
+
+            <li>
+                <a href="{{ route('admin.refunds.index') }}"
+                    class="nav-link {{ request()->routeIs('admin.refunds.*') ? 'active' : '' }}">
+                        <i class="fas fa-undo-alt"></i> Refunds
+                        @php $pendingRefunds = \App\Models\Refund::where('status','pending')->count(); @endphp
+                        @if($pendingRefunds > 0)
+                            <span class="badge bg-danger ms-1">{{ $pendingRefunds }}</span>
+                        @endif
+                </a>
+            </li>
+
             <li>
                 <a href="{{ route('admin.coupons.index') }}"
                     class="nav-link {{ request()->routeIs('admin.coupons.*') ? 'active' : '' }}">
