@@ -108,4 +108,17 @@ class Order extends Model
     {
         return $query->whereDate('created_at', today());
     }
+
+    //for refund
+    public function refunds()
+    {
+        return $this->hasMany(Refund::class);
+    }
+
+    public function hasActiveRefund(): bool
+    {
+        return $this->refunds()
+                    ->whereIn('status', ['pending', 'approved'])
+                    ->exists();
+    }
 }
