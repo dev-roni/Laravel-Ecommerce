@@ -74,4 +74,9 @@ Route::middleware(['auth','admin'])->group(function(){
     //invoice generate
     Route::get('orders/{order}/invoice',[OrderController::class, 'invoice'])->name('orders.invoice');
 
+    //refund
+    Route::get('refunds', [Admin\RefundController::class, 'index'])->name('refunds.index');
+    Route::get('refunds/{refund}', [Admin\RefundController::class, 'show'])->name('refunds.show');
+    Route::patch('refunds/{refund}', [Admin\RefundController::class, 'update'])->name('refunds.update');
+
 });
