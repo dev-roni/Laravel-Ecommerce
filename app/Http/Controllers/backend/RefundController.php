@@ -32,7 +32,7 @@ class RefundController extends Controller
     public function show(Refund $refund)
     {
         $refund->load(['order.items', 'user']);
-        return view('baclend.pages.refund-show', compact('refund'));
+        return view('backend.pages.refundShow', compact('refund'));
     }
 
     public function update(Request $request, Refund $refund)
