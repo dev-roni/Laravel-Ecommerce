@@ -39,7 +39,7 @@ class RefundStatusMail extends Mailable implements ShouldQueue
      */
     public function content(): Content
     {
-        return new Content(view: 'mails.refund-status');
+        return new Content(view: 'backend.mails.refund-status');
     }
 
     /**
