@@ -48,6 +48,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
 
+    //Refund
+    Route::get('refunds', [RefundController::class, 'index'])->name('refunds.index');
+    Route::get('orders/{order}/refund', [RefundController::class, 'create'])->name('refunds.create');
+    Route::post('orders/{order}/refund', [RefundController::class, 'store'])->name('refunds.store');
+
     //product reviews
     Route::post('/products/{product}/reviews',[ProductReviewController::class, 'store'])->name('reviews.store');
     Route::delete('/reviews/{review}', [ProductReviewController::class, 'destroy'])->name('reviews.destroy');
