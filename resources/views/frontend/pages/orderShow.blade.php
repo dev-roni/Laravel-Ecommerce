@@ -156,6 +156,21 @@
                 </div>
             </div>
             @endif
+
+            {{-- Delivered + paid + no active refund --}}
+            @if(in_array($order->status, ['delivered','cancelled'])
+                && $order->payment_status === 'paid'
+                && !$order->hasActiveRefund())
+                <a href="{{ route('refunds.create', $order) }}"
+                class="btn btn-outline-danger w-100 mt-2">
+                    ↩️ Refund Request করুন
+                </a>
+            @elseif($order->hasActiveRefund())
+                <div class="my-2 py-1 text-center"
+                    style="font-size:.8rem;color:var(--secondary); border:2px solid var(--secondary) !important; border-radius: 4px; ">
+                    ⏳ Refund Request প্রক্রিয়াধীন
+                </div>
+            @endif
             
             {{-- Cancel button --}}
             @if($order->status === 'pending')

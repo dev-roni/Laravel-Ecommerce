@@ -96,7 +96,7 @@ class PaymentController extends Controller
             try {
                 $order->update([
                     'payment_status'     => 'paid',
-                    'status'             => 'processing',
+                    'status'             => 'pending',
                     'ssl_val_id'         => $request->val_id,
                     'ssl_transaction_id' => $request->tran_id,
                     'ssl_response'       => json_encode($request->all()),
