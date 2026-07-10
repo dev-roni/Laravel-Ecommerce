@@ -73,6 +73,6 @@ class RefundController extends Controller
                          ->latest()
                          ->paginate(10);
 
-        return view('shop.refund.index', compact('refunds'));
+        return view('frontend.pages.refunds', compact('refunds'));
     }
 }
