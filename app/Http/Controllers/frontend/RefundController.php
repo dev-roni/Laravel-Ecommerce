@@ -64,4 +64,15 @@ class RefundController extends Controller
             ->route('orders.show', $order)
             ->with('success', 'Refund request জমা হয়েছে। আমরা শীঘ্রই যোগাযোগ করব।');
     }
+
+     // Customer-এর সব refund
+    public function index()
+    {
+        $refunds = Refund::where('user_id', auth()->id())
+                         ->with(['order'])
+                         ->latest()
+                         ->paginate(10);
+
+        return view('shop.refund.index', compact('refunds'));
+    }
 }
