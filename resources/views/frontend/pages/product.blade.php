@@ -421,236 +421,236 @@
             <div class="meta-body">
             <div class="meta-content">
 
-{{-- REVIEWS SECTION --}}
-<div class="mt-5" id="reviews">
+    {{-- REVIEWS SECTION --}}
+    <div class="mt-5" id="reviews">
 
-    {{-- Session messages --}}
-    @if(session('review_success'))
-        <div class="alert alert-success alert-dismissible fade show">
-        {{ session('review_success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-    @if(session('review_error'))
-        <div class="alert alert-danger alert-dismissible fade show">
-        {{ session('review_error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
-    <div class="row g-5">
-
-        {{-- বাম: Summary --}}
-        <div class="col-md-5">
-            <div class="card border-0 shadow-sm p-4 text-center">
-
-                <div style="font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:600;color:var(--primary);line-height:1">
-                {{ number_format($product->avg_rating, 1) }}
-                </div>
-
-                {{-- Stars --}}
-                <div class="my-2" style="font-size:1.3rem">
-                @for($s = 1; $s <= 5; $s++)
-                    <span style="color:{{ $s <= round($product->avg_rating) ? 'var(--warning)' : 'var(--border)' }}">★</span>
-                @endfor
-                </div>
-
-                <div class="text-muted small mb-4">
-                {{ $product->review_count }}টি Review
-                </div>
-
-                {{-- Rating Breakdown --}}
-                @for($r = 5; $r >= 1; $r--)
-                @php
-                    $count = $ratingBreakdown[$r] ?? 0;
-                    $pct   = $product->review_count > 0
-                    ? round(($count / $product->review_count) * 100)
-                    : 0;
-                @endphp
-                <div class="d-flex align-items-center gap-2 mb-2">
-                    <span style="font-size:.75rem;color:var(--warning);white-space:nowrap">
-                    {{ $r }} ★
-                    </span>
-                    <div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
-                    <div style="height:100%;width:{{ $pct }}%;background:var(--warning);border-radius:3px;transition:width .6s ease"></div>
-                    </div>
-                    <span style="font-size:.72rem;color:var(--text-secondary);min-width:24px;text-align:right">
-                    {{ $count }}
-                    </span>
-                </div>
-                @endfor
-
+        {{-- Session messages --}}
+        @if(session('review_success'))
+            <div class="alert alert-success alert-dismissible fade show">
+            {{ session('review_success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
-        </div>
+        @endif
+        @if(session('review_error'))
+            <div class="alert alert-danger alert-dismissible fade show">
+            {{ session('review_error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
 
-        {{-- ডান: Reviews + Form --}}
-        <div class="col-md-7">
+        <div class="row g-5">
 
-            {{-- ── Write a Review ── --}}
-            @auth
-                @if(!$userReview)
-                <div class="card border-0 shadow-sm p-4 mb-4">
-                    <h6 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--primary);margin-bottom:1rem">
-                    আপনার মতামত দিন
-                    </h6>
+            {{-- বাম: Summary --}}
+            <div class="col-md-5">
+                <div class="card border-0 shadow-sm p-4 text-center">
 
-                    <form method="POST"
-                        action="{{ route('reviews.store', $product) }}">
-                    @csrf
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:600;color:var(--primary);line-height:1">
+                    {{ number_format($product->avg_rating, 1) }}
+                    </div>
 
-                    {{-- Star Rating --}}
-                    <div class="mb-3">
-                        <label class="form-label"
-                            style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--text-secondary)">
-                        Rating *
-                        </label>
-                        <div class="star-picker d-flex gap-1" id="starPicker">
-                        @for($s = 1; $s <= 5; $s++)
-                            <button type="button"
-                                    class="star-pick-btn"
-                                    data-val="{{ $s }}"
-                                    onclick="pickStar({{ $s }})"
-                                    style="background:transparent;border:none;font-size:1.8rem;color:var(--border);cursor:pointer;padding:0;line-height:1;transition:color .15s,transform .15s">
-                            ★
-                            </button>
-                        @endfor
+                    {{-- Stars --}}
+                    <div class="my-2" style="font-size:1.3rem">
+                    @for($s = 1; $s <= 5; $s++)
+                        <span style="color:{{ $s <= round($product->avg_rating) ? 'var(--warning)' : 'var(--border)' }}">★</span>
+                    @endfor
+                    </div>
+
+                    <div class="text-muted small mb-4">
+                    {{ $product->review_count }}টি Review
+                    </div>
+
+                    {{-- Rating Breakdown --}}
+                    @for($r = 5; $r >= 1; $r--)
+                    @php
+                        $count = $ratingBreakdown[$r] ?? 0;
+                        $pct   = $product->review_count > 0
+                        ? round(($count / $product->review_count) * 100)
+                        : 0;
+                    @endphp
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span style="font-size:.75rem;color:var(--warning);white-space:nowrap">
+                        {{ $r }} ★
+                        </span>
+                        <div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+                        <div style="height:100%;width:{{ $pct }}%;background:var(--warning);border-radius:3px;transition:width .6s ease"></div>
                         </div>
-                        <input type="hidden" name="rating" id="ratingInput" value="">
-                        @error('rating')
-                        <div class="text-danger small mt-1">{{ $message }}</div>
-                        @enderror
+                        <span style="font-size:.72rem;color:var(--text-secondary);min-width:24px;text-align:right">
+                        {{ $count }}
+                        </span>
                     </div>
+                    @endfor
 
-                    {{-- Body --}}
-                    <div class="mb-3">
-                        <label class="form-label"
-                            style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--text-secondary)">
-                        Review *
-                        </label>
-                        <textarea name="body"
-                                rows="4"
-                                class="form-control @error('body') is-invalid @enderror"
-                                placeholder="পণ্যটি কেমন ছিল? আপনার অভিজ্ঞতা শেয়ার করুন...">{{ old('body') }}</textarea>
-                        @error('body')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <button type="submit"
-                            class="btn btn-primary px-4">
-                        Review জমা দিন
-                    </button>
-
-                    </form>
                 </div>
-                @else
+            </div>
 
-                    Your Comment
-                {{-- আগে review দিয়েছে --}}
-                <div class="card border-0 shadow-sm p-4 mb-4"
-                    style="border-left:3px solid var(--secondary) !important">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <div class="mb-1" style="color:var(--warning)">
+            {{-- ডান: Reviews + Form --}}
+            <div class="col-md-7">
+
+                {{-- ── Write a Review ── --}}
+                @auth
+                    @if(!$userReview)
+                    <div class="card border-0 shadow-sm p-4 mb-4">
+                        <h6 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--primary);margin-bottom:1rem">
+                        আপনার মতামত দিন
+                        </h6>
+
+                        <form method="POST"
+                            action="{{ route('reviews.store', $product) }}">
+                        @csrf
+
+                        {{-- Star Rating --}}
+                        <div class="mb-3">
+                            <label class="form-label"
+                                style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--text-secondary)">
+                            Rating *
+                            </label>
+                            <div class="star-picker d-flex gap-1" id="starPicker">
                             @for($s = 1; $s <= 5; $s++)
-                                {{ $s <= $userReview->rating ? '★' : '☆' }}
+                                <button type="button"
+                                        class="star-pick-btn"
+                                        data-val="{{ $s }}"
+                                        onclick="pickStar({{ $s }})"
+                                        style="background:transparent;border:none;font-size:1.8rem;color:var(--border);cursor:pointer;padding:0;line-height:1;transition:color .15s,transform .15s">
+                                ★
+                                </button>
                             @endfor
                             </div>
-                            <p class="text-muted small mb-0">{{ $userReview->body }}</p>
-                        </div>
-
-                    </div>
-                    <div class="mt-2 small text-muted">
-                    আপনার review — {{ $userReview->created_at->format('d M Y') }}
-                    </div>
-                        <form method="POST"
-                                action="{{ route('reviews.destroy', $userReview) }}"
-                                onsubmit="return confirm('Review মুছবেন?')">
-                            @csrf @method('DELETE')
-                            <button class="btn btn-outline-danger btn-sm">মুছুন</button>
-                        </form>
-                </div>
-                @endif
-            @else
-                {{-- Guest --}}
-                <div class="card  border-0 bg-light p-4 mb-2 text-center">
-                <p class="mb-2 text-muted">Review দিতে হলে আগে Login করুন।</p>
-                <a href="{{ route('login') }}" class="btn btn-primary btn-sm px-4">
-                    Login করুন
-                </a>
-                </div>
-            @endauth
-        </div>
-
-        {{-- ── Review List ── --}}
-        @if($product->approvedReviews->count())
-            <div class="d-flex flex-column gap-3">
-            @foreach($product->approvedReviews as $review)
-                <div class="card  border-0 shadow-sm p-2">
-                    <div class="d-flex align-items-start gap-3">
-
-                        {{-- Avatar --}}
-                        <div style="width:38px;height:38px;border-radius:50%;flex-shrink:0;
-                                    background:linear-gradient(135deg,var(--primary),var(--secondary));
-                                    display:flex;align-items:center;justify-content:center;
-                                    color:#fff;font-size:.8rem;font-weight:700">
-                        {{ strtoupper(substr($review->user->name, 0, 1)) }}
-                        </div>
-
-                        <div class="flex-grow-1">
-                        {{-- Name + Stars --}}
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                            <div>
-                            <span class="fw-600" style="font-size:.9rem;color:var(--primary)">
-                                {{ $review->user->name }}
-                            </span>
-                            <span class="ms-2" style="color:var(--warning);font-size:.85rem">
-                                @for($s = 1; $s <= 5; $s++)
-                                {{ $s <= $review->rating ? '★' : '☆' }}
-                                @endfor
-                            </span>
-                            </div>
-                            <span class="text-muted"
-                                style="font-size:.72rem">
-                            {{ $review->created_at->diffForHumans() }}
-                            </span>
+                            <input type="hidden" name="rating" id="ratingInput" value="">
+                            @error('rating')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         {{-- Body --}}
-                        <p class="text-muted mb-0 "
-                            style="font-size:.87rem;line-height:1.7">
-                            {{ $review->body }}
-                        </p>
+                        <div class="mb-3">
+                            <label class="form-label"
+                                style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--text-secondary)">
+                            Review *
+                            </label>
+                            <textarea name="body"
+                                    rows="4"
+                                    class="form-control @error('body') is-invalid @enderror"
+                                    placeholder="পণ্যটি কেমন ছিল? আপনার অভিজ্ঞতা শেয়ার করুন...">{{ old('body') }}</textarea>
+                            @error('body')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                        {{-- Delete own review --}}
-                        @auth
-                            @if($review->user_id === auth()->id())
-                            <form method="POST"
-                                    action="{{ route('reviews.destroy', $review) }}"
-                                    class="mt-2"
-                                    onsubmit="return confirm('মুছবেন?')">
-                                @csrf @method('DELETE')
-                                <button class="btn btn-outline-danger btn-sm"
-                                        style="font-size:.72rem;padding:.2rem .6rem">
-                                মুছুন
-                                </button>
-                            </form>
-                            @endif
-                        @endauth
+                        <button type="submit"
+                                class="btn btn-primary px-4">
+                            Review জমা দিন
+                        </button>
+
+                        </form>
+                    </div>
+                    @else
+
+                        Your Comment
+                    {{-- আগে review দিয়েছে --}}
+                    <div class="card border-0 shadow-sm p-4 mb-4"
+                        style="border-left:3px solid var(--secondary) !important">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="mb-1" style="color:var(--warning)">
+                                @for($s = 1; $s <= 5; $s++)
+                                    {{ $s <= $userReview->rating ? '★' : '☆' }}
+                                @endfor
+                                </div>
+                                <p class="text-muted small mb-0">{{ $userReview->body }}</p>
+                            </div>
 
                         </div>
+                        <div class="mt-2 small text-muted">
+                        আপনার review — {{ $userReview->created_at->format('d M Y') }}
+                        </div>
+                            <form method="POST"
+                                    action="{{ route('reviews.destroy', $userReview) }}"
+                                    onsubmit="return confirm('Review মুছবেন?')">
+                                @csrf @method('DELETE')
+                                <button class="btn btn-outline-danger btn-sm">মুছুন</button>
+                            </form>
                     </div>
+                    @endif
+                @else
+                    {{-- Guest --}}
+                    <div class="card  border-0 bg-light p-4 mb-2 text-center">
+                    <p class="mb-2 text-muted">Review দিতে হলে আগে Login করুন।</p>
+                    <a href="{{ route('login') }}" class="btn btn-primary btn-sm px-4">
+                        Login করুন
+                    </a>
+                    </div>
+                @endauth
+            </div>
+
+            {{-- ── Review List ── --}}
+            @if($product->approvedReviews->count())
+                <div class="d-flex flex-column gap-3">
+                @foreach($product->approvedReviews as $review)
+                    <div class="card  border-0 shadow-sm p-2">
+                        <div class="d-flex align-items-start gap-3">
+
+                            {{-- Avatar --}}
+                            <div style="width:38px;height:38px;border-radius:50%;flex-shrink:0;
+                                        background:linear-gradient(135deg,var(--primary),var(--secondary));
+                                        display:flex;align-items:center;justify-content:center;
+                                        color:#fff;font-size:.8rem;font-weight:700">
+                            {{ strtoupper(substr($review->user->name, 0, 1)) }}
+                            </div>
+
+                            <div class="flex-grow-1">
+                            {{-- Name + Stars --}}
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                <div>
+                                <span class="fw-600" style="font-size:.9rem;color:var(--primary)">
+                                    {{ $review->user->name }}
+                                </span>
+                                <span class="ms-2" style="color:var(--warning);font-size:.85rem">
+                                    @for($s = 1; $s <= 5; $s++)
+                                    {{ $s <= $review->rating ? '★' : '☆' }}
+                                    @endfor
+                                </span>
+                                </div>
+                                <span class="text-muted"
+                                    style="font-size:.72rem">
+                                {{ $review->created_at->diffForHumans() }}
+                                </span>
+                            </div>
+
+                            {{-- Body --}}
+                            <p class="text-muted mb-0 "
+                                style="font-size:.87rem;line-height:1.7">
+                                {{ $review->body }}
+                            </p>
+
+                            {{-- Delete own review --}}
+                            @auth
+                                @if($review->user_id === auth()->id())
+                                <form method="POST"
+                                        action="{{ route('reviews.destroy', $review) }}"
+                                        class="mt-2"
+                                        onsubmit="return confirm('মুছবেন?')">
+                                    @csrf @method('DELETE')
+                                    <button class="btn btn-outline-danger btn-sm"
+                                            style="font-size:.72rem;padding:.2rem .6rem">
+                                    মুছুন
+                                    </button>
+                                </form>
+                                @endif
+                            @endauth
+
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
                 </div>
-            @endforeach
-            </div>
-        @else
-            <div class="text-center py-5 text-muted">
-            <div style="font-size:2.5rem">💬</div>
-            <p class="mt-2">এখনো কোনো review নেই। প্রথম review দিন!</p>
-            </div>
-        @endif
+            @else
+                <div class="text-center py-5 text-muted">
+                <div style="font-size:2.5rem">💬</div>
+                <p class="mt-2">এখনো কোনো review নেই। প্রথম review দিন!</p>
+                </div>
+            @endif
+        </div>
     </div>
-</div>
 
             </div>
             </div>
@@ -671,6 +671,31 @@
                 @endforeach
             </div>
         </div>
+    @endif
+
+    {{-- Recently Viewed --}}
+    @if(isset($recentlyViewed) && $recentlyViewed->count())
+    <section class="py-5"
+            style="background:var(--background);border-top:1px solid var(--border)">
+        <div class="container-xl">
+
+        <div class="d-flex align-items-end justify-content-between mb-4">
+            <div>
+            <div class="sec-eyebrow mb-1">আপনি আগে দেখেছেন</div>
+            <h2 class="sec-title mb-0">Recently Viewed</h2>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            @foreach($recentlyViewed as $i => $rvProduct)
+            <div class="col-xl-3 col-md-6 anim-up d{{ ($i % 4) + 1 }}">
+                @include('frontend.component.product-card', ['product' => $rvProduct])
+            </div>
+            @endforeach
+        </div>
+
+        </div>
+    </section>
     @endif
 
 </div>
