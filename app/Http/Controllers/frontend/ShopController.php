@@ -5,7 +5,9 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\RecentlyViewedService;
 use Illuminate\Http\Request;
+
 
 class ShopController extends Controller
 {
@@ -40,6 +42,9 @@ class ShopController extends Controller
             'approvedReviews.user',
         ]);
 
+        // ── Add in Recently Viewed- ──────────────
+        app(RecentlyViewedService::class)->add($product->id);
+
         // Rating breakdown (1★ থেকে 5★ কতটা)
         $ratingBreakdown = $product->approvedReviews()
             ->selectRaw('rating, count(*) as count')
@@ -54,11 +59,17 @@ class ShopController extends Controller
                     ->first()
             : null;
 
+        //related product
         $related = Product::getByCategory($product->category_id, 6)
                           ->reject(fn($p) => $p->id === $product->id)
                           ->take(4);
 
-        return view('frontend.pages.product', compact('product', 'related','ratingBreakdown','userReview'));
+        // ── Recently Viewed (current product বাদে) ──
+        $recentlyViewed = app(RecentlyViewedService::class)
+                        ->getProducts(excludeId: $product->id)
+                        ->take(5);
+
+        return view('frontend.pages.product', compact('product', 'related','ratingBreakdown','userReview','recentlyViewed'));
     }
 
  
