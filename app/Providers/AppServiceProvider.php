@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Observers\CategoryObserver;
 use App\Services\CartService;
 use App\Services\CouponService;
+use App\Services\RecentlyViewedService;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(CartService::class, fn() => new CartService());
         $this->app->singleton(CouponService::class,fn() => new CouponService());
+        $this->app->singleton(RecentlyViewedService::class,fn() => new RecentlyViewedService());
     }
 
     /**
