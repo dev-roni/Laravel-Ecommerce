@@ -149,4 +149,16 @@ class ShopController extends Controller
 
         return view('frontend.pages.search', compact('products','wishedIds'));
     }
+
+    // recent view clear
+    public function clearRecentlyViewed()
+    {
+        app(RecentlyViewedService::class)->clear();
+
+        if (request()->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
+        return back();
+    }
 }
