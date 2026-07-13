@@ -157,3 +157,23 @@ function toggleWishlist(event, productId, btn) {
 
 }
 window.toggleWishlist = toggleWishlist;
+
+// clear recent view
+function clearRecentlyViewed() {
+    fetch('{{ route("recently-viewed.clear") }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': window.App.csrfToken,
+        },
+    })
+        .then(() => {
+            // Section সরিয়ে দাও
+            const section = document.querySelector('.recently-viewed-section');
+            if (section) {
+                section.style.opacity = '0';
+                section.style.transition = 'opacity .3s';
+                setTimeout(() => section.remove(), 300);
+            }
+            showToast('History clear হয়েছে।', 'success');
+        });
+}
