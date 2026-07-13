@@ -75,6 +75,7 @@ Route::get('/', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/search', [ShopController::class, 'search'])->name('shop.search');
 Route::get('/category/{slug}', [ShopController::class, 'category'])->name('shop.category');
 Route::get('/product/{slug}', [ShopController::class, 'product'])->name('shop.product');
+Route::get('recent-view',[ShopController::class, 'recentView'])->name('recent.view');
 Route::post('recently-viewed/clear',[ShopController::class, 'clearRecentlyViewed'])->name('recently-viewed.clear');
 
 // SSLCommerz callback — auth middleware ছাড়া

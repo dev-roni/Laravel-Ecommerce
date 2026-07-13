@@ -150,6 +150,17 @@ class ShopController extends Controller
         return view('frontend.pages.search', compact('products','wishedIds'));
     }
 
+    // recent view
+    public function recentView(){
+
+        $products =app(RecentlyViewedService::class)
+                        ->paginateProducts(5);
+
+        $wishedIds = auth()->check()
+            ? auth()->user()->wishedProductIds()
+            : [];
+        return view('frontend.pages.search', compact('products','wishedIds'));
+    }
     // recent view clear
     public function clearRecentlyViewed()
     {

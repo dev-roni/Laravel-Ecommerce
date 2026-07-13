@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Models\Product;
 use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class RecentlyViewedService
 {
@@ -59,6 +60,24 @@ class RecentlyViewedService
             ->filter(fn($id) => $products->has($id))
             ->map(fn($id) => $products[$id])
             ->values();
+    }
+
+    public function paginateProducts(int $perPage = 5, ?int $excludeId = null): LengthAwarePaginator
+    {
+        $products = $this->getProducts($excludeId);
+
+        $page = LengthAwarePaginator::resolveCurrentPage();
+
+        return new LengthAwarePaginator(
+            $products->forPage($page, $perPage)->values(),
+            $products->count(),
+            $perPage,
+            $page,
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
     }
 
     // Clear
