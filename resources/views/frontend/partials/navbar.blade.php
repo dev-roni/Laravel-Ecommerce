@@ -86,7 +86,12 @@
             <ul class="dropdown-menu dropdown-menu-end">
               <li>
                 <a class="dropdown-item" href="{{ route('orders.index') }}">
-                  <i class="fa-solid fa-box me-2"></i>আমার Orders
+                  <i class="fa-solid fa-box me-2"></i>My Orders
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ route('recent.view') }}">
+                  <i class="fas fa-history"></i> Recent View
                 </a>
               </li>
               <li>
@@ -169,7 +174,10 @@
           @endif
         </a>
         <a href="{{ route('orders.index') }}" class="mob-nav-link" data-bs-dismiss="offcanvas">
-          <i class="fa-solid fa-box"></i> আমার Orders
+          <i class="fa-solid fa-box"></i> My Orders
+        </a>
+        <a href="{{ route('recent.view') }}" class="mob-nav-link" data-bs-dismiss="offcanvas">
+          <i class="fas fa-history"></i> Recent View
         </a>
         <a href="{{ route('profile.edit') }}" class="mob-nav-link" data-bs-dismiss="offcanvas">
           <i class="fa-regular fa-user"></i> Profile
