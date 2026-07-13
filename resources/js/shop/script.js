@@ -160,10 +160,11 @@ window.toggleWishlist = toggleWishlist;
 
 // clear recent view
 function clearRecentlyViewed() {
-    fetch('{{ route("recently-viewed.clear") }}', {
+    fetch(window.App.recentViewClear, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': window.App.csrfToken,
+            'X-Requested-With': 'XMLHttpRequest',
         },
     })
         .then(() => {
@@ -177,3 +178,4 @@ function clearRecentlyViewed() {
             showToast('History clear হয়েছে।', 'success');
         });
 }
+window.clearRecentlyViewed = clearRecentlyViewed;

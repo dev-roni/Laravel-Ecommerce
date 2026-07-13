@@ -13,6 +13,17 @@
         @endif
     </h4>
 
+    @if(request()->routeIs('recent.view'))
+        <button onclick="clearRecentlyViewed()"
+            onmouseover="this.style.color='var(--accent)'"
+            onmouseout="this.style.color='var(--text-secondary)'"
+            style="font-size:.77rem;color:var(--text-secondary);
+                    background:transparent;border:none;cursor:pointer;
+                    text-decoration:none">
+        <i class="fa-solid fa-trash"></i> Clear Recent View History
+        </button>
+    @endif
+
     @if($products->isEmpty())
         <div class="text-center py-5">
             <div style="font-size:60px">🔍</div>

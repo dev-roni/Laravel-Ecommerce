@@ -16,6 +16,7 @@
     cartAddUrl: @json(route('cart.add')),
     wishlistToggle: @json(route('wishlist.toggle')),
     loginUrl: @json(route('login')),
+    recentViewClear: @json(route('recently-viewed.clear')),
   };
 </script>
 @vite(['resources/css/app.css','resources/js/app.js'])
