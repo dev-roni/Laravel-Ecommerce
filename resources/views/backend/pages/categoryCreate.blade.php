@@ -1,4 +1,5 @@
 @extends('backend.layouts.masterLayout')
+@section('title', $category->exists ? 'Edit Category: '.$category->name : 'Category Create')
 @section('content')
 
         <!-- টপ নেভবার -->

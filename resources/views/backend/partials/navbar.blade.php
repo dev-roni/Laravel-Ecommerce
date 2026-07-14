@@ -2,7 +2,7 @@
         <div class="top-navbar">
             <div class="d-flex align-items-center">
                 <i class="fas fa-bars toggle-btn me-3" id="sidebarToggle"></i>
-                <h4 class="m-0">ড্যাশবোর্ড ওভারভিউ</h4>
+                <h4 class="m-0">@yield('title', 'পবনবাহিকা')</h4>
             </div>
             <div class="d-flex align-items-center gap-3">
                 <i class="fas fa-bell text-secondary cursor-pointer"></i>

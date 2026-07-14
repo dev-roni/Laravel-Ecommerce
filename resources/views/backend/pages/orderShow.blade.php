@@ -1,5 +1,5 @@
  @extends('backend/layouts/masterLayout')
-
+@section('title', 'Order: '.$order->order_number)
 @section('content')
 @php
     use App\Models\Order;

@@ -1,6 +1,6 @@
 
 @extends('backend.layouts.masterLayout')
-@section('title', 'নতুন Coupon')
+@section('title', $coupon->exists ? 'Edit Coupon: '.$coupon->code : 'Coupon Create')
 
 @section('content')
 <div class="container py-4" style="max-width:600px">

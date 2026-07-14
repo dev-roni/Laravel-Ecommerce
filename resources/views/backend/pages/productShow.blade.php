@@ -1,5 +1,5 @@
 @extends('backend/layouts/masterLayout')
-
+@section('title', $product->name)
 @section('content')
 <div class="container py-4" style="max-width:900px">
 

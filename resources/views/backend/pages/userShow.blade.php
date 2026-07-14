@@ -1,4 +1,4 @@
-{{-- resources/views/admin/users/show.blade.php --}}
+
 @extends('backend.layouts.masterLayout')
 @section('title', $user->name)
 

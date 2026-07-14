@@ -1,5 +1,5 @@
  @extends('backend/layouts/masterLayout')
-
+@section('title', 'Orders')
 
 @section('content')
 

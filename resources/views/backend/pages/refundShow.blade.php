@@ -1,6 +1,6 @@
 
 @extends('backend.layouts.masterLayout')
-@section('title', 'Refund Details')
+@section('title', 'Refund Details: '.$refund->order->order_number)
 
 @section('content')
 <div class="container py-4" style="max-width:820px">

@@ -1,5 +1,5 @@
 @extends('backend.layouts.masterLayout')
-
+@section('title', 'Product-Create')
 @section('content')
 <div class="container py-4" style="max-width:860px">
     <h4 class="mb-4">নতুন Product তৈরি করুন</h4>

@@ -1,5 +1,6 @@
 {{-- admin/attributes/show.blade.php --}}
 @extends('backend.layouts.masterLayout')
+@section('title', $attribute->name)
 @section('content')
 <div class="container py-4" style="max-width:600px">
 
