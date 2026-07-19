@@ -85,4 +85,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->wishlist()->pluck('product_id')->toArray();
     }
+
+    public function hasPassword(): bool
+    {
+        return !is_null($this->password);
+    }
 }
