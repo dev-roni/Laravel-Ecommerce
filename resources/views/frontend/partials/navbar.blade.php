@@ -79,9 +79,18 @@
           </a>
           {{-- User Dropdown --}}
           <div class="dropdown">
-            <button class="user-pill-btn dropdown-toggle border-0" data-bs-toggle="dropdown">
-              <span class="user-avt">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
-              {{ Str::limit(auth()->user()->name, 12) }}
+            {{-- User pill button --}}
+            <button class="user-pill-btn dropdown-toggle border-0"
+                    data-bs-toggle="dropdown">
+                @if(auth()->user()->avatar)
+                    <img src="{{ auth()->user()->avatar }}"
+                        style="width:26px;height:26px;border-radius:50%;object-fit:cover">
+                @else
+                    <span class="user-avt">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </span>
+                @endif
+                {{ Str::limit(auth()->user()->name, 12) }}
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
               <li>
