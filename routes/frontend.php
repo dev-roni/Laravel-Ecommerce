@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function () {
 
         // Cart
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::middleware('throttle:30,1')->post('/cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::patch('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/{cartItem}', [CartController::class, 'remove'])->name('cart.remove');
 
@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
      Route::get('payment/pending/{order}',
         [PaymentController::class, 'pending'])
         ->name('payment.pending');
-    Route::post('payment/initiate/{order}',[PaymentController::class, 'initiate'])->name('payment.initiate');
+    Route::middleware('throttle:30,1')->post('payment/initiate/{order}',[PaymentController::class, 'initiate'])->name('payment.initiate');
 
     // Order success
     Route::get('/orders/{order}/success', [OrderController::class, 'success'])->name('orders.success');
@@ -63,7 +63,7 @@ Route::middleware('auth')->group(function () {
 
     //wishlist
     Route::get('wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-    Route::post('wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::middleware('throttle:30,1')->post('wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::delete('wishlist/{wishlist}', [WishlistController::class, 'remove'])->name('wishlist.remove');
     Route::post('wishlist/{wishlist}/cart', [WishlistController::class, 'moveToCart'])->name('wishlist.to-cart');
     Route::post('wishlist/cart/all', [WishlistController::class, 'moveAllToCart'])->name('wishlist.all-to-cart');
