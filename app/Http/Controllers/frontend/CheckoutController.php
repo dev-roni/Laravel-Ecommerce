@@ -59,6 +59,13 @@ class CheckoutController extends Controller
 
         $items = $this->cart->items();
 
+        //ঘন্টায় 3 বারের বেশি অর্ডার চেক
+        if (!$this->checkOrderVelocity()) {
+            return back()->with('error',
+                'আপনি অনেক বেশি order দিচ্ছেন। কিছুক্ষণ পর আবার চেষ্টা করুন।'
+            );
+        }
+
         if ($items->isEmpty()) {
             return redirect()->route('cart.index')
                              ->with('error', 'Cart খালি আছে।');
@@ -149,5 +156,15 @@ class CheckoutController extends Controller
             DB::rollBack();
             return back()->with('error', 'সমস্যা হয়েছে: ' . $e->getMessage());
         }
+    }
+
+    // শেষ ১ ঘণ্টায় ৩-এর বেশি order দিলে block
+    private function checkOrderVelocity(): bool
+    {
+        $recentOrders = Order::where('user_id', auth()->id())
+                            ->where('created_at', '>=', now()->subHour())
+                            ->count();
+
+        return $recentOrders < 3;
     }
 }
