@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\CartService;
 use App\Mail\OrderConfirmedMail;
+use App\Http\Request\CheckoutRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -40,22 +41,9 @@ class CheckoutController extends Controller
             compact('items', 'subtotal', 'shipping', 'total', 'discount','user'));
     }
 
-    public function store(Request $request)
+    public function store(CheckoutRequest $request)
     {
-        $request->validate([
-            'shipping_name'    => 'required|string|max:100',
-            'shipping_phone'   => 'required|string|max:20',
-            'shipping_address' => 'required|string|max:500',
-            'shipping_city'    => 'required|string|max:100',
-            'payment_method'   => 'required|in:cod,online',
-            'notes'            => 'nullable|string|max:300',
-        ], [
-            'shipping_name.required'    => 'নাম দিতে হবে।',
-            'shipping_phone.required'   => 'ফোন নম্বর দিতে হবে।',
-            'shipping_address.required' => 'ঠিকানা দিতে হবে।',
-            'shipping_city.required'    => 'শহর দিতে হবে।',
-            'payment_method.required'   => 'Payment পদ্ধতি নির্বাচন করুন।',
-        ]);
+        $checkoutData = $request->validated();
 
         $items = $this->cart->items();
 
@@ -90,18 +78,18 @@ class CheckoutController extends Controller
             $order = Order::create([
                 'user_id'          => auth()->id(),
                 'order_number'     => Order::generateOrderNumber(),
-                'shipping_name'    => $request->shipping_name,
-                'shipping_phone'   => $request->shipping_phone,
-                'shipping_address' => $request->shipping_address,
-                'shipping_city'    => $request->shipping_city,
+                'shipping_name'    => $checkoutData->shipping_name,
+                'shipping_phone'   => $checkoutData->shipping_phone,
+                'shipping_address' => $checkoutData->shipping_address,
+                'shipping_city'    => $checkoutData->shipping_city,
                 'subtotal'         => $subtotal,
                 'shipping_charge'  => $shipping,
                 'discount'         => $discount,
                 'total'            => $subtotal + $shipping - $discount,
-                'payment_method'   => $request->payment_method,
+                'payment_method'   => $checkoutData->payment_method,
                 'payment_status'   => 'unpaid',
                 'status'           => 'pending',
-                'notes'            => $request->notes,
+                'notes'            => $checkoutData->notes,
             ]);
 
             // Order items তৈরি + stock কমানো
