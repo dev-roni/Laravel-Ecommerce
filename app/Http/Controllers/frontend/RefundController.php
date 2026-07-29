@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Order;
 use App\Models\Refund;
+use App\Http\Request\RefundRequest;
 
 class RefundController extends Controller
 {
@@ -33,30 +34,19 @@ class RefundController extends Controller
     }
 
     // Refund request submit
-    public function store(Request $request, Order $order)
+    public function store(RefundRequest $request, Order $order)
     {
         if ($order->user_id !== auth()->id()) abort(403);
 
-        $request->validate([
-            'reason'         => 'required|string|min:20|max:500',
-            'refund_method'  => 'required|in:bkash,nagad,bank',
-            'refund_account' => 'required|string|max:50',
-            'amount'         => 'required|numeric|min:1|max:' . $order->total,
-        ], [
-            'reason.required'         => 'কারণ লিখতে হবে।',
-            'reason.min'              => 'কারণ কমপক্ষে ২০ অক্ষর হতে হবে।',
-            'refund_method.required'  => 'Refund পদ্ধতি নির্বাচন করুন।',
-            'refund_account.required' => 'Account নম্বর দিতে হবে।',
-            'amount.max'              => 'Refund amount order total-এর বেশি হতে পারবে না।',
-        ]);
+        $refundData = $request->validated();
 
         Refund::create([
             'order_id'       => $order->id,
             'user_id'        => auth()->id(),
-            'amount'         => $request->amount,
-            'reason'         => $request->reason,
-            'refund_method'  => $request->refund_method,
-            'refund_account' => $request->refund_account,
+            'amount'         => $refundData->amount,
+            'reason'         => $refundData->reason,
+            'refund_method'  => $refundData->refund_method,
+            'refund_account' => $refundData->refund_account,
             'status'         => 'pending',
         ]);
 
