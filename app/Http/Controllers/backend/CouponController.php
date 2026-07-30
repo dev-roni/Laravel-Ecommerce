@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Coupon;
+use App\Http\Request\CouponRequest;
 use Illuminate\Support\Str;
 
 class CouponController extends Controller
@@ -24,27 +25,13 @@ class CouponController extends Controller
         return view('backend.pages.couponCreate',compact('coupon'));
     }
 
-    public function store(Request $request)
+    public function store(CouponRequest $request)
     {
-        $request->validate([
-            'code'              => 'required|string|max:30|unique:coupons,code',
-            'type'              => 'required|in:fixed,percent',
-            'value'             => 'required|numeric|min:0',
-            'min_order_amount'  => 'nullable|numeric|min:0',
-            'max_discount'      => 'nullable|numeric|min:0',
-            'usage_limit'       => 'nullable|integer|min:1',
-            'per_user_limit'    => 'required|integer|min:1',
-            'starts_at'         => 'nullable|date',
-            'expires_at'        => 'nullable|date|after_or_equal:starts_at',
-        ], [
-            'code.required'  => 'Coupon code দিতে হবে।',
-            'code.unique'    => 'এই code আগে থেকেই আছে।',
-            'value.required' => 'মূল্য দিতে হবে।',
-        ]);
+        $couponData = $request->validated();
 
         Coupon::create([
-            ...$request->all(),
-            'code'      => strtoupper($request->code),
+            ...$couponData,
+            'code' => strtoupper($couponData['code']),
             'is_active' => $request->boolean('is_active', true),
         ]);
 
