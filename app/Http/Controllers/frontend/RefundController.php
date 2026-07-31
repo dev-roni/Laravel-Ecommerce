@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Order;
 use App\Models\Refund;
-use App\Http\Request\RefundRequest;
+use App\Http\Requests\RefundRequest;
 
 class RefundController extends Controller
 {
@@ -43,10 +43,10 @@ class RefundController extends Controller
         Refund::create([
             'order_id'       => $order->id,
             'user_id'        => auth()->id(),
-            'amount'         => $refundData->amount,
-            'reason'         => $refundData->reason,
-            'refund_method'  => $refundData->refund_method,
-            'refund_account' => $refundData->refund_account,
+            'amount'         => $refundData['amount'],
+            'reason'         => $refundData['reason'],
+            'refund_method'  => $refundData['refund_method'],
+            'refund_account' => $refundData['refund_account'],
             'status'         => 'pending',
         ]);
 

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\CartService;
 use App\Mail\OrderConfirmedMail;
-use App\Http\Request\CheckoutRequest;
+use App\Http\Requests\CheckoutRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -78,18 +78,18 @@ class CheckoutController extends Controller
             $order = Order::create([
                 'user_id'          => auth()->id(),
                 'order_number'     => Order::generateOrderNumber(),
-                'shipping_name'    => $checkoutData->shipping_name,
-                'shipping_phone'   => $checkoutData->shipping_phone,
-                'shipping_address' => $checkoutData->shipping_address,
-                'shipping_city'    => $checkoutData->shipping_city,
+                'shipping_name'    => $checkoutData['shipping_name'],
+                'shipping_phone'   => $checkoutData['shipping_phone'],
+                'shipping_address' => $checkoutData['shipping_address'],
+                'shipping_city'    => $checkoutData['shipping_city'],
                 'subtotal'         => $subtotal,
                 'shipping_charge'  => $shipping,
                 'discount'         => $discount,
                 'total'            => $subtotal + $shipping - $discount,
-                'payment_method'   => $checkoutData->payment_method,
+                'payment_method'   => $checkoutData['payment_method'],
                 'payment_status'   => 'unpaid',
                 'status'           => 'pending',
-                'notes'            => $checkoutData->notes,
+                'notes'            => $checkoutData['notes'],
             ]);
 
             // Order items তৈরি + stock কমানো
