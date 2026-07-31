@@ -27,13 +27,7 @@ class CouponController extends Controller
 
     public function store(CouponRequest $request)
     {
-        $couponData = $request->validated();
-
-        Coupon::create([
-            ...$couponData,
-            'code' => strtoupper($couponData['code']),
-            'is_active' => $request->boolean('is_active', true),
-        ]);
+        Coupon::create($request->validated());
 
         return redirect()->route('admin.coupons.index')
                          ->with('success', 'Coupon তৈরি হয়েছে।');

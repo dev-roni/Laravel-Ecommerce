@@ -43,4 +43,12 @@ class CouponRequest extends FormRequest
             'value.required' => 'মূল্য দিতে হবে।',
         ];
     }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'code' => strtoupper($this->code),
+            'is_active' => $this->boolean('is_active', true),
+        ]);
+    }
 }
