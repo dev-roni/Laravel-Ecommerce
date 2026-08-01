@@ -30,7 +30,7 @@ class CouponController extends Controller
         Coupon::create($request->validated());
 
         return redirect()->route('admin.coupons.index')
-                         ->with('success', 'Coupon তৈরি হয়েছে।');
+                         ->with('success', 'Coupon create successfully');
     }
 
     public function edit(Coupon $coupon)
@@ -38,28 +38,12 @@ class CouponController extends Controller
         return view('backend.pages.couponCreate', compact('coupon'));
     }
 
-    public function update(Request $request, Coupon $coupon)
+    public function update(CouponRequest $request, Coupon $coupon)
     {
-        $request->validate([
-            'code'              => 'required|string|max:30|unique:coupons,code,' . $coupon->id,
-            'type'              => 'required|in:fixed,percent',
-            'value'             => 'required|numeric|min:0',
-            'min_order_amount'  => 'nullable|numeric|min:0',
-            'max_discount'      => 'nullable|numeric|min:0',
-            'usage_limit'       => 'nullable|integer|min:1',
-            'per_user_limit'    => 'required|integer|min:1',
-            'starts_at'         => 'nullable|date',
-            'expires_at'        => 'nullable|date|after_or_equal:starts_at',
-        ]);
-
-        $coupon->update([
-            ...$request->all(),
-            'code'      => strtoupper($request->code),
-            'is_active' => $request->boolean('is_active'),
-        ]);
+        $coupon->update($request->validated());
 
         return redirect()->route('admin.coupons.index')
-                         ->with('success', 'Coupon আপডেট হয়েছে।');
+                         ->with('success', 'Coupon updated successfully');
     }
 
     public function destroy(Coupon $coupon)

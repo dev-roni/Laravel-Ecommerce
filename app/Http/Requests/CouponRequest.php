@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CouponRequest extends FormRequest
 {
@@ -22,16 +23,23 @@ class CouponRequest extends FormRequest
      */
     public function rules(): array
     {
+        $coupon = $this->route('coupon');
+
         return [
-            'code'              => 'required|string|max:30|unique:coupons,code',
-            'type'              => 'required|in:fixed,percent',
-            'value'             => 'required|numeric|min:0',
-            'min_order_amount'  => 'nullable|numeric|min:0',
-            'max_discount'      => 'nullable|numeric|min:0',
-            'usage_limit'       => 'nullable|integer|min:1',
-            'per_user_limit'    => 'required|integer|min:1',
-            'starts_at'         => 'nullable|date',
-            'expires_at'        => 'nullable|date|after_or_equal:starts_at',
+            'code' => [
+                'required',
+                'string',
+                'max:30',
+                Rule::unique('coupons', 'code')->ignore($coupon),
+            ],
+            'type' => 'required|in:fixed,percent',
+            'value' => 'required|numeric|min:0',
+            'min_order_amount' => 'nullable|numeric|min:0',
+            'max_discount' => 'nullable|numeric|min:0',
+            'usage_limit' => 'nullable|integer|min:1',
+            'per_user_limit' => 'required|integer|min:1',
+            'starts_at' => 'nullable|date',
+            'expires_at' => 'nullable|date|after_or_equal:starts_at',
         ];
     }
 
