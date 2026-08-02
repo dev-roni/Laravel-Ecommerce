@@ -6,26 +6,20 @@ use App\Models\Attribute;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProductVariantRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ProductVariantController extends Controller
 {
     // নতুন variant যোগ
-    public function store(Request $request, Product $product)
+    public function store(ProductVariantRequest $request, Product $product)
     {
-        $request->validate([
-            'variants'                       => 'required|array|min:1',
-            'variants.*.price'               => 'required|numeric|min:0',
-            'variants.*.stock'               => 'required|integer|min:0',
-            'variants.*.sale_price'          => 'nullable|numeric|min:0',
-            'variants.*.sku'                 => 'nullable|string',
-            'variants.*.attribute_value_ids' => 'required|array|min:1',
-        ]);
+        $validated = $request->validated();
 
         DB::beginTransaction();
         try {
-            foreach ($request->variants as $variantData) {
+            foreach ($validated['variants'] as $variantData) {
 
                 // একই combination আগে আছে কিনা চেক
                 $exists = $this->combinationExists(
