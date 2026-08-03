@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\RefundApprovalRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RefundStatusMail;
 
@@ -37,28 +38,22 @@ class RefundController extends Controller
         return view('backend.pages.refundShow', compact('refund'));
     }
 
-    public function update(Request $request, Refund $refund)
+    public function update(RefundApprovalRequest $request, Refund $refund)
     {
-        $request->validate([
-            'status'         => 'required|in:approved,rejected,completed',
-            'admin_note'     => 'nullable|string|max:500',
-            'transaction_id' => 'required_if:status,completed|nullable|string',
-        ], [
-            'transaction_id.required_if' => 'Completed করতে Transaction ID দিতে হবে।',
-        ]);
+        $validData = $request->validated();
 
         $data = [
-            'status'         => $request->status,
-            'admin_note'     => $request->admin_note,
-            'transaction_id' => $request->transaction_id,
+            'status'         => $validData['status'],
+            'admin_note'     => $validData['admin_note'],
+            'transaction_id' => $validData['transaction_id'],
         ];
 
-        if (in_array($request->status, ['approved', 'rejected', 'completed'])) {
+        if (in_array($validData['status'], ['approved', 'rejected', 'completed'])) {
             $data['resolved_at'] = now();
         }
 
         // Completed হলে order payment status refunded করো
-        if ($request->status === 'completed') {
+        if ($validData['status'] === 'completed') {
             $refund->order->update(['payment_status' => 'refunded']);
         }
 
