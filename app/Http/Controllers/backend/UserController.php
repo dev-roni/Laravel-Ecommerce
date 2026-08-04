@@ -92,20 +92,9 @@ class UserController extends Controller
 
     public function storeAdmin(Request $request)
     {
-        $request->validate([
-            'name'     => 'required|string|max:100',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
-        ], [
-            'email.unique' => 'এই email আগে থেকেই আছে।',
-        ]);
+       $data = $request->validated();
 
-        User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => 'admin',
-        ]);
+        User::create($data);
 
         return redirect()->route('backend.pages.users.admins')
                          ->with('success', 'নতুন Admin তৈরি হয়েছে।');
