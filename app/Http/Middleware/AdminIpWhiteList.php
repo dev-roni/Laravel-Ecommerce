@@ -9,10 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 class AdminIpWhiteList
 {
     // শুধু এই IP থেকে admin panel access হবে
-    private array $allowedIps = [
-        '127.0.0.1',
-        // Add your ip
-    ];
+    private array $allowedIps;
+
+    public function __construct()
+    {
+        $this->allowedIps = config('security.allowed_ips');
+    }
     /**
      * Handle an incoming request.
      *
