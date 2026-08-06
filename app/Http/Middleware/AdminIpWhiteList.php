@@ -6,17 +6,12 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use Illuminate\Support\Facades\Cache;
 use App\Models\AllowedIp;
 
 class AdminIpWhiteList
 {
-    // শুধু এই IP থেকে admin panel access হবে
-    private array $allowedIps;
 
-    public function __construct()
-    {
-        $this->allowedIps = config('security.allowed_ips');
-    }
     /**
      * Handle an incoming request.
      *
@@ -24,7 +19,14 @@ class AdminIpWhiteList
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!in_array($request->ip(), $this->allowedIps)) {
+         // শুধু ডাটাবেজে থাকা IP থেকে admin panel access হবে
+        $allowedIps = Cache::rememberForever('allowed_ips', function() {
+            return AllowedIp::where('is_active',true)
+            ->pluck('ip')
+            ->toArray();
+        });
+
+        if (!in_array($request->ip(), $allowedIps)) {
             abort(403, 'Access Denied');
         }
 
