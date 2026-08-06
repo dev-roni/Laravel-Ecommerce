@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use App\Models\AllowedIp;
+
 class AdminIpWhiteList
 {
     // শুধু এই IP থেকে admin panel access হবে
