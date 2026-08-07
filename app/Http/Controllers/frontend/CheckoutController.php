@@ -43,6 +43,12 @@ class CheckoutController extends Controller
 
     public function store(CheckoutRequest $request)
     {
+        // Session-এ checkout token রাখো same cart er duplicate order protect korte
+        if (session('checkout_processing')) {
+            return back()->with('error', 'Order প্রক্রিয়াধীন আছে।');
+        }
+        session(['checkout_processing' => true]); 
+    
         $checkoutData = $request->validated();
 
         $items = $this->cart->items();
@@ -126,6 +132,8 @@ class CheckoutController extends Controller
 
             DB::commit();
 
+            // Session- checkout token delete
+            session()->forget('checkout_processing');
             // COD হলে সরাসরি success page
             if ($request->payment_method === 'cod') {
 
@@ -141,6 +149,8 @@ class CheckoutController extends Controller
             return redirect()->route('payment.pending', $order);
 
         } catch (\Exception $e) {
+            // Session- checkout token delete
+            session()->forget('checkout_processing');
             DB::rollBack();
             return back()->with('error', 'সমস্যা হয়েছে: ' . $e->getMessage());
         }

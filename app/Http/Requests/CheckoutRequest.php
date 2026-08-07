@@ -24,7 +24,7 @@ class CheckoutRequest extends FormRequest
     {
         return [
             'shipping_name'    => 'required|string|max:100',
-            'shipping_phone'   => 'required|string|max:20',
+            'shipping_phone'   => 'required|string|regex:/^(\+8801|8801|01)[3-9]\d{8}$/',
             'shipping_address' => 'required|string|max:500',
             'shipping_city'    => 'required|string|max:100',
             'payment_method'   => 'required|in:cod,online',
