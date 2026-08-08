@@ -29,8 +29,8 @@ class CheckoutRequest extends FormRequest
                                     'string',
                                     'regex:/^(\+8801|8801|01)[3-9][0-9]{8}$/',
                                 ],
-            'shipping_address' => 'required|string|max:500',
-            'shipping_city'    => 'required|string|max:100',
+            'shipping_address' => 'required|string|min:5|max:500',
+            'shipping_city'    => 'required|string|min:3|max:100',
             'payment_method'   => 'required|in:cod,online',
             'notes'            => 'nullable|string|max:300',
         ];

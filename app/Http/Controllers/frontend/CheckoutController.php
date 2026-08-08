@@ -43,22 +43,29 @@ class CheckoutController extends Controller
 
     public function store(CheckoutRequest $request)
     {
+        // CheckoutController@store-এ
+        if ($request->filled('website')) {
+            // Bot detected — silently fail
+            return redirect()->route('shop.index');
+        }
         // Session-এ checkout token রাখো same cart er duplicate order protect korte
         if (session('checkout_processing')) {
             return back()->with('error', 'Order প্রক্রিয়াধীন আছে।');
         }
         session(['checkout_processing' => true]); 
-    
-        $checkoutData = $request->validated();
 
-        $items = $this->cart->items();
-
-        //ঘন্টায় 3 বারের বেশি অর্ডার চেক
+         //ঘন্টায় 3 বারের বেশি অর্ডার চেক
         if (!$this->checkOrderVelocity()) {
             return back()->with('error',
                 'আপনি অনেক বেশি order দিচ্ছেন। কিছুক্ষণ পর আবার চেষ্টা করুন।'
             );
         }
+    
+        $checkoutData = $request->validated();
+
+        $items = $this->cart->items();
+
+       
 
         if ($items->isEmpty()) {
             return redirect()->route('cart.index')

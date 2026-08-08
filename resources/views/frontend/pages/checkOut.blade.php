@@ -16,6 +16,12 @@
                     <div class="card-body">
 
                         <div class="row g-3">
+
+                            {{--for security Bot এটা fill করবে, human করবে না --}}
+                            <div style="display:none" aria-hidden="true">
+                                <input type="text" name="website" tabindex="-1" autocomplete="off">
+                            </div>
+
                             <div class="col-md-6">
                                 <label class="form-label">নাম *</label>
                                 <input type="text" name="shipping_name"
