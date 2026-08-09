@@ -54,6 +54,16 @@ class IdempotencyService
         );
     }
 
-    
+    // Random key generate করুন (frontend-এ ব্যবহারের জন্য)
+    public static function generate(): string
+    {
+        return \Str::uuid()->toString();
+    }
+
+    // পুরনো expired keys cleanup
+    public static function cleanup(): void
+    {
+        IdempotencyKey::where('expires_at', '<', now())->delete();
+    }
 
 }
