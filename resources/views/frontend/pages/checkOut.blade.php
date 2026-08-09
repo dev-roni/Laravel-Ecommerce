@@ -4,7 +4,7 @@
 <div class="container py-5">
     <h4 class="mb-4">Checkout</h4>
 
-    <form method="POST" action="{{ route('checkout.store') }}">
+    <form method="POST" action="{{ route('checkout.store') }}" id="checkoutForm">
         @csrf
         <div class="row g-4">
 
@@ -16,6 +16,12 @@
                     <div class="card-body">
 
                         <div class="row g-3">
+
+                            {{-- Idempotency Key — page load-এ generate হয়, submit-এ পাঠায় --}}
+                            <input type="hidden"
+                                    name="idempotency_key"
+                                    id="idempotencyKey"
+                                    value="{{ \Illuminate\Support\Str::uuid() }}">
 
                             {{--for security Bot এটা fill করবে, human করবে না --}}
                             <div style="display:none" aria-hidden="true">
@@ -194,12 +200,26 @@
 </div>
 
 <script>
-function selectPayment(value, el) {
-    document.querySelectorAll('.form-check').forEach(c => {
-        c.classList.remove('border-primary', 'bg-light');
+    function selectPayment(value, el) {
+        document.querySelectorAll('.form-check').forEach(c => {
+            c.classList.remove('border-primary', 'bg-light');
+        });
+        el.classList.add('border-primary', 'bg-light');
+        document.getElementById('pay_' + value).checked = true;
+    }
+
+    // Double submit prevent করো
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+        const btn = this.querySelector('button[type="submit"]');
+
+        if (btn.dataset.submitted === 'true') {
+            e.preventDefault(); // দ্বিতীয় submit block
+            return;
+        }
+
+        btn.dataset.submitted = 'true';
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>প্রক্রিয়াধীন...';
     });
-    el.classList.add('border-primary', 'bg-light');
-    document.getElementById('pay_' + value).checked = true;
-}
 </script>
 @endsection
