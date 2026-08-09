@@ -33,5 +33,27 @@ class IdempotencyService
         ];
     }
 
+    // Successful response save করো
+    public function store(
+        string $key,
+        string $endpoint,
+        int $status,
+        array $body
+    ): void {
+        IdempotencyKey::updateOrCreate(
+            [
+                'key'      => $key,
+                'user_id'  => Auth::id(),
+                'endpoint' => $endpoint,
+            ],
+            [
+                'response_status' => $status,
+                'response_body'   => $body,
+                'expires_at'      => now()->addHours(24),
+            ]
+        );
+    }
+
+    
 
 }
