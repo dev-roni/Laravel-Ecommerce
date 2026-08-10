@@ -33,6 +33,7 @@ class CheckoutRequest extends FormRequest
             'shipping_city'    => 'required|string|min:3|max:100',
             'payment_method'   => 'required|in:cod,online',
             'notes'            => 'nullable|string|max:300',
+            'idempotency_key' => 'required|string|uuid',
         ];
     }
 
