@@ -5,6 +5,7 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\CartService;
+use App\Services\IdempotencyService;
 use App\Mail\OrderConfirmedMail;
 use App\Http\Requests\CheckoutRequest;
 use Illuminate\Http\Request;
@@ -43,7 +44,25 @@ class CheckoutController extends Controller
 
     public function store(CheckoutRequest $request)
     {
-        // CheckoutController@store-এ
+        $idempotency = app(IdempotencyService::class);
+        $key         = $request->idempotency_key;
+        $endpoint    = 'checkout.store';
+
+        // ── Cache check ───────────────────────────────
+        $cached = $idempotency->check($key, $endpoint);
+
+        if ($cached) {
+            // আগেই process হয়েছে — cached order-এ redirect
+            $order = Order::find($cached['body']['order_id']);
+
+            if ($order) {
+                return redirect()
+                    ->route('orders.success', $order)
+                    ->with('info', 'আপনার order আগেই তৈরি হয়েছে।');
+            }
+        }
+
+        // ── Honeypot check ────────────────────────────
         if ($request->filled('website')) {
             // Bot detected — silently fail
             return redirect()->route('shop.index');
@@ -54,7 +73,7 @@ class CheckoutController extends Controller
         }
         session(['checkout_processing' => true]); 
 
-         //ঘন্টায় 3 বারের বেশি অর্ডার চেক
+        // ── Order velocity check ──────────────────────ঘন্টায় 3 বারের বেশি অর্ডার চেক
         if (!$this->checkOrderVelocity()) {
             return back()->with('error',
                 'আপনি অনেক বেশি order দিচ্ছেন। কিছুক্ষণ পর আবার চেষ্টা করুন।'
@@ -136,6 +155,12 @@ class CheckoutController extends Controller
             $this->cart->clear();
             // checkout শেষে coupon clear
             session()->forget('coupon'); 
+
+            // ── Idempotency key save ──────────────────
+            $idempotency->store($key, $endpoint, 200, [
+                'order_id'     => $order->id,
+                'order_number' => $order->order_number,
+            ]);
 
             DB::commit();
 
