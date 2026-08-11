@@ -36,6 +36,18 @@ class PaymentController extends Controller
                              ->with('info', 'এই order ইতিমধ্যে পরিশোধিত।');
         }
 
+        // Payment-এর idempotency key = order number
+        // একই order-এ দুইবার payment initiate হবে না
+        $key      = 'payment_' . $order->order_number;
+        $endpoint = 'payment.initiate';
+
+        $cached = app(IdempotencyService::class)->check($key, $endpoint);
+
+        if ($cached && isset($cached['body']['gateway_url'])) {
+            // আগের payment URL-এ redirect করো
+            return redirect($cached['body']['gateway_url']);
+        }
+
         $user = auth()->user();
 
         try {
@@ -56,6 +68,12 @@ class PaymentController extends Controller
                 ->makePayment();
                
             if ($response->success()) {
+                
+                // Gateway URL cache করো
+                app(IdempotencyService::class)->store($key, $endpoint, 200, [
+                    'gateway_url'    => $response->gatewayPageURL(),
+                    'transaction_id' => $response->transactionId(),
+                ]);
                 // Order-এ transaction id save করো
                 $order->update([
                     'ssl_transaction_id' => $order->order_number,
