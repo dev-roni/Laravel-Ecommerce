@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
+use Illuminate\Pagination\Paginator;
 use App\Models\Category;
 use App\Observers\CategoryObserver;
 use App\Services\CartService;
@@ -29,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::useBootstrapFive();
         Category::observe(CategoryObserver::class);
 
         View::composer('*', function ($view) {
