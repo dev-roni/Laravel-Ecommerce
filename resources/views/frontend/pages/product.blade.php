@@ -186,7 +186,7 @@
             @endif
 
             {{-- Quantity + Add to Cart --}}
-            <div class="d-flex gap-3 align-items-center mb-4 anim-up d4">
+            <div class="d-flex flex-wrap gap-3 align-items-center mb-4 anim-up d4">
                 <div class="d-flex align-items-center border rounded">
                     <button class="btn btn-light px-3"
                             onclick="changeQty(-1)">−</button>
@@ -196,16 +196,28 @@
                 </div>
                 <input type="hidden" id="qty-input" value="1">
 
-                <button id="add-cart-btn"
-                        class="btn btn-primary px-5 py-2 anim-up"
-                        onclick="handleAddToCart()"
-                        {{ $product->total_stock <= 0 ? 'disabled' : '' }}>
-                    @if($product->total_stock <= 0)
-                        Stock নেই
-                    @else
-                        🛒 Cart-এ যোগ করুন
-                    @endif
-                </button>
+                {{-- মোবাইলে stacked grid, sm+ থেকে flex পাশাপাশি --}}
+                <div class="d-flex gap-2 flex-grow-1">
+
+                    <button id="add-cart-btn"
+                            class="btn btn-primary px-2 px-sm-5 py-2 flex-fill anim-up"
+                            onclick="handleAddToCart()"
+                            {{ $product->total_stock <= 0 ? 'disabled' : '' }}>
+                        @if($product->total_stock <= 0)
+                            Stock নেই
+                        @else
+                            🛒 Cart-এ যোগ করুন
+                        @endif
+                    </button>
+
+                    <button id="buy-now-btn"
+                            class="btn btn-outline-primary px-2 px-sm-5 py-2 flex-fill anim-up"
+                            onclick="handleBuyNow()"
+                            {{ $product->total_stock <= 0 ? 'disabled' : '' }}>
+                        ⚡ এখনই কিনুন
+                    </button>
+                </div>
+
                 @if($product->total_stock <= 0)
                     @auth
                         <button id="wishBtn"
