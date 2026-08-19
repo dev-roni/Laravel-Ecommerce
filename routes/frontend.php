@@ -27,6 +27,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/{cartItem}', [CartController::class, 'remove'])->name('cart.remove');
 
+    //buy now
+    Route::post('buy-now', [BuyNowController::class, 'store'])
+         ->name('buy-now.store');
+    Route::get('buy-now/checkout', [BuyNowController::class, 'checkout'])
+         ->name('buy-now.checkout');
+    Route::post('buy-now/order', [BuyNowController::class, 'placeOrder'])
+         ->name('buy-now.order');
+
     // Checkout
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
