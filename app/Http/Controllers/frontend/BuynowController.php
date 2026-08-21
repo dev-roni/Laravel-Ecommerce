@@ -59,4 +59,41 @@ class BuynowController extends Controller
             'redirect_url' => route('buy-now.checkout'),
         ]);
     }
+
+    // ── Checkout Page ─────────────────────────────
+    public function checkout()
+    {
+        $buyNow = session('buy_now');
+
+        if (!$buyNow) {
+            return redirect()->route('shop.index')
+                             ->with('error', 'Session expired। আবার চেষ্টা করুন।');
+        }
+
+        $product = Product::with(['primaryImage', 'category'])
+                          ->findOrFail($buyNow['product_id']);
+
+        $variant = $buyNow['variant_id']
+            ? ProductVariant::with('attributeValues')->find($buyNow['variant_id'])
+            : null;
+
+        $quantity = $buyNow['quantity'];
+
+        // Price calculate
+        $unitPrice = $variant
+            ? ($variant->sale_price ?? $variant->price)
+            : ($product->sale_price  ?? $product->base_price);
+
+        $subtotal = $unitPrice * $quantity;
+        $shipping = $subtotal >= 1000 ? 0 : 60;
+        $total    = $subtotal + $shipping;
+
+        $user = auth()->user();
+
+        return view('shop.buy-now.checkout', compact(
+            'product', 'variant', 'quantity',
+            'unitPrice', 'subtotal', 'shipping', 'total',
+            'user'
+        ));
+    }
 }
