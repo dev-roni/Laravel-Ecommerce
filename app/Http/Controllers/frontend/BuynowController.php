@@ -4,8 +4,14 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Mail\OrderConfirmedMail;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Services\CouponService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class BuynowController extends Controller
 {
