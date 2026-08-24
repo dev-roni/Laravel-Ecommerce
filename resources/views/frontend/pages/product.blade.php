@@ -210,11 +210,12 @@
                         @endif
                     </button>
 
-                    <button id="buy-now-btn"
-                            class="btn btn-outline-primary px-2 px-sm-5 py-2 flex-fill anim-up"
+                     {{-- Buy Now --}}
+                    <button class="btn btn-outline-primary px-2 px-sm-5 py-2 flex-fill anim-up"
+                            id="buyNowBtn"
                             onclick="handleBuyNow()"
                             {{ $product->total_stock <= 0 ? 'disabled' : '' }}>
-                        ⚡ এখনই কিনুন
+                        ⚡ Buy Now
                     </button>
                 </div>
 
@@ -1052,6 +1053,51 @@ function handleAddToCart() {
 
 }
 
+// buy now redirect
+
+function handleBuyNow() {
+    @if($product->has_variants)
+        if (Object.keys(selectedAttrs).length < totalAttrGroups) {
+            showToast('সব Variation নির্বাচন করুন।', false);
+            return;
+        }
+        if (!selectedVariantId) {
+            showToast('এই combination পাওয়া যাচ্ছে না।', false);
+            return;
+        }
+    @endif
+
+    const btn = document.getElementById('buyNowBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>...';
+
+    fetch(window.App.buyNowStore, {
+        method: 'POST',
+        headers: {
+            'Content-Type':  'application/json',
+            'X-CSRF-TOKEN': window.App.csrfToken,
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({
+            product_id: {{ $product->id }},
+            variant_id: selectedVariantId,
+            quantity:   currentQty,
+        }),
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = data.redirect_url;
+        } else {
+            showToast(data.message, 'error');
+            btn.disabled = false;
+            btn.innerHTML = '⚡ Buy Now';
+        }
+    })
+    .catch(() => {
+        window.location.href = '{{ route("login") }}';
+    });
+}
 
 
 // ── Accordion for description,delivery info zip/unzip ─────────────────────────────────────────────
@@ -1108,6 +1154,8 @@ document.querySelectorAll('.star-pick-btn').forEach((btn, i, all) => {
     });
   });
 @endif
+
+
 
 </script>
 @endpush

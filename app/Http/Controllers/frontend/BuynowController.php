@@ -96,7 +96,7 @@ class BuynowController extends Controller
 
         $user = auth()->user();
 
-        return view('shop.buy-now.checkout', compact(
+        return view('frontend.pages.buynowCheckout', compact(
             'product', 'variant', 'quantity',
             'unitPrice', 'subtotal', 'shipping', 'total',
             'user'

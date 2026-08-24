@@ -13,6 +13,7 @@
   window.App = {
     csrfToken: @json(csrf_token()),
     cartAddUrl: @json(route('cart.add')),
+    buyNowStore: @json(route('buy-now.store')),
     wishlistToggle: @json(route('wishlist.toggle')),
     loginUrl: @json(route('login')),
     recentViewClear: @json(route('recently-viewed.clear')),
