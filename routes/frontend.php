@@ -10,6 +10,7 @@ use App\Http\Controllers\frontend\orderController;
 use App\Http\Controllers\frontend\PaymentController;
 use App\Http\Controllers\frontend\WishlistController;
 use App\Http\Controllers\frontend\RefundController;
+use App\Http\Controllers\frontend\BuyNowController;
 
 // ── Auth Routes (Breeze দেয়) ──
 require __DIR__ . '/auth.php';
