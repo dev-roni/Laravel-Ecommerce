@@ -73,7 +73,7 @@ class PaymentController extends Controller
                 // Gateway URL cache করো
                 app(IdempotencyService::class)->store($key, $endpoint, 200, [
                     'gateway_url'    => $response->gatewayPageURL(),
-                    'transaction_id' => $response->transactionId(),
+                    'transaction_id' => $order->order_number,
                 ]);
                 // Order-এ transaction id save করো
                 $order->update([
