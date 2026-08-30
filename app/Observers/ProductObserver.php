@@ -30,7 +30,23 @@ class ProductObserver
      */
     public function updated(Product $product): void
     {
-        //
+        // Stock পরিবর্তন
+        if ($product->isDirty('stock')) {
+            AuditService::log(
+                'product.stock_updated',
+                $product,
+                ['stock' => $product->getOriginal('stock')],
+                ['stock' => $product->stock]
+            );
+            return; // Stock change আলাদা log, general update-এ include করব না
+        }
+
+        // অন্য fields
+        AuditService::logModelChange(
+            'product.updated',
+            $product,
+            $this->tracked
+        );
     }
 
     /**
