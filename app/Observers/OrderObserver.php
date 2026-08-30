@@ -57,7 +57,12 @@ class OrderObserver
      */
     public function deleted(Order $order): void
     {
-        //
+        AuditService::log(
+            'order.cancelled',
+            $order,
+            ['order_number' => $order->order_number],
+            []
+        );
     }
 
     /**
