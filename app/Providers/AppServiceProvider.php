@@ -5,8 +5,17 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Illuminate\Pagination\Paginator;
+
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\User;
 use App\Models\Category;
+
+use App\Observers\OrderObserver;
+use App\Observers\ProductObserver;
+use App\Observers\UserObserver;
 use App\Observers\CategoryObserver;
+
 use App\Services\CartService;
 use App\Services\CouponService;
 use App\Services\RecentlyViewedService;
@@ -32,6 +41,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
         Category::observe(CategoryObserver::class);
+        Order::observe(OrderObserver::class);
+        Product::observe(ProductObserver::class);
+        User::observe(UserObserver::class);
 
         View::composer('*', function ($view) {
 
