@@ -54,7 +54,12 @@ class ProductObserver
      */
     public function deleted(Product $product): void
     {
-        //
+        AuditService::log(
+            'product.deleted',
+            $product,
+            ['name' => $product->name],
+            []
+        );
     }
 
     /**
