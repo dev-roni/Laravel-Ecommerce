@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\CartService;
 use App\Services\IdempotencyService;
+use App\Services\AuditService;
 use App\Mail\OrderConfirmedMail;
 use App\Http\Requests\CheckoutRequest;
 use Illuminate\Http\Request;
@@ -149,6 +150,16 @@ class CheckoutController extends Controller
             if ($couponId) {
                 app(\App\Services\CouponService::class)
                 ->recordUsage($couponId, auth()->id(), $order->id, $discount);
+                //coupon loggin
+                AuditService::log(
+                    'coupon.used',
+                    $coupon,
+                    [],
+                    [
+                        'order_number'    => $order->order_number,
+                        'discount_amount' => $discount,
+                    ]
+                );
             }
 
             // Cart খালি করো
