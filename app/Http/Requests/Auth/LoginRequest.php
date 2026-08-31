@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Services\AuditService;
 
 class LoginRequest extends FormRequest
 {
@@ -48,6 +49,16 @@ class LoginRequest extends FormRequest
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
+            //logging
+            AuditService::log(
+                'auth.login_failed',
+                null,
+                [],
+                [
+                    'email' => $this->email,
+                    'ip' => $this->ip(),
+                ]
+            );
         }
 
         RateLimiter::clear($this->throttleKey());
