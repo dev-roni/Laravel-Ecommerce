@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Services\AuditService;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -27,6 +28,9 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        // Login success হলে লগ
+        AuditService::log('user.login', auth()->user());
 
         return redirect()->intended(auth()->user()->destination());
     }
