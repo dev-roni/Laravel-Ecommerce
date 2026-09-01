@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\RefundApprovalRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RefundStatusMail;
+use App\Services\AuditService;
 
 use App\Models\Refund;
 
@@ -58,6 +59,18 @@ class RefundController extends Controller
         }
 
         $refund->update($data);
+
+        //logging
+        AuditService::log(
+            'refund.' . $request->status,
+            $refund,
+            ['status' => $oldStatus],
+            [
+                'status'         => $request->status,
+                'admin_note'     => $request->admin_note,
+                'transaction_id' => $request->transaction_id,
+            ]
+        );
 
         // Customer-কে email পাঠাও
         Mail::to($refund->user->email)->send(new RefundStatusMail($refund));
