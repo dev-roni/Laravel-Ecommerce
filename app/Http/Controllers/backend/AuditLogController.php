@@ -40,4 +40,9 @@ class AuditLogController extends Controller
 
         return view('admin.audit-logs.index', compact('logs', 'events', 'models'));
     }
+
+    public function show(AuditLog $auditLog)
+    {
+        return view('admin.audit-logs.show', compact('auditLog'));
+    }
 }
