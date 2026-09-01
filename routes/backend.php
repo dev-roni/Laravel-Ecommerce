@@ -80,4 +80,10 @@ Route::middleware(['auth','admin'])->group(function(){
     Route::get('refunds/{refund}', [RefundController::class, 'show'])->name('refunds.show');
     Route::patch('refunds/{refund}', [RefundController::class, 'update'])->name('refunds.update');
 
+    //Audit log
+    Route::get('audit-logs', [AuditLogController::class, 'index'])
+         ->name('audit-logs.index');
+    Route::get('audit-logs/{auditLog}', [AuditLogController::class, 'show'])
+         ->name('audit-logs.show');
+
 });
