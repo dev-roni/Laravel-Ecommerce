@@ -87,6 +87,12 @@
                     <i class="fas fa-users"></i> Customers
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.audit-logs.index') }}"
+                class="nav-link {{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}">
+                    📋 Audit Logs
+                </a>
+            </li>
             <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
             <li>
                 <form method="POST" action="{{ route('logout') }}">
