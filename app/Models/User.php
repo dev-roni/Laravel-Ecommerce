@@ -45,6 +45,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+        'otp_code',
+        'two_factor_secret',
     ];
 
     /**
@@ -55,9 +57,14 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'is_banned' => 'boolean'
+            'email_verified_at'         => 'datetime',
+            'password'                  => 'hashed',
+            'is_banned'                 => 'boolean',
+            'otp_expires_at'          => 'datetime',
+            'otp_attempts'            => 'integer',
+            'two_factor_enabled'      => 'boolean',
+            'two_factor_confirmed_at' => 'datetime',
+            
         ];
     }
 
