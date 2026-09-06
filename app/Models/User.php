@@ -118,7 +118,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return $otp;
     }
-    
+
     public function verifyOtp(string $otp): bool
     {
         if (!$this->otp_expires_at || $this->otp_expires_at->isPast()) {
@@ -142,5 +142,14 @@ class User extends Authenticatable implements MustVerifyEmail
         ]);
 
         return true;
+    }
+
+    // ── Google Authenticator Methods ──────────────────
+
+    public function hasTwoFactorEnabled(): bool
+    {
+        return $this->two_factor_enabled
+            && !is_null($this->two_factor_secret)
+            && !is_null($this->two_factor_confirmed_at);
     }
 }
