@@ -29,6 +29,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'address',
         'is_banned',
         'email_verified',
+        'otp_code', 
+        'otp_expires_at',
+         'otp_attempts',
+        'two_factor_secret',
+         'two_factor_enabled',
+        'two_factor_confirmed_at',
     ];
 
     /**
