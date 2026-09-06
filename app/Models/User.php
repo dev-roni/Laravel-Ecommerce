@@ -103,4 +103,44 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return !is_null($this->password);
     }
+
+    // ── Email OTP Methods ─────────────────────────────
+
+    public function generateOtp(): string
+    {
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        $this->update([
+            'otp_code'       => bcrypt($otp),
+            'otp_expires_at' => now()->addMinutes(10),
+            'otp_attempts'   => 0,
+        ]);
+
+        return $otp;
+    }
+    
+    public function verifyOtp(string $otp): bool
+    {
+        if (!$this->otp_expires_at || $this->otp_expires_at->isPast()) {
+            return false;
+        }
+
+        if ($this->otp_attempts >= 5) {
+            return false;
+        }
+
+        $this->increment('otp_attempts');
+
+        if (!\Hash::check($otp, $this->otp_code)) {
+            return false;
+        }
+
+        $this->update([
+            'otp_code'       => null,
+            'otp_expires_at' => null,
+            'otp_attempts'   => 0,
+        ]);
+
+        return true;
+    }
 }
