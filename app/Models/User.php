@@ -160,10 +160,15 @@ class User extends Authenticatable implements MustVerifyEmail
         // Customer — সবসময় email OTP
         return $this->role === 'customer';
     }
-    
+
     public function requiresAuthenticator(): bool
     {
         // Admin — Authenticator
         return $this->isAdmin() && $this->hasTwoFactorEnabled();
+    }
+
+    public function requiresAnyVerification(): bool
+    {
+        return $this->requiresEmailOtp() || $this->requiresAuthenticator();
     }
 }
