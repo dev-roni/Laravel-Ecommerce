@@ -152,4 +152,18 @@ class User extends Authenticatable implements MustVerifyEmail
             && !is_null($this->two_factor_secret)
             && !is_null($this->two_factor_confirmed_at);
     }
+
+    // ── কোন method ব্যবহার হবে ────────────────────────
+
+    public function requiresEmailOtp(): bool
+    {
+        // Customer — সবসময় email OTP
+        return $this->role === 'customer';
+    }
+    
+    public function requiresAuthenticator(): bool
+    {
+        // Admin — Authenticator
+        return $this->isAdmin() && $this->hasTwoFactorEnabled();
+    }
 }
