@@ -40,6 +40,20 @@ Route::middleware('guest')->group(function () {
         ->name('auth.google');
     Route::get('auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback'])
         ->name('auth.google.callback');
+
+    // ── Email OTP (Customer) ──────────────────────────
+    Route::get('verify/otp',    [VerificationController::class, 'showOtp'])
+        ->name('verify.otp');
+    Route::post('verify/otp',   [VerificationController::class, 'verifyOtp'])
+        ->name('verify.otp.post');
+    Route::post('verify/resend', [VerificationController::class, 'resendOtp'])
+        ->name('verify.resend');
+
+    // ── Google Authenticator (Admin) ──────────────────
+    Route::get('verify/authenticator',  [VerificationController::class, 'showAuthenticator'])
+        ->name('verify.authenticator');
+    Route::post('verify/authenticator', [VerificationController::class, 'verifyAuthenticator'])
+        ->name('verify.authenticator.post');
 });
 
 Route::middleware('auth')->group(function () {
