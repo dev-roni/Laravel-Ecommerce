@@ -62,4 +62,28 @@ class VerificationController extends Controller
 
         return $this->loginUser($request, $user);
     }
+
+    public function resendOtp(Request $request)
+    {
+        $userId = session('auth_user_id');
+
+        if (!$userId) return redirect()->route('login');
+
+        // Rate limit — ১ মিনিটে ১ বার
+        $key = 'otp_resend_' . $userId;
+
+        if (RateLimiter::tooManyAttempts($key, 1)) {
+            return back()->with('error',
+                RateLimiter::availableIn($key) . ' সেকেন্ড পর চেষ্টা করুন।'
+            );
+        }
+
+        RateLimiter::hit($key, 60);
+
+        $user = User::findOrFail($userId);
+        $otp  = $user->generateOtp();
+        Mail::to($user->email)->send(new OtpMail($otp, $user->name));
+
+        return back()->with('success', 'নতুন code পাঠানো হয়েছে।');
+    }
 }
