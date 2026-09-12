@@ -86,4 +86,18 @@ class VerificationController extends Controller
 
         return back()->with('success', 'নতুন code পাঠানো হয়েছে।');
     }
+
+    // ════════════════════════════════════════
+    // GOOGLE AUTHENTICATOR (Admin)
+    // ════════════════════════════════════════
+
+    public function showAuthenticator()
+    {
+        if (!session('auth_user_id')
+            || session('auth_method') !== 'authenticator') {
+            return redirect()->route('login');
+        }
+
+        return view('auth.verify.authenticator');
+    }
 }
