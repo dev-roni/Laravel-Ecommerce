@@ -156,4 +156,13 @@ class VerificationController extends Controller
     {
         session()->forget(['auth_user_id', 'auth_remember', 'auth_method']);
     }
+
+    private function maskEmail(string $email): string
+    {
+        [$local, $domain] = explode('@', $email);
+        $masked = substr($local, 0, 2)
+                . str_repeat('*', max(strlen($local) - 3, 2))
+                . substr($local, -1);
+        return $masked . '@' . $domain;
+    }
 }
