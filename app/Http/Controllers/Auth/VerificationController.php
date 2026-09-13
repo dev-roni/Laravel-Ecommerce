@@ -151,4 +151,9 @@ class VerificationController extends Controller
             $user->isAdmin() ? route('admin.dashboard') : route('shop.index')
         )->with('success', 'স্বাগতম, ' . $user->name . '!');
     }
+
+    private function clearAuthSession(): void
+    {
+        session()->forget(['auth_user_id', 'auth_remember', 'auth_method']);
+    }
 }
