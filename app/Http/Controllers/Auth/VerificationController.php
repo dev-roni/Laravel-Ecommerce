@@ -100,4 +100,38 @@ class VerificationController extends Controller
 
         return view('auth.verify.authenticator');
     }
+
+    public function verifyAuthenticator(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|digits:6',
+        ], [
+            'code.required' => 'Code দিতে হবে।',
+            'code.digits'   => '৬ সংখ্যার code দিন।',
+        ]);
+
+        $userId = session('auth_user_id');
+
+        if (!$userId || session('auth_method') !== 'authenticator') {
+            return redirect()->route('login');
+        }
+
+        $user  = User::findOrFail($userId);
+        $valid = app('pragmarx.google2fa')->verifyKey(
+            $user->two_factor_secret,
+            $request->code
+        );
+
+        if (!$valid) {
+            AuditService::log('auth.authenticator_failed', $user, [], [
+                'ip' => $request->ip(),
+            ]);
+
+            return back()->withErrors([
+                'code' => 'Code সঠিক নয়। App থেকে নতুন code দেখুন।',
+            ]);
+        }
+
+        return $this->loginUser($request, $user);
+    }
 }
