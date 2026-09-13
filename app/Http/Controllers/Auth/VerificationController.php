@@ -134,4 +134,21 @@ class VerificationController extends Controller
 
         return $this->loginUser($request, $user);
     }
+    
+     // ════════════════════════════════════════
+    // SHARED — Login helper
+    // ════════════════════════════════════════
+
+    private function loginUser(Request $request, User $user): \Illuminate\Http\RedirectResponse
+    {
+        auth()->login($user, session('auth_remember'));
+        $this->clearAuthSession();
+        $request->session()->regenerate();
+
+        AuditService::log('user.login', $user);
+
+        return redirect()->intended(
+            $user->isAdmin() ? route('admin.dashboard') : route('shop.index')
+        )->with('success', 'স্বাগতম, ' . $user->name . '!');
+    }
 }
