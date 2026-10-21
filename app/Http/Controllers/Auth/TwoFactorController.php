@@ -37,4 +37,38 @@ class TwoFactorController extends Controller
 
         return view('auth.2fa.setup', compact('qrCode'));
     }
+
+
+    // ── Confirm ───────────────────────────────────
+    public function confirm(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'code' => 'required|digits:6',
+        ], [
+            'code.required' => 'Code দিতে হবে।',
+            'code.digits'   => '৬ সংখ্যার code দিন।',
+        ]);
+
+        $user  = auth()->user();
+        $valid = app('pragmarx.google2fa')->verifyKey(
+            $user->two_factor_secret,
+            $request->code
+        );
+
+        if (!$valid) {
+            return back()->withErrors([
+                'code' => 'Code সঠিক নয়। App থেকে নতুন code দেখুন।',
+            ]);
+        }
+
+        $user->update([
+            'two_factor_enabled'      => true,
+            'two_factor_confirmed_at' => now(),
+        ]);
+
+        AuditService::log('auth.2fa_enabled', $user);
+
+        return redirect()->route('2fa.manage')
+            ->with('success', '✅ Google Authenticator সফলভাবে চালু হয়েছে!');
+    }
 }
