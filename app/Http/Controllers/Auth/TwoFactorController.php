@@ -71,4 +71,18 @@ class TwoFactorController extends Controller
         return redirect()->route('2fa.manage')
             ->with('success', '✅ Google Authenticator সফলভাবে চালু হয়েছে!');
     }
+
+    // ── Manage Page ───────────────────────────────
+    public function manage(): View|RedirectResponse
+    {
+        $user = auth()->user();
+
+        if (!$user->isAdmin()) abort(403);
+
+        if (!$user->hasTwoFactorEnabled()) {
+            return redirect()->route('2fa.setup');
+        }
+
+        return view('auth.2fa.manage', compact('user'));
+    }
 }
