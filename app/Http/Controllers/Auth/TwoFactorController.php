@@ -85,4 +85,31 @@ class TwoFactorController extends Controller
 
         return view('auth.2fa.manage', compact('user'));
     }
+
+        // ── Disable ───────────────────────────────────
+    public function disable(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'password' => 'required',
+        ], [
+            'password.required' => 'পাসওয়ার্ড দিতে হবে।',
+        ]);
+
+        if (!\Hash::check($request->password, auth()->user()->password)) {
+            return back()->withErrors([
+                'password' => 'পাসওয়ার্ড সঠিক নয়।',
+            ]);
+        }
+
+        auth()->user()->update([
+            'two_factor_secret'       => null,
+            'two_factor_enabled'      => false,
+            'two_factor_confirmed_at' => null,
+        ]);
+
+        AuditService::log('auth.2fa_disabled', auth()->user());
+
+        return redirect()->route('profile.edit')
+            ->with('success', '2FA বন্ধ করা হয়েছে।');
+    }
 }
