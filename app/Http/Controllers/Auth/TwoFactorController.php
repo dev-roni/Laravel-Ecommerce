@@ -112,4 +112,16 @@ class TwoFactorController extends Controller
         return redirect()->route('profile.edit')
             ->with('success', '2FA বন্ধ করা হয়েছে।');
     }
+
+    // ── QR Code Generate ──────────────────────────
+    private function generateQrCodeSvg(string $url): string
+    {
+        $renderer = new ImageRenderer(
+            new RendererStyle(200),
+            new SvgImageBackEnd()
+        );
+
+        $writer = new Writer($renderer);
+        return base64_encode($writer->writeString($url));
+    }
 }
