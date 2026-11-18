@@ -61,10 +61,8 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     
     // ── Admin 2FA Setup ───────────────────────────────
-    Route::get('2fa/setup',    [TwoFactorController::class, 'setup'])
-        ->name('2fa.setup');
-   // Route::post('2fa/confirm', [Auth\TwoFactorController::class, 'confirm'])
-    //     ->name('2fa.confirm');
+    Route::get('2fa/setup',[TwoFactorController::class, 'setup'])->name('2fa.setup');
+    Route::post('2fa/confirm',[TwoFactorController::class, 'confirm'])->name('2fa.confirm');
    // Route::get('2fa/manage',   [Auth\TwoFactorController::class, 'manage'])
    //      ->name('2fa.manage');
   //  Route::post('2fa/disable', [Auth\TwoFactorController::class, 'disable'])
