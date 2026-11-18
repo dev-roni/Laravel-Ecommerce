@@ -73,18 +73,27 @@ class AuthenticatedSessionController extends Controller
         // ════════════════════════════════════════
         // CUSTOMER → Email OTP
         // ════════════════════════════════════════
-        $otp = $user->generateOtp();
-        Mail::to($user->email)->send(new OtpMail($otp, $user->name));
+        if ($user->two_factor_enabled) {
+            Auth::logout();
 
-        session([
-            'auth_user_id'  => $user->id,
-            'auth_remember' => $remember,
-            'auth_method'   => 'email_otp',          // ← method mark
-        ]);
+            $otp = $user->generateOtp();
+            Mail::to($user->email)->send(new OtpMail($otp, $user->name));
 
-        AuditService::log('auth.otp_sent', $user);
+            session([
+                'auth_user_id'  => $user->id,
+                'auth_remember' => $remember,
+                'auth_method'   => 'email_otp',
+            ]);
 
-        return redirect()->route('verify.otp');
+            return redirect()->route('verify.otp');
+        }
+        // ══════════ বন্ধ থাকলে সরাসরি login ══════════
+        $request->session()->regenerate();
+
+        AuditService::log('user.login', $user);
+
+        return redirect()->intended(route('shop.index'))
+            ->with('success', 'স্বাগতম, ' . $user->name . '!');
     }
 
     /**
