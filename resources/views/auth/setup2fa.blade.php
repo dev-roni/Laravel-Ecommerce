@@ -1,4 +1,4 @@
-{{-- resources/views/auth/2fa/setup.blade.php --}}
+
 @extends('frontend.layouts.masterLayout')
 @section('title', '2FA Setup')
 
