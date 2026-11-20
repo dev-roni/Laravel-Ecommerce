@@ -66,7 +66,11 @@ class TwoFactorController extends Controller
             'code.digits'   => '৬ সংখ্যার code দিন।',
         ]);
 
-        $user  = auth()->user();
+        $user = $this->setupUser();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
         $valid = app('pragmarx.google2fa')->verifyKey(
             $user->two_factor_secret,
             $request->code
@@ -85,8 +89,13 @@ class TwoFactorController extends Controller
 
         AuditService::log('auth.2fa_enabled', $user);
 
-        return redirect()->route('2fa.manage')
-            ->with('success', '✅ Google Authenticator সফলভাবে চালু হয়েছে!');
+        // Authenticator-এর code দিয়ে প্রমাণ হয়েছে, এখন login
+        Auth::login($user, session('auth_remember', false));
+        session()->forget(['auth_user_id', 'auth_remember', 'auth_method']);
+        $request->session()->regenerate();
+
+        return redirect()->route('dashboard')
+            ->with('success', '✅ Google Authenticator চালু হয়েছে!');
     }
 
     // ── Manage Page ───────────────────────────────
