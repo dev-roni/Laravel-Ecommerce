@@ -48,9 +48,12 @@ class AuthenticatedSessionController extends Controller
 
             // 2FA setup করা না থাকলে → setup-এ পাঠাও
             if (!$user->hasTwoFactorEnabled()) {
-                // Temporarily login করাও শুধু setup-এর জন্য
-                auth()->login($user);
-                $request->session()->regenerate();
+
+                session([
+                    'auth_user_id'  => $user->id,
+                    'auth_remember' => $remember,
+                    'auth_method'   => '2fa_setup',
+                ]);
 
                 return redirect()->route('2fa.setup')
                     ->with('warning',
