@@ -16,6 +16,19 @@ use Illuminate\View\View;
 
 class TwoFactorController extends Controller
 {
+    // Pending setup user
+    private function setupUser(): ?User
+    {
+        if (session('auth_method') !== '2fa_setup' || !session('auth_user_id')) {
+            return null;
+        }
+
+        $user = User::find(session('auth_user_id'));
+
+        return ($user && $user->isAdmin() && !$user->hasTwoFactorEnabled())
+            ? $user
+            : null;
+    }
     // ── Setup Page ────────────────────────────────
     public function setup(): View|RedirectResponse
     {
