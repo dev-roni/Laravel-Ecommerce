@@ -5,6 +5,14 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Services\AuditService;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+
 
 class TwoFactorController extends Controller
 {
@@ -35,7 +43,7 @@ class TwoFactorController extends Controller
 
         $qrCode = $this->generateQrCodeSvg($qrCodeUrl);
 
-        return view('auth.2fa.setup', compact('qrCode'));
+        return view('auth.setup2fa', compact('qrCode'));
     }
 
 
