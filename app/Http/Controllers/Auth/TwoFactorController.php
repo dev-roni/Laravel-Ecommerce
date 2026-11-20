@@ -32,13 +32,9 @@ class TwoFactorController extends Controller
     // ── Setup Page ────────────────────────────────
     public function setup(): View|RedirectResponse
     {
-        $user = auth()->user();
-
-        if (!$user->isAdmin()) abort(403);
-
-        // আগে থেকে enabled → manage-এ
-        if ($user->hasTwoFactorEnabled()) {
-            return redirect()->route('2fa.manage');
+        $user = $this->setupUser();
+        if (!$user) {
+            return redirect()->route('login');
         }
 
         // Secret generate (না থাকলে)
