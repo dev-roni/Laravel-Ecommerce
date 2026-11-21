@@ -91,6 +91,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('verify.otp');
         }
         // ══════════ বন্ধ থাকলে সরাসরি login ══════════
+        Auth::login($user);
         $request->session()->regenerate();
 
         AuditService::log('user.login', $user);
@@ -115,7 +116,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->back('home');
+        return redirect()->route('shop.index');
     }
 
 }
