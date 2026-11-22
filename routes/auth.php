@@ -53,16 +53,21 @@ Route::middleware('guest')->group(function () {
 
     // ── Google Authenticator (Admin) ──────────────────
     Route::get('verify/authenticator',  [VerificationController::class, 'showAuthenticator'])
-        ->name('verify.authenticator');
+        ->middleware('throttle:5,1')->name('verify.authenticator');
     Route::post('verify/authenticator', [VerificationController::class, 'verifyAuthenticator'])
         ->name('verify.authenticator.post');
+
+    // auth middleware ছাড়া, session-এর pending user দিয়ে সুরক্ষিত
+    Route::get('2fa/setup', [TwoFactorController::class, 'setup'])
+        ->name('2fa.setup');
+
+    Route::post('2fa/confirm', [TwoFactorController::class, 'confirm'])
+        ->middleware('throttle:10,1')->name('2fa.confirm');
 });
 
 Route::middleware('auth')->group(function () {
     
     // ── Admin 2FA Setup ───────────────────────────────
-    Route::get('2fa/setup',[TwoFactorController::class, 'setup'])->name('2fa.setup');
-    Route::post('2fa/confirm',[TwoFactorController::class, 'confirm'])->name('2fa.confirm');
     Route::get('2fa/manage',   [TwoFactorController::class, 'manage'])->name('2fa.manage');
     Route::post('2fa/disable', [TwoFactorController::class, 'disable'])->name('2fa.disable');
 

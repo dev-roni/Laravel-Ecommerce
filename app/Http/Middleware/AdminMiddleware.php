@@ -13,14 +13,31 @@ class AdminMiddleware
      *
      * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
-        if(!auth()->check()){
+        $user = auth()->user();
+
+        if (!$user) {
             return redirect()->route('login');
         }
-        if(!auth()->user()->isAdmin()){
-            abort(403,'এই পেজে প্রবেশের অনুমতি নেই');
+
+        if (!$user->isAdmin()) {
+            abort(403);
         }
+
+        if (!$user->hasTwoFactorEnabled()) {
+            auth()->logout();
+
+            session([
+                'auth_user_id'  => $user->id,
+                'auth_remember' => false,
+                'auth_method'   => '2fa_setup',
+            ]);
+
+            return redirect()->route('2fa.setup')
+                ->with('warning', 'Admin panel ব্যবহার করতে Authenticator setup করুন।');
+        }
+
         return $next($request);
     }
 }
