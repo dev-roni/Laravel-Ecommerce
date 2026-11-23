@@ -12,11 +12,11 @@ use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-
+use App\Models\User;
 
 class TwoFactorController extends Controller
 {
-    // Pending setup user
+    // Pending user
     private function setupUser(): ?User
     {
         if (session('auth_method') !== '2fa_setup' || !session('auth_user_id')) {

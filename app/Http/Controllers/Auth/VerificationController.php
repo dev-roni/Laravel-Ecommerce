@@ -107,7 +107,7 @@ class VerificationController extends Controller
             return redirect()->route('login');
         }
 
-        return view('auth.verify.authenticator');
+        return view('auth.verify-authenticator');
     }
 
     public function verifyAuthenticator(Request $request)
